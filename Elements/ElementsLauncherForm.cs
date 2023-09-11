@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace LauncherNet.Elements
 {
@@ -41,13 +42,15 @@ namespace LauncherNet.Elements
     /// <returns></returns>
     private void LoadCategoriesPanel(Form launcher)
     {
-      CategoriesPanelControl categoriesPanel = new CategoriesPanelControl()
+      Panel categoriesPanel = new Panel()
       {
         Height = DataClass.sizeForm.Height,
         Width = DataClass.sizeForm.Width / 8,
-        Border = true,
-        BorderColor = Color.Black,
+        BorderStyle = BorderStyle.FixedSingle,
       };
+
+      categoriesPanel.MouseDoubleClick += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.AddCategory, null, null);
+
       DataClass.categoriesElementSize.Width = categoriesPanel.Width;
       launcher.Controls.Add(categoriesPanel);
 
@@ -66,25 +69,26 @@ namespace LauncherNet.Elements
           BackColor = Color.Green,
           Text = name,
         };
-        ContextMenuStrip contextMenuButton = new ContextMenuStrip();
+        
 
-        contextMenuButton.Items.Add("Добавить приложение");
-        contextMenuButton.Items.Add("Переименовать категорию");
-        contextMenuButton.Items.Add("Создать новую категорию");
-        contextMenuButton.Items.Add("Удалить категорию");
 
-        contextMenuButton.Items[0].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.AddApp, panelApps, name);
-        contextMenuButton.Items[1].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.RenameCategory, panelApps, name);
-        contextMenuButton.Items[2].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.AddCategory, panelApps, name);
-        contextMenuButton.Items[3].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.DeleteCategory, panelApps, name);
+        ContextMenuStrip functionCategories = new ContextMenuStrip();
+        functionCategories.Items.Add("Добавить приложение");
+        functionCategories.Items.Add("Переименовать категорию");
+        functionCategories.Items.Add("Создать новую категорию");
+        functionCategories.Items.Add("Удалить категорию");
+
+        functionCategories.Items[0].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.AddApp, panelApps, name);
+        functionCategories.Items[1].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.RenameCategory, panelApps, name);
+        functionCategories.Items[2].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.AddCategory, panelApps, name);
+        functionCategories.Items[3].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.DeleteCategory, panelApps, name);
 
         categoryPanel.MouseEnter += (s, e) => DesignLauncherForm.SetHoverСolorCategory(categoryPanel);
         categoryPanel.MouseLeave += (s, e) => DesignLauncherForm.ResetColor(categoryPanel);
-        categoryPanel.MouseDown += (s, e) => new FunctionsCategories().OpenCategory(e, contextMenuButton, categoryPanel, panelApps, launcher);
+        categoryPanel.MouseDown += (s, e) => new FunctionsCategories().LoadFunctionCategory(e, functionCategories, categoryPanel, panelApps, launcher);
+        
 
-
-        if (categoryPanel.Text == lastCategory) new FunctionsCategories().OpenCategory(null, contextMenuButton, categoryPanel, panelApps, launcher);
-
+        if (categoryPanel.Text == lastCategory) new FunctionsCategories().LoadFunctionCategory(null, functionCategories, categoryPanel, panelApps, launcher);
 
         categoriesPanel.Controls.Add(categoryPanel);
         launcher.Controls.Add(panelApps);
@@ -211,7 +215,7 @@ namespace LauncherNet.Elements
         new FunctionsApps().FormImage(nameCategory, nameFile, pathImages);
         new SettingsForms().UpdateLauncher(launcher);
       };
-      contextMenuButton.Items[3].Click += (s, e) => new FunctionsApps().DeleteApp(launcher,  nameCategory, labelFileName.Text, false);
+      contextMenuButton.Items[3].Click += (s, e) => new FunctionsApps().DeleteApp(launcher, nameCategory, labelFileName.Text, false);
 
       //Действие на ЛКМ и ПКМ
       labelFileName.MouseDown += (s, e) =>

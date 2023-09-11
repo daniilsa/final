@@ -5,6 +5,7 @@ using LauncherNet.Settings;
 using System;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace LauncherNet.Functions
     /// <summary>
     /// Открытие категории или её функций.
     /// </summary>
-    public void OpenCategory(MouseEventArgs e, ContextMenuStrip contextMenuButton, CategoryPanelControl categoryPanel, Panel panelApps, Form launcher)
+    public void LoadFunctionCategory(MouseEventArgs e, ContextMenuStrip contextMenuButton, CategoryPanelControl categoryPanel, Panel panelApps, Form launcher)
     {
       if (e == null || e.Button == MouseButtons.Left)
       {
@@ -47,8 +48,13 @@ namespace LauncherNet.Functions
       }
       else if (e.Button == MouseButtons.Right)
       {
-        contextMenuButton.Show(System.Windows.Forms.Cursor.Position);
+        LoadContextMenu(contextMenuButton);
       }
+    }
+
+    private void LoadContextMenu(ContextMenuStrip contextMenuButton)
+    {
+      contextMenuButton.Show(System.Windows.Forms.Cursor.Position);
     }
 
     /// <summary>
