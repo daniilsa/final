@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -144,6 +145,24 @@ namespace LauncherNet.Functions
           if (readText[index].LastIndexOf(nameFiliDelete) == -1) { newText[j] = readText[index]; j++; }
         File.WriteAllLines(pathFildeDelete, newText);
         new SettingsForms().UpdateLauncher(launcher);
+      }
+    }
+
+    /// <summary>
+    /// Сохранение картинки из интернета.
+    /// </summary>
+    /// <param name="nameCategory"></param>
+    /// <param name="nameFile"></param>
+    public void SaveImagefromInternet(string nameCategory, string nameFile)
+    {
+      if (Directory.Exists($@"{DataClass.pathImages}\{nameCategory}"))
+      {
+        using (WebClient client = new WebClient()) client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+      }
+      else
+      {
+        Directory.CreateDirectory($@"{DataClass.pathImages}\{nameCategory}");
+        using (WebClient client = new WebClient()) client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
       }
     }
   }

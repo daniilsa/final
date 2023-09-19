@@ -14,6 +14,11 @@ namespace LauncherNet
     #region Размеры элементов 
 
     /// <summary>
+    /// Размер элемента с приложением.
+    /// </summary>
+    static public Size sizelAppElement;
+
+    /// <summary>
     /// Размер всего приложения.
     /// </summary>
     static public Size sizeForm;
@@ -21,7 +26,7 @@ namespace LauncherNet
     /// <summary>
     /// Размер элемента с категориями.
     /// </summary>
-    public static Size categoriesElementSize;
+    public static Size sizeCategoriesElement;
 
     /// <summary>
     /// Разрешение экрана в пикселях.
@@ -31,6 +36,7 @@ namespace LauncherNet
     #endregion
 
     #region Локация элментов
+
     /// <summary>
     /// Заполнение локации элемента.
     /// </summary>
@@ -51,6 +57,7 @@ namespace LauncherNet
     /// Локация приложения.
     /// </summary>
     static public Location locationForm;
+
     #endregion
 
     #region Путь к файлам
@@ -79,6 +86,11 @@ namespace LauncherNet
     /// Путь к шрифтам
     /// </summary>
     public static string pathFont;
+    
+    /// <summary>
+    /// Путь к выбранно йкртинке из интернета;
+    /// </summary>
+    public static string locationImage;
 
     #endregion
 
@@ -133,6 +145,11 @@ namespace LauncherNet
     #region Другое
 
     /// <summary>
+    /// Количетсво искомых картинок в интернете.
+    /// </summary>
+    static public int countImageSearch = 10;
+
+    /// <summary>
     /// Функции категорий.
     /// </summary>
     public enum FunctionCategory
@@ -164,7 +181,6 @@ namespace LauncherNet
     public enum FunctionApp
     {
       ChangeImage,
-
     }
 
     #endregion
@@ -173,8 +189,12 @@ namespace LauncherNet
 
     #region Конструктор
 
+    /// <summary>
+    /// Заполнение первичных данных для работы ПО.
+    /// </summary>
     static DataClass()
     {
+      sizelAppElement = new Size(167, 268);
       screenSize = Screen.PrimaryScreen.Bounds.Size;
 
       pathFiles = @".\Files";
@@ -187,11 +207,8 @@ namespace LauncherNet
       keyCategory = "lastCategory";
 
       allApps = new List<Panel>();
-
     }
 
     #endregion
-
   }
-
 }

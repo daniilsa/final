@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static LauncherNet.DataClass;
 
 namespace LauncherNet.Elements
 {
@@ -17,22 +18,12 @@ namespace LauncherNet.Elements
   {
 
     /// <summary>
-    /// Ширина панели с приложением.
-    /// </summary>
-    const int WidthPanelCategory = 167;
-
-    /// <summary>
-    /// Высота панели с приложением.
-    /// </summary>
-    const int HeightPanelCategory = 268;
-
-    /// <summary>
     /// Загрузка элементов на форму.
     /// </summary>
     /// <param name="launcher">"Экземпляр формы.</param>
     public void LoadElements(Form launcher)
     {
-      LoadCategoriesPanel(launcher);
+      CreateCategoriesPanel(launcher);
     }
 
     /// <summary>
@@ -40,11 +31,10 @@ namespace LauncherNet.Elements
     /// </summary>
     /// <param name="launcher">Форма, на которую добавляется панель.</param>
     /// <returns></returns>
-    private void LoadCategoriesPanel(Form launcher)
+    private void CreateCategoriesPanel(Form launcher)
     {
       Panel categoriesPanel = new Panel()
       {
-        //Height = DataClass.sizeForm.Height,
         Width = DataClass.sizeForm.Width / 8,
         BackColor = new ColorElements().GetHeaderColor(),
         Dock = DockStyle.Left,
@@ -52,7 +42,7 @@ namespace LauncherNet.Elements
 
       categoriesPanel.MouseDoubleClick += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.AddCategory, null, null);
 
-      DataClass.categoriesElementSize.Width = categoriesPanel.Width;
+      DataClass.sizeCategoriesElement.Width = categoriesPanel.Width;
       launcher.Controls.Add(categoriesPanel);
 
       string lastCategory = new BackUpClass().GetCategory();
@@ -115,7 +105,7 @@ namespace LauncherNet.Elements
       Panel panelApp = new Panel
       {
         Dock = DockStyle.Left,
-        Width = DataClass.sizeForm.Width - DataClass.categoriesElementSize.Width - 15,
+        Width = DataClass.sizeForm.Width - DataClass.sizeCategoriesElement.Width - 15,
         Visible = false,
         AutoScroll = true,
         Name = name,
@@ -168,11 +158,11 @@ namespace LauncherNet.Elements
 
       // Главная панель
       Panel fileСontrols = new Panel();
-      fileСontrols.Size = new System.Drawing.Size(WidthPanelCategory, HeightPanelCategory);
+      fileСontrols.Size = new System.Drawing.Size(DataClass.sizelAppElement.Width, DataClass.sizelAppElement.Height);
 
       // Картинка файла
       PictureBox pictureBoxImageApp = new PictureBox();
-      pictureBoxImageApp.Height = HeightPanelCategory - 40;
+      pictureBoxImageApp.Height = DataClass.sizelAppElement.Height - 40;
       pictureBoxImageApp.Dock = DockStyle.Top;
       pictureBoxImageApp.BackgroundImageLayout = ImageLayout.Zoom;
       pictureBoxImageApp.BackColor = new ColorElements().GetNameAppBackColor();
@@ -257,24 +247,36 @@ namespace LauncherNet.Elements
       if (DataClass.activeAppPanel != null)
       {
         DataClass.activeAppPanel.VerticalScroll.Value = 0;
-        DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.categoriesElementSize.Width - 15;
+        DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.sizeCategoriesElement.Width - 15;
+
+        DataClass.activeAppPanel.VerticalScroll.Value = 0;
+        DataClass.activeAppPanel.HorizontalScroll.Value = 0;
 
         foreach (Panel app in DataClass.allApps)
         {
           if (locationX + 200 < DataClass.activeAppPanel.Width)
           {
             app.Location = new System.Drawing.Point(locationX, locationY);
-            locationX += WidthPanelCategory + 10;
+            locationX += DataClass.sizelAppElement.Width + 10;
           }
           else
           {
             locationX = 40;
-            locationY += HeightPanelCategory + 22;
+            locationY += DataClass.sizelAppElement.Height + 22;
             app.Location = new System.Drawing.Point(locationX, locationY);
-            locationX += WidthPanelCategory + 10;
+            locationX += DataClass.sizelAppElement.Width + 10;
           }
         }
       }
+    }
+
+    /// <summary>
+    /// Размер панели с элементамии приложений.
+    /// </summary>
+    public void SizeAppsPanel()
+    {
+      DataClass.activeAppPanel.Dock = DockStyle.Right;
+      DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.sizeCategoriesElement.Width - 15;
     }
   }
 }

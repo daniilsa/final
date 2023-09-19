@@ -29,10 +29,15 @@ namespace LauncherNet.Settings
         DataClass.sizeForm.Width = launcher.Width;
         if (DataClass.activeAppPanel != null)
         {
-          DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.categoriesElementSize.Width - 15;
+
+          DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.sizeCategoriesElement.Width - 15;
           new ElementsLauncherForm().LocationApps();
+
+          new ElementsLauncherForm().SizeAppsPanel();
+
         }
       };
+
 
       launcher.LocationChanged += (s, a) => DataClass.locationForm = new DataClass.Location(launcher.Location.X, launcher.Location.Y);
 
@@ -65,6 +70,18 @@ namespace LauncherNet.Settings
       functional.FormBorderStyle = FormBorderStyle.None;
       functional.StartPosition = FormStartPosition.CenterScreen;
     }
-  }
 
+    /// <summary>
+    /// Настройки формы выбора обложки для приложения.
+    /// </summary>
+    /// <param name="imageSelection">Экземпляр формы</param>
+    public void SettingsImageForm(Form imageSelection)
+    {
+      imageSelection.Size = new Size((DataClass.sizelAppElement.Width * 5) + (10 * 4) + 80, (DataClass.sizelAppElement.Height * 2) + (22 * 1) + 120);
+      imageSelection.StartPosition = FormStartPosition.CenterScreen;
+      imageSelection.Text = "Выбор обложки";
+      imageSelection.FormBorderStyle = FormBorderStyle.None;
+
+    }
+  }
 }

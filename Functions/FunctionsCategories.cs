@@ -60,16 +60,12 @@ namespace LauncherNet.Functions
         }
 
         new ElementsLauncherForm().LocationApps();
+
       }
       else if (e.Button == MouseButtons.Right)
       {
-        LoadContextMenu(contextMenuButton);
+        contextMenuButton.Show(System.Windows.Forms.Cursor.Position);
       }
-    }
-
-    private void LoadContextMenu(ContextMenuStrip contextMenuButton)
-    {
-      contextMenuButton.Show(System.Windows.Forms.Cursor.Position);
     }
 
     /// <summary>
@@ -167,7 +163,7 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory">Имя категории.</param>
     /// <param name="nameFile">Имя файла.</param>
     /// <param name="pathFile">Путь к приложению.</param>
-    public void CreateApp(string nameCategory, string nameFile, string pathFile, string imagePath, string nameImage, bool triggerImage)
+    public bool CreateApp(string nameCategory, string nameFile, string pathFile, string imagePath, string nameImage, bool triggerImage)
     {
       if (File.Exists(pathFile))
       {
@@ -179,7 +175,7 @@ namespace LauncherNet.Functions
           {
             if (collection[i].Contains(nameFile))
             {
-              MessageBox.Show($@"Файл {nameFile} уже существует.", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+              MessageBox.Show($@"Файл {nameFile} уже существует. Пожалуйста, введите уникально имя приложения!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
               next = false;
               break;
             }
@@ -187,7 +183,17 @@ namespace LauncherNet.Functions
 
           if (next)
           {
-            if (!triggerImage) new SearchImage().StartSearch(nameCategory, nameFile);
+            //TODO: Триггер для теста формы поиска картинок, потом выключить
+            //triggerImage = true;
+
+            if (!triggerImage)
+            {
+              ImageSelectionForm iamgeForm = new ImageSelectionForm();
+              iamgeForm.NameFile = nameFile;
+              iamgeForm.NameCategory = nameCategory;
+              iamgeForm.Load();
+              iamgeForm.ShowDialog();
+            } /*new SearchImage().StartSearch(nameCategory, nameFile);*/
             else
             {
               try
@@ -200,9 +206,10 @@ namespace LauncherNet.Functions
                 File.Copy(imagePath, $@"{DataClass.pathImages}\{nameCategory}\{nameFile}\.jpg");
               }
             }
-            if (collection.Length>0) File.AppendAllText($@"{DataClass.categoriesPathFiles}\{nameCategory}",$"\r\n{DataClass.code}{nameFile}{DataClass.code}{pathFile}{DataClass.code}");
-            else File.AppendAllText($@"{DataClass.categoriesPathFiles}\{nameCategory}",$"{DataClass.code}{nameFile}{DataClass.code}{pathFile}{DataClass.code}");
+            if (collection.Length > 0) File.AppendAllText($@"{DataClass.categoriesPathFiles}\{nameCategory}", $"\r\n{DataClass.code}{nameFile}{DataClass.code}{pathFile}{DataClass.code}");
+            else File.AppendAllText($@"{DataClass.categoriesPathFiles}\{nameCategory}", $"{DataClass.code}{nameFile}{DataClass.code}{pathFile}{DataClass.code}");
           }
+          else return false;
         }
         else
         {
@@ -211,15 +218,16 @@ namespace LauncherNet.Functions
           {
             CreateCategory(nameCategory);
             CreateApp(nameCategory, nameFile, pathFile, imagePath, nameImage, triggerImage);
-            return;
+            return false;
           }
         }
       }
       else
       {
         MessageBox.Show($@"Не найден путь: {pathFile}.", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return false;
       }
+      return true;
     }
-
   }
 }

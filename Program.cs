@@ -1,3 +1,5 @@
+using LauncherNet.Forms;
+
 namespace LauncherNet
 {
   internal static class Program

@@ -42,7 +42,7 @@ namespace LauncherNet.Forms
     public void AppForm(DataClass.FunctionApp functionCategory, string nameCategory, string nameFile, string pathImage)
     {
       new SettingsForms().SettingsFunctionalForm(this);
-      if (functionCategory == DataClass.FunctionApp.ChangeImage) ChangeImage(nameCategory,nameFile,pathImage);
+      if (functionCategory == DataClass.FunctionApp.ChangeImage) ChangeImage(nameCategory, nameFile, pathImage);
 
       this.Location = new Point((DataClass.screenSize.Width - this.Width) / 2, (DataClass.screenSize.Height - this.Height) / 2);
       this.ShowDialog();
@@ -125,7 +125,7 @@ namespace LauncherNet.Forms
     /// Настройка внешнего вида формы при функции переименовть категорию.
     /// </summary>
     /// <param name="form"></param>
-    private void RenameCategory( string nameCategory)
+    private void RenameCategory(string nameCategory)
     {
       //Панель настроек
       Panel panelSettings = new Panel
@@ -366,8 +366,7 @@ namespace LauncherNet.Forms
       };
       buttonYes.Click += (s, e) =>
       {
-        new FunctionsCategories().CreateApp(textBoxNameCategory.Text,textBoxNameFile.Text,textBoxPathFile.Text,imagePath,addImageButton.Text,triggerImage);
-        this.Close();
+        if (new FunctionsCategories().CreateApp(textBoxNameCategory.Text, textBoxNameFile.Text, textBoxPathFile.Text, imagePath, addImageButton.Text, triggerImage)) this.Close();
       };
 
       // Кнопка для выхода
@@ -449,7 +448,7 @@ namespace LauncherNet.Forms
           //int indexFerst = OFD.FileName.LastIndexOf('\\') + 1;
           //for (; indexFerst < indexLast; indexFerst++)
           //  textBoxPathFile.Text += OFD.FileName[indexFerst];
-            textBoxPathFile.Text = OFD.FileName;
+          textBoxPathFile.Text = OFD.FileName;
         }
       };
       // Кнопка для применения действий.
