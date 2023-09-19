@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Launcher.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace LauncherNet
 {
   static public class DataClass
   {
+    #region Поля
+
     #region Размеры элементов 
 
     /// <summary>
@@ -23,7 +26,7 @@ namespace LauncherNet
     /// <summary>
     /// Разрешение экрана в пикселях.
     /// </summary>
-    static public Size screenSize = Screen.PrimaryScreen.Bounds.Size;
+    static public Size screenSize;
 
     #endregion
 
@@ -43,7 +46,7 @@ namespace LauncherNet
         location[1] = y;
       }
     }
-    
+
     /// <summary>
     /// Локация приложения.
     /// </summary>
@@ -55,22 +58,27 @@ namespace LauncherNet
     /// <summary>
     /// Путь к текстовым файлам категорий.
     /// </summary>
-    public static string pathFiles = @".\Files";
+    public static string pathFiles;
 
     /// <summary>
     /// Путь к файлу с последними настройками.
     /// </summary>
-    public static string pathBackup = pathFiles + "\\backup";
+    public static string pathBackup;
 
     /// <summary>
     /// Путь к текстовым файлам категорий.
     /// </summary>
-    public static string categoriesPathFiles = @".\Files\Categories";
+    public static string categoriesPathFiles;
 
     /// <summary>
     /// Путь к картинкам.
     /// </summary>
-    public static string pathImages = @".\Images";
+    public static string pathImages;
+
+    /// <summary>
+    /// Путь к шрифтам
+    /// </summary>
+    public static string pathFont;
 
     #endregion
 
@@ -79,12 +87,12 @@ namespace LauncherNet
     /// <summary>
     /// Разделительный "символ" между параметрами приложения. 
     /// </summary>
-    public static string code = "$SPRTR$";
+    public static string code;
 
     /// <summary>
     /// Ключ для поиска активной категории при закрытии приложения.
     /// </summary>
-    public static string keyCategory = "lastCategory";
+    public static string keyCategory;
 
     #endregion
 
@@ -93,7 +101,7 @@ namespace LauncherNet
     /// <summary>
     /// Список приложений актовной категории. 
     /// </summary>
-    static public List<Panel> allApps= new List<Panel>();
+    static public List<Panel> allApps;
 
     /// <summary>
     /// Активная панель с приложениями.
@@ -104,6 +112,21 @@ namespace LauncherNet
     /// Последняя активная панель с приложениями.
     /// </summary>
     static public Panel lastAppPanel;
+
+    /// <summary>
+    /// Активная панель категории.
+    /// </summary>
+    static public TextElement activeCategoryPanel;
+
+    /// <summary>
+    /// Последняя активная панель категории.
+    /// </summary>
+    static public TextElement lastCategoryPanel;
+
+    #endregion
+
+    #region Шрифт
+
 
     #endregion
 
@@ -139,9 +162,32 @@ namespace LauncherNet
     /// Функции приложений.
     /// </summary>
     public enum FunctionApp
-    { 
+    {
       ChangeImage,
-    
+
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Конструктор
+
+    static DataClass()
+    {
+      screenSize = Screen.PrimaryScreen.Bounds.Size;
+
+      pathFiles = @".\Files";
+      pathBackup = pathFiles + "\\backup";
+      categoriesPathFiles = @".\Files\Categories";
+      pathImages = @".\Images";
+      pathFont = @".\Font";
+
+      code = "$SPRTR$";
+      keyCategory = "lastCategory";
+
+      allApps = new List<Panel>();
+
     }
 
     #endregion

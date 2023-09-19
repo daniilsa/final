@@ -3,6 +3,8 @@ using LauncherNet.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,15 +18,20 @@ namespace LauncherNet.Settings
     /// <param name="launcher">"Экземпляр формы</param>
     public void SettingsLauncherForm(Form launcher)
     {
-      launcher.Size = new Size(800, 600);
-      launcher.MinimumSize = new Size(800, 600);
+      launcher.Size = new Size(700, 600);
+      launcher.MinimumSize = new Size(700, 600);
       launcher.WindowState = FormWindowState.Maximized;
       launcher.Text = "Launcher";
+      //launcher.FormBorderStyle = FormBorderStyle.None;
 
       launcher.SizeChanged += (s, a) =>
       {
         DataClass.sizeForm.Width = launcher.Width;
-        if (DataClass.activeAppPanel != null) DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.categoriesElementSize.Width - 15;
+        if (DataClass.activeAppPanel != null)
+        {
+          DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.categoriesElementSize.Width - 15;
+          new ElementsLauncherForm().LocationApps();
+        }
       };
 
       launcher.LocationChanged += (s, a) => DataClass.locationForm = new DataClass.Location(launcher.Location.X, launcher.Location.Y);
@@ -58,6 +65,6 @@ namespace LauncherNet.Settings
       functional.FormBorderStyle = FormBorderStyle.None;
       functional.StartPosition = FormStartPosition.CenterScreen;
     }
-
   }
+
 }

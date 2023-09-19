@@ -16,6 +16,7 @@ namespace LauncherNet.Settings
       if (!Directory.Exists(DataClass.pathFiles)) Directory.CreateDirectory(DataClass.pathFiles);
       if (!Directory.Exists(DataClass.categoriesPathFiles)) Directory.CreateDirectory(DataClass.categoriesPathFiles);
       if (!Directory.Exists(DataClass.pathImages)) Directory.CreateDirectory(DataClass.pathImages);
+      if (!Directory.Exists(DataClass.pathFont)) Directory.CreateDirectory(DataClass.pathFont);
       if (!File.Exists(DataClass.pathFiles + "\\backup")) File.Create(DataClass.pathFiles + "\\backup");
       if (!File.Exists(@$"{DataClass.pathImages}\Default.jpg")) 
         MessageBox.Show("0_0 Не найден системный файл ПО. Все обложки без картинки будут красного цвета!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);

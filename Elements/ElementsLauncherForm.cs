@@ -44,9 +44,10 @@ namespace LauncherNet.Elements
     {
       Panel categoriesPanel = new Panel()
       {
-        Height = DataClass.sizeForm.Height,
+        //Height = DataClass.sizeForm.Height,
         Width = DataClass.sizeForm.Width / 8,
-        BorderStyle = BorderStyle.FixedSingle,
+        BackColor = new ColorElements().GetHeaderColor(),
+        Dock = DockStyle.Left,
       };
 
       categoriesPanel.MouseDoubleClick += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.AddCategory, null, null);
@@ -62,15 +63,15 @@ namespace LauncherNet.Elements
         string name = nameFile[i].Substring(nameFile[i].LastIndexOf("\\") + 1, nameFile[i].Length - (nameFile[i].LastIndexOf("\\") + 1));
 
         Panel panelApps = CreateMain(launcher, name);
-        CategoryPanelControl categoryPanel = new CategoryPanelControl()
+        TextElement categoryPanel = new TextElement()
         {
           Height = DataClass.sizeForm.Height / 15,
           Width = categoriesPanel.Width,
-          BackColor = Color.Green,
+          BackColor = new ColorElements().GetHeaderColor(),
           Text = name,
+          Font = new FontElements().GetHeaderFont(),
+          ForeColor = new FontElements().GetHeaderFontColor(),
         };
-        
-
 
         ContextMenuStrip functionCategories = new ContextMenuStrip();
         functionCategories.Items.Add("Добавить приложение");
@@ -83,10 +84,18 @@ namespace LauncherNet.Elements
         functionCategories.Items[2].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.AddCategory, panelApps, name);
         functionCategories.Items[3].Click += (s, e) => new FunctionsCategories().StartFunction(launcher, DataClass.FunctionCategory.DeleteCategory, panelApps, name);
 
-        categoryPanel.MouseEnter += (s, e) => DesignLauncherForm.SetHoverСolorCategory(categoryPanel);
-        categoryPanel.MouseLeave += (s, e) => DesignLauncherForm.ResetColor(categoryPanel);
+        categoryPanel.MouseEnter += (s, e) =>
+        {
+          if (categoryPanel != DataClass.activeCategoryPanel) categoryPanel.BackColor = new ColorElements().GetHoverHeaderColor();
+        };
+
+        categoryPanel.MouseLeave += (s, e) =>
+        {
+          if (categoryPanel != DataClass.activeCategoryPanel) categoryPanel.BackColor = new ColorElements().GetHeaderColor();
+        };
+
         categoryPanel.MouseDown += (s, e) => new FunctionsCategories().LoadFunctionCategory(e, functionCategories, categoryPanel, panelApps, launcher);
-        
+
 
         if (categoryPanel.Text == lastCategory) new FunctionsCategories().LoadFunctionCategory(null, functionCategories, categoryPanel, panelApps, launcher);
 
@@ -105,11 +114,12 @@ namespace LauncherNet.Elements
     {
       Panel panelApp = new Panel
       {
-        Dock = DockStyle.Right,
+        Dock = DockStyle.Left,
         Width = DataClass.sizeForm.Width - DataClass.categoriesElementSize.Width - 15,
         Visible = false,
         AutoScroll = true,
         Name = name,
+        BackColor = new ColorElements().GetMainColor(),
       };
 
       string pathFile = DataClass.categoriesPathFiles + "\\" + name;
@@ -135,9 +145,6 @@ namespace LauncherNet.Elements
       {
         File.Create(pathFile);
       }
-
-      panelApp.SizeChanged += (s, a) => LocationApps();
-
 
       return panelApp;
     }
@@ -168,6 +175,7 @@ namespace LauncherNet.Elements
       pictureBoxImageApp.Height = HeightPanelCategory - 40;
       pictureBoxImageApp.Dock = DockStyle.Top;
       pictureBoxImageApp.BackgroundImageLayout = ImageLayout.Zoom;
+      pictureBoxImageApp.BackColor = new ColorElements().GetNameAppBackColor();
 
       if (File.Exists(pathImages + nameFile + ".jpg"))
       {
@@ -176,8 +184,6 @@ namespace LauncherNet.Elements
         {
           pictureBoxImageApp.BackgroundImage = Image.FromStream(imgStream);
         }
-
-        //pictureBoxImageApp.BackgroundImage = new Bitmap(pathImages + nameFile + ".jpg");
       }
       else
       {
@@ -187,7 +193,6 @@ namespace LauncherNet.Elements
           {
             pictureBoxImageApp.BackgroundImage = Image.FromStream(imgStream);
           }
-          //pictureBoxImageApp.BackgroundImage = new Bitmap(@$"{DataClass.pathImages}\Default.jpg");
         }
         catch
         {
@@ -196,11 +201,16 @@ namespace LauncherNet.Elements
       }
 
       // Для запуска файла
-      Label labelFileName = new Label();
-      labelFileName.Height = fileСontrols.Height - pictureBoxImageApp.Height;
-      labelFileName.Dock = DockStyle.Bottom;
-      labelFileName.Text = nameFile;
-      labelFileName.BorderStyle = BorderStyle.FixedSingle;
+      TextElement labelFileName = new TextElement
+      {
+        Height = fileСontrols.Height - pictureBoxImageApp.Height,
+        Width = pictureBoxImageApp.Width,
+        Dock = DockStyle.Bottom,
+        Text = nameFile,
+        BackColor = new ColorElements().GetNameAppBackColor(),
+        ForeColor = new FontElements().GetNameAppFontColor(),
+        Font = new FontElements().GetFooterFont(),
+      };
 
       ContextMenuStrip contextMenuButton = new ContextMenuStrip();
       contextMenuButton.Items.Add("Открыть");
@@ -245,6 +255,10 @@ namespace LauncherNet.Elements
       int locationY = 40;
 
       if (DataClass.activeAppPanel != null)
+      {
+        DataClass.activeAppPanel.VerticalScroll.Value = 0;
+        DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.categoriesElementSize.Width - 15;
+
         foreach (Panel app in DataClass.allApps)
         {
           if (locationX + 200 < DataClass.activeAppPanel.Width)
@@ -260,6 +274,7 @@ namespace LauncherNet.Elements
             locationX += WidthPanelCategory + 10;
           }
         }
+      }
     }
   }
 }

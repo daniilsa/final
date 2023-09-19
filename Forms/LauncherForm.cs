@@ -15,10 +15,11 @@ namespace LauncherNet
     }
 
     public void Load()
-    { 
+    {
       new CheckingFiles().CheckingResources();
       new SettingsForms().SettingsLauncherForm(this);
       new ElementsLauncherForm().LoadElements(this);
     }
+
   }
 }

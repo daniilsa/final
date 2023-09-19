@@ -1,4 +1,5 @@
 ﻿using Launcher.Controls;
+using LauncherNet.Design;
 using LauncherNet.Elements;
 using LauncherNet.Forms;
 using LauncherNet.Settings;
@@ -18,7 +19,7 @@ namespace LauncherNet.Functions
     /// <summary>
     /// Открытие категории или её функций.
     /// </summary>
-    public void LoadFunctionCategory(MouseEventArgs e, ContextMenuStrip contextMenuButton, CategoryPanelControl categoryPanel, Panel panelApps, Form launcher)
+    public void LoadFunctionCategory(MouseEventArgs e, ContextMenuStrip contextMenuButton, TextElement categoryPanel, Panel panelApps, Form launcher)
     {
       if (e == null || e.Button == MouseButtons.Left)
       {
@@ -27,14 +28,28 @@ namespace LauncherNet.Functions
         {
           DataClass.activeAppPanel = panelApps;
           DataClass.lastAppPanel = panelApps;
+
+          DataClass.activeCategoryPanel = categoryPanel;
+          DataClass.lastCategoryPanel = categoryPanel;
         }
         else
         {
           DataClass.lastAppPanel = DataClass.activeAppPanel;
           DataClass.activeAppPanel = panelApps;
+
+          DataClass.lastCategoryPanel = DataClass.activeCategoryPanel;
+          DataClass.activeCategoryPanel = categoryPanel;
+
         }
         DataClass.lastAppPanel.Visible = false;
         DataClass.activeAppPanel.Visible = true;
+        
+        DataClass.lastCategoryPanel.BackColor = new ColorElements().GetHeaderColor();
+        DataClass.activeCategoryPanel.BackColor = new ColorElements().GetActiveHeaderColor();
+
+        DataClass.lastCategoryPanel.ForeColor = new FontElements().GetHeaderFontColor();
+        DataClass.activeCategoryPanel.ForeColor = new FontElements().GetActiveHeaderFontColor();
+
         launcher.Text = DataClass.activeAppPanel.Name;
 
         DataClass.allApps.Clear();
