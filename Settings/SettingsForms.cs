@@ -1,5 +1,7 @@
 ﻿using LauncherNet.BackUp;
+using LauncherNet.DesignFront;
 using LauncherNet.Elements;
+using LauncherNet.Front;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,22 +24,21 @@ namespace LauncherNet.Settings
       launcher.MinimumSize = new Size(700, 600);
       launcher.WindowState = FormWindowState.Maximized;
       launcher.Text = "Launcher";
-      //launcher.FormBorderStyle = FormBorderStyle.None;
+      launcher.FormBorderStyle = FormBorderStyle.None;
 
       launcher.SizeChanged += (s, a) =>
       {
-        DataClass.sizeForm.Width = launcher.Width;
+        DataClass.sizeForm = launcher.Size;
         if (DataClass.activeAppPanel != null)
         {
-
           DataClass.activeAppPanel.Width = DataClass.sizeForm.Width - DataClass.sizeCategoriesElement.Width - 15;
           new ElementsLauncherForm().LocationApps();
-
-          new ElementsLauncherForm().SizeAppsPanel();
+          new ElementsLauncherForm().SizeElements();
+          launcher.TopMost = true;
+          launcher.TopMost = false;
 
         }
       };
-
 
       launcher.LocationChanged += (s, a) => DataClass.locationForm = new DataClass.Location(launcher.Location.X, launcher.Location.Y);
 
@@ -45,7 +46,6 @@ namespace LauncherNet.Settings
 
       DataClass.sizeForm = new Size(DataClass.screenSize.Width, DataClass.screenSize.Height);
       DataClass.locationForm = new DataClass.Location(launcher.Location.X, launcher.Location.Y);
-
     }
 
     /// <summary>
@@ -54,10 +54,24 @@ namespace LauncherNet.Settings
     /// <param name="launcher">Экземпляр формы</param>
     public void UpdateLauncher(Form launcher)
     {
+      try
+      {
+        if (FontElements.FontCategory.Name.Contains("Parameter is not valid"))
+          new SettingsForms().UpdateLauncher(DataClass.launcher);
+      }
+      catch
+      {
+        FontElements.UpdateFont();
+      }
+      
       launcher.Controls.Clear();
-      DataClass.allApps.Clear();
+      launcher.Hide();
+      DataClass.appsElement.Clear();
       new BackUpClass().SetCategory();
       new ElementsLauncherForm().LoadElements(launcher);
+      new DesignElements().Load();
+      Thread.Sleep(100);
+      launcher.Show();
     }
 
     /// <summary>
@@ -77,11 +91,23 @@ namespace LauncherNet.Settings
     /// <param name="imageSelection">Экземпляр формы</param>
     public void SettingsImageForm(Form imageSelection)
     {
-      imageSelection.Size = new Size((DataClass.sizelAppElement.Width * 5) + (10 * 4) + 80, (DataClass.sizelAppElement.Height * 2) + (22 * 1) + 120);
+      imageSelection.Size = new Size((DataClass.sizeAppElement.Width * 5) + (10 * 4) + 80, (DataClass.sizeAppElement.Height * 2) + (22 * 1) + 120);
       imageSelection.StartPosition = FormStartPosition.CenterScreen;
       imageSelection.Text = "Выбор обложки";
       imageSelection.FormBorderStyle = FormBorderStyle.None;
 
+    }
+
+    /// <summary>
+    /// Настройка формы загрузки приложения.
+    /// </summary>
+    /// <param name="loadForm"></param>
+    public void SettingsLoadForm(Form loadForm)
+    {
+      loadForm.Size = new Size(408, 150);
+      loadForm.FormBorderStyle = FormBorderStyle.None;
+      loadForm.Location = new Point((DataClass.screenSize.Width - loadForm.Width) / 2, ((DataClass.screenSize.Height - loadForm.Height) / 2));
+      loadForm.BackColor = BackColorElements.HoverBackColorCategory;
     }
   }
 }

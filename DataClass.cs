@@ -1,14 +1,38 @@
 ﻿using Launcher.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace LauncherNet
 {
   static public class DataClass
   {
+
+    #region Позже раскидать по категориям.
+
+    static public bool downloadStage = false;
+    static public Form launcher;
+    static public Panel topElement;
+    static public Panel categoriesElement;
+    static public List<TextElement> categoryElement;
+    static public List<Panel> mainAppsControl;
+
+    static public Panel mainPanel;
+
+    static public bool update;
+
+    /// <summary>
+    /// Список приложений актовной категории. 
+    /// </summary>
+    static public List<Panel> appsElement;
+
+    #endregion
+
     #region Поля
 
     #region Размеры элементов 
@@ -16,12 +40,17 @@ namespace LauncherNet
     /// <summary>
     /// Размер элемента с приложением.
     /// </summary>
-    static public Size sizelAppElement;
+    static public Size sizeAppElement;
 
     /// <summary>
     /// Размер всего приложения.
     /// </summary>
     static public Size sizeForm;
+
+    /// <summary>
+    /// Размер формы до прилипания.
+    /// </summary>
+    static public Size sizeStickingForm;
 
     /// <summary>
     /// Размер элемента с категориями.
@@ -42,14 +71,16 @@ namespace LauncherNet
     /// </summary>
     public struct Location
     {
-      private int[] location = new int[2];
+      private Point location = new Point();
 
-      public int[] LocationElement { get { return location; } }
+      public Point LocationElement { get { return location; } set { location = value; } }
+
+      public int X { get { return location.X; } }
+      public int Y { get { return location.Y; } }
 
       public Location(int x, int y)
       {
-        location[0] = x;
-        location[1] = y;
+        location = new Point(x, y);
       }
     }
 
@@ -57,6 +88,8 @@ namespace LauncherNet
     /// Локация приложения.
     /// </summary>
     static public Location locationForm;
+
+    static public Location locationStickingForm;
 
     #endregion
 
@@ -86,7 +119,7 @@ namespace LauncherNet
     /// Путь к шрифтам
     /// </summary>
     public static string pathFont;
-    
+
     /// <summary>
     /// Путь к выбранно йкртинке из интернета;
     /// </summary>
@@ -108,12 +141,10 @@ namespace LauncherNet
 
     #endregion
 
-    #region Работа с панелями категорий
+    #region Экземпляры элементов
 
-    /// <summary>
-    /// Список приложений актовной категории. 
-    /// </summary>
-    static public List<Panel> allApps;
+
+
 
     /// <summary>
     /// Активная панель с приложениями.
@@ -143,6 +174,8 @@ namespace LauncherNet
     #endregion
 
     #region Другое
+
+    static public Sticking stickingForm;
 
     /// <summary>
     /// Количетсво искомых картинок в интернете.
@@ -183,6 +216,30 @@ namespace LauncherNet
       ChangeImage,
     }
 
+    /// <summary>
+    /// Список возможных "прилипаний" формы к границам экрана.
+    /// </summary>
+    public enum Sticking
+    {
+      Left,
+      Right,
+      Top,
+      Bottom,
+      Nope
+    }
+
+    /// <summary>
+    /// Список возможных границ изменений формы.
+    /// </summary>
+    public enum Expand
+    {
+      Left,
+      Right,
+      Bottom,
+      LeftBottom,
+      RightBottom,
+      Nope
+    }
     #endregion
 
     #endregion
@@ -194,7 +251,7 @@ namespace LauncherNet
     /// </summary>
     static DataClass()
     {
-      sizelAppElement = new Size(167, 268);
+      sizeAppElement = new Size(167, 268);
       screenSize = Screen.PrimaryScreen.Bounds.Size;
 
       pathFiles = @".\Files";
@@ -206,7 +263,11 @@ namespace LauncherNet
       code = "$SPRTR$";
       keyCategory = "lastCategory";
 
-      allApps = new List<Panel>();
+      appsElement = new List<Panel>();
+      stickingForm = Sticking.Nope;
+
+      categoryElement = new List<TextElement>();
+      mainAppsControl = new List<Panel>();
     }
 
     #endregion

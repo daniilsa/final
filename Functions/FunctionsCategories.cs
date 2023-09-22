@@ -1,5 +1,4 @@
 ﻿using Launcher.Controls;
-using LauncherNet.Design;
 using LauncherNet.Elements;
 using LauncherNet.Forms;
 using LauncherNet.Settings;
@@ -23,7 +22,6 @@ namespace LauncherNet.Functions
     {
       if (e == null || e.Button == MouseButtons.Left)
       {
-        categoryPanel.BackColor = Color.Red;
         if (DataClass.activeAppPanel == null)
         {
           DataClass.activeAppPanel = panelApps;
@@ -43,23 +41,29 @@ namespace LauncherNet.Functions
         }
         DataClass.lastAppPanel.Visible = false;
         DataClass.activeAppPanel.Visible = true;
-        
-        DataClass.lastCategoryPanel.BackColor = new ColorElements().GetHeaderColor();
-        DataClass.activeCategoryPanel.BackColor = new ColorElements().GetActiveHeaderColor();
 
-        DataClass.lastCategoryPanel.ForeColor = new FontElements().GetHeaderFontColor();
-        DataClass.activeCategoryPanel.ForeColor = new FontElements().GetActiveHeaderFontColor();
+        //TODO: На подумать
+        //DataClass.lastCategoryPanel.BackColor = new ColorElements().GetHeaderColor();
+        //DataClass.activeCategoryPanel.BackColor = new ColorElements().GetActiveHeaderColor();
+        //
+        //DataClass.lastCategoryPanel.ForeColor = new FontElements().GetHeaderFontColor();
+        //DataClass.activeCategoryPanel.ForeColor = new FontElements().GetActiveHeaderFontColor();
 
         launcher.Text = DataClass.activeAppPanel.Name;
 
-        DataClass.allApps.Clear();
+        DataClass.appsElement.Clear();
 
-        foreach (Panel item in DataClass.activeAppPanel.Controls)
+        foreach (var item in DataClass.activeAppPanel.Controls)
         {
-          DataClass.allApps.Add(item);
+          try
+          {
+            DataClass.appsElement.Add((item as Panel));
+          }
+          catch { }
         }
 
         new ElementsLauncherForm().LocationApps();
+        new ElementsLauncherForm().SizeElements();
 
       }
       else if (e.Button == MouseButtons.Right)
@@ -80,7 +84,12 @@ namespace LauncherNet.Functions
       else if (functionCategory == DataClass.FunctionCategory.RenameCategory) FormRenameCategory(nameCategory);
       else if (functionCategory == DataClass.FunctionCategory.DeleteCategory) Delete(nameCategory);
       else if (functionCategory == DataClass.FunctionCategory.AddApp) FormAddApp(panelApps, nameCategory);
-      new SettingsForms().UpdateLauncher(launcher);
+
+      if (DataClass.update)
+      {
+        new SettingsForms().UpdateLauncher(launcher);
+        DataClass.update = false;
+      }
     }
 
     /// <summary>
@@ -153,7 +162,8 @@ namespace LauncherNet.Functions
     /// <param name="newName">Новое имя категории.</param>
     public void RenameCategory(string oldName, string newName)
     {
-      File.Move($@"{DataClass.categoriesPathFiles}\{oldName}", $@"{DataClass.categoriesPathFiles}\\{newName}");
+      File.Move($@"{DataClass.categoriesPathFiles}\{oldName}", $@"{DataClass.categoriesPathFiles}\{newName}");
+      Directory.Move($@"{DataClass.pathImages}\{oldName}", $@"{DataClass.pathImages}\{newName}");
       Task.Delay(1000).Wait();
     }
 

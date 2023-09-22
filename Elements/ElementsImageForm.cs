@@ -59,12 +59,12 @@ namespace LauncherNet.Elements
       for (int i = 0; i < DataClass.countImageSearch; i++)
       {
         Panel fileСontrols = new Panel();
-        fileСontrols.Size = new System.Drawing.Size(DataClass.sizelAppElement.Width, DataClass.sizelAppElement.Height);
+        fileСontrols.Size = new System.Drawing.Size(DataClass.sizeAppElement.Width, DataClass.sizeAppElement.Height);
         fileСontrols.BorderStyle = BorderStyle.FixedSingle;
 
         // Картинка файла
         PictureBox pictureBoxImageApp = new PictureBox();
-        pictureBoxImageApp.Height = DataClass.sizelAppElement.Height - 40;
+        pictureBoxImageApp.Height = DataClass.sizeAppElement.Height - 40;
         pictureBoxImageApp.Dock = DockStyle.Top;
         pictureBoxImageApp.BackColor = Color.Green;
 
@@ -95,14 +95,14 @@ namespace LauncherNet.Elements
         if (locationX + fileСontrols.Width + 10 < imageForm.Width)
         {
           fileСontrols.Location = new System.Drawing.Point(locationX, locationY);
-          locationX += DataClass.sizelAppElement.Width + 10;
+          locationX += DataClass.sizeAppElement.Width + 10;
         }
         else
         {
           locationX = 40;
-          locationY += DataClass.sizelAppElement.Height + 22;
+          locationY += DataClass.sizeAppElement.Height + 22;
           fileСontrols.Location = new System.Drawing.Point(locationX, locationY);
-          locationX += DataClass.sizelAppElement.Width + 10;
+          locationX += DataClass.sizeAppElement.Width + 10;
         }
         mainPanel.Controls.Add(fileСontrols);
       }
