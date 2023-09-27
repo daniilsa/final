@@ -1,7 +1,9 @@
 
 using LauncherNet.BackUp;
 using LauncherNet.Elements;
+using LauncherNet.Front;
 using LauncherNet.Settings;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace LauncherNet
 {
@@ -11,15 +13,6 @@ namespace LauncherNet
     {
       DoubleBuffered = true;
       InitializeComponent();
-      Load();
     }
-
-    public void Load()
-    {
-      new CheckingFiles().CheckingResources();
-      new SettingsForms().SettingsLauncherForm(this);
-      new ElementsLauncherForm().LoadElements(this);
-    }
-
   }
 }

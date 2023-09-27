@@ -58,8 +58,7 @@ namespace LauncherNet.Forms
       {
         Dock = DockStyle.Fill,
         Padding = new Padding(10, 10, 10, 10),
-        //BackColor = Color.FromArgb(20, 20, 30),
-        BackColor = Color.LightBlue,
+        BackColor = Color.FromArgb(20, 20, 30),
       };
 
       // Текст: "Введите имя новой категории:"
@@ -68,8 +67,8 @@ namespace LauncherNet.Forms
         Text = "Введите имя новой категории:",
         Dock = DockStyle.Top,
         Location = new System.Drawing.Point(15, 15),
-        //Font = new System.Drawing.Font("Winston Bold", 14),
-        //ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        ForeColor = Color.White,
         Width = panelSettings.Width,
       };
 
@@ -78,10 +77,10 @@ namespace LauncherNet.Forms
       {
         Width = this.Width - 30,
         Location = new Point(categoryName.Location.X, categoryName.Location.Y + categoryName.Height + 10),
-        //BackColor = Color.FromArgb(40, 40, 50),
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
-        //BorderStyle = BorderStyle.None
+        BackColor = Color.FromArgb(40, 40, 50),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        BorderStyle = BorderStyle.None
       };
 
       // Кнопка для применения действий.
@@ -90,11 +89,12 @@ namespace LauncherNet.Forms
         Size = new Size(100, 30),
         Text = "Применить",
         Location = new Point(textBoxName.Location.X, textBoxName.Location.Y + textBoxName.Height + 10),
-        //ForeColor = Color.White
+        ForeColor = Color.White
       };
       buttonYes.Click += (s, e) =>
       {
         new FunctionsCategories().CreateCategory(textBoxName.Text);
+        DataClass.update = true;
         this.Close();
       };
 
@@ -103,11 +103,12 @@ namespace LauncherNet.Forms
       {
         Size = new Size(100, 30),
         Text = "Отменить",
-        //ForeColor = Color.White,
+        ForeColor = Color.White,
       };
       buttonNo.Location = new Point(textBoxName.Width - buttonNo.Width + 15, buttonYes.Location.Y);
       buttonNo.Click += (s, e) =>
       {
+        DataClass.update = false;
         this.Close();
       };
 
@@ -132,8 +133,7 @@ namespace LauncherNet.Forms
       {
         Dock = DockStyle.Fill,
         Padding = new Padding(10, 10, 10, 10),
-        BackColor = Color.LightBlue,
-        //BackColor = Color.FromArgb(20, 20, 30)
+        BackColor = Color.FromArgb(20, 20, 30)
       };
 
       // Текст : "Введите имя категории:"
@@ -143,9 +143,9 @@ namespace LauncherNet.Forms
         Location = new System.Drawing.Point(15, 15),
         Width = panelSettings.Width,
         Dock = DockStyle.Top,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
-        //ForeColor = Color.White,
-        //BackColor = Color.FromArgb(20, 20, 30),
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        ForeColor = Color.White,
+        BackColor = Color.FromArgb(20, 20, 30),
       };
 
       // Поле для ввода имени категории
@@ -154,18 +154,18 @@ namespace LauncherNet.Forms
         Width = this.Width - 30,
         Location = new Point(categoryOldName.Location.X, categoryOldName.Location.Y + categoryOldName.Height + 10),
         Text = nameCategory,
-        //BackColor = Color.FromArgb(40, 40, 50),
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
-        //BorderStyle = BorderStyle.None
+        BackColor = Color.FromArgb(40, 40, 50),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        BorderStyle = BorderStyle.None
       };
 
       // Текст : "Введите новое имя категории:",
       Label categoryNewName = new Label
       {
         Text = "Введите новое имя категории:",
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
         Width = panelSettings.Width,
         Location = new Point(textBoxOldNameCategory.Location.X, textBoxOldNameCategory.Location.Y + textBoxOldNameCategory.Height + 10)
       };
@@ -175,10 +175,10 @@ namespace LauncherNet.Forms
       {
         Width = this.Width - 30,
         Location = new Point(categoryNewName.Location.X, categoryNewName.Location.Y + categoryNewName.Height + 10),
-        //BackColor = Color.FromArgb(40, 40, 50),
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
-        //BorderStyle = BorderStyle.None
+        BackColor = Color.FromArgb(40, 40, 50),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        BorderStyle = BorderStyle.None
       };
 
       // Кнопка для применения действий.
@@ -187,7 +187,7 @@ namespace LauncherNet.Forms
         Size = new Size(100, 30),
         Text = "Применить",
         Location = new Point(textBoxNewNameFile.Location.X, textBoxNewNameFile.Location.Y + textBoxNewNameFile.Height + 10),
-        //ForeColor = Color.White
+        ForeColor = Color.White
       };
       buttonYes.Click += (s, e) =>
       {
@@ -200,7 +200,7 @@ namespace LauncherNet.Forms
       {
         Size = new Size(100, 30),
         Text = "Отменить",
-        //ForeColor = Color.White
+        ForeColor = Color.White
       };
       buttonNo.Location = new Point(textBoxNewNameFile.Width - buttonNo.Width + 15, buttonYes.Location.Y);
       buttonNo.Click += (s, e) =>
@@ -236,8 +236,7 @@ namespace LauncherNet.Forms
       {
         Dock = DockStyle.Fill,
         Padding = new Padding(10, 10, 10, 10),
-        BackColor = Color.LightBlue,
-        //BackColor = Color.FromArgb(20, 20, 30)
+        BackColor = Color.FromArgb(20, 20, 30)
       };
 
       // Текст : "Введите имя категории:"
@@ -247,9 +246,9 @@ namespace LauncherNet.Forms
         Location = new System.Drawing.Point(15, 15),
         Width = panelSettings.Width,
         Dock = DockStyle.Top,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
-        //ForeColor = Color.White,
-        //BackColor = Color.FromArgb(20, 20, 30),
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        ForeColor = Color.White,
+        BackColor = Color.FromArgb(20, 20, 30),
       };
 
       // Поле для ввода имени категории
@@ -257,19 +256,20 @@ namespace LauncherNet.Forms
       {
         Width = this.Width - 30,
         Location = new Point(categoryName.Location.X, categoryName.Location.Y + categoryName.Height + 10),
-        //BackColor = Color.FromArgb(40, 40, 50),`
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
-        //BorderStyle = BorderStyle.None
+        BackColor = Color.FromArgb(40, 40, 50),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        BorderStyle = BorderStyle.None
       };
-      if (DataClass.activeAppPanel != null && DataClass.activeAppPanel.Name.Length > 0) textBoxNameCategory.Text = DataClass.activeAppPanel.Name;
+      if (DataClass.activeAppPanelLauncher != null && DataClass.activeAppPanelLauncher.Name.Length > 0)
+        textBoxNameCategory.Text = DataClass.activeAppPanelLauncher.Name;
 
       // Текст : "Введите имя приложения:"
       Label appName = new Label
       {
         Text = "Введите имя приложения:",
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
         Width = panelSettings.Width,
         Location = new Point(textBoxNameCategory.Location.X, textBoxNameCategory.Location.Y + textBoxNameCategory.Height + 10)
       };
@@ -279,18 +279,18 @@ namespace LauncherNet.Forms
       {
         Width = this.Width - 30,
         Location = new Point(appName.Location.X, appName.Location.Y + appName.Height + 10),
-        //BackColor = Color.FromArgb(40, 40, 50),
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
-        //BorderStyle = BorderStyle.None
+        BackColor = Color.FromArgb(40, 40, 50),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        BorderStyle = BorderStyle.None
       };
 
       // Текст : "Введите путь приложения:"
       Label pathFile = new Label
       {
         Text = "Введите путь приложения:",
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 14),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
         Width = panelSettings.Width,
         Location = new Point(textBoxNameFile.Location.X, textBoxNameFile.Location.Y + textBoxNameFile.Height + 10)
       };
@@ -300,10 +300,10 @@ namespace LauncherNet.Forms
       {
         Width = this.Width - 30,
         Location = new Point(pathFile.Location.X, pathFile.Location.Y + pathFile.Height + 10),
-        // BackColor = Color.FromArgb(40, 40, 50),
-        // ForeColor = Color.White,
-        // Font = new System.Drawing.Font("Winston Bold", 14),
-        // BorderStyle = BorderStyle.None
+        BackColor = Color.FromArgb(40, 40, 50),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 14),
+        BorderStyle = BorderStyle.None
       };
       textBoxPathFile.MouseDoubleClick += (sender, e) =>
       {
@@ -323,8 +323,8 @@ namespace LauncherNet.Forms
       Label warningLabel = new Label
       {
         Text = "Внимание! Обложка для этого приложения будет загружена автоматически. Если вы хотите загрузить свою обложку, пожалуйста, нажмите на кнопку 'Добавить изображение'",
-        //ForeColor = Color.White,
-        //Font = new System.Drawing.Font("Winston Bold", 9),
+        ForeColor = Color.White,
+        Font = new System.Drawing.Font("Winston Bold", 9),
         Width = this.Width - 30,
         Location = new Point(textBoxPathFile.Location.X, textBoxPathFile.Location.Y + textBoxPathFile.Height + 10),
       };
@@ -337,7 +337,7 @@ namespace LauncherNet.Forms
         Text = "Добавить изображение",
         Width = this.Width - 30,
         Location = new Point(textBoxPathFile.Location.X, warningLabel.Location.Y + warningLabel.Height + 10),
-        //ForeColor = Color.White
+        ForeColor = Color.White
       };
       addImageButton.Click += (s, e) =>
       {
@@ -345,8 +345,6 @@ namespace LauncherNet.Forms
         if (OFD.ShowDialog() == DialogResult.OK)
         {
           imagePath = OFD.FileName;
-
-
           if (imagePath.EndsWith(".png") || imagePath.EndsWith(".jpg"))
           {
             triggerImage = true;
@@ -362,11 +360,18 @@ namespace LauncherNet.Forms
         Size = new Size(100, 30),
         Text = "Применить",
         Location = new Point(textBoxPathFile.Location.X, addImageButton.Location.Y + addImageButton.Height + 10),
-        //ForeColor = Color.White
+        ForeColor = Color.White
       };
       buttonYes.Click += (s, e) =>
       {
-        if (new FunctionsCategories().CreateApp(textBoxNameCategory.Text, textBoxNameFile.Text, textBoxPathFile.Text, imagePath, addImageButton.Text, triggerImage)) this.Close();
+        if (new FunctionsCategories().CreateApp(textBoxNameCategory.Text, textBoxNameFile.Text, textBoxPathFile.Text, imagePath, addImageButton.Text, triggerImage))
+        {
+          if (DataClass.locationImage != null && DataClass.locationImage != string.Empty)
+          {
+            DataClass.update = true;
+            this.Close();
+          }
+        }
       };
 
       // Кнопка для выхода
@@ -374,11 +379,12 @@ namespace LauncherNet.Forms
       {
         Size = new Size(100, 30),
         Text = "Отменить",
-        //ForeColor = Color.White
+        ForeColor = Color.White
       };
       buttonNo.Location = new Point(textBoxPathFile.Width - buttonNo.Width + 15, buttonYes.Location.Y);
       buttonNo.Click += (s, e) =>
       {
+        DataClass.update = false;
         this.Close();
       };
 
@@ -440,7 +446,7 @@ namespace LauncherNet.Forms
       textBoxPathFile.MouseDoubleClick += (sender, e) =>
       {
         OpenFileDialog OFD = new OpenFileDialog();
-        OFD.Filter = "Изображение (*.jpg)|*.jpg";
+        OFD.Filter = "Изображение |*.jpg;*jpeg;*png";
         if (OFD.ShowDialog() == DialogResult.OK)
         {
           //((TextBox)sender).Text = OFD.FileName;
@@ -462,6 +468,7 @@ namespace LauncherNet.Forms
       buttonYes.Click += (s, e) =>
       {
         new FunctionsApps().ChangeImage(nameCategory, nameFile, textBoxPathFile.Text);
+        DataClass.update = true;
         this.Close();
       };
 
@@ -475,6 +482,7 @@ namespace LauncherNet.Forms
       buttonNo.Location = new Point(textBoxPathFile.Width - buttonNo.Width + 15, buttonYes.Location.Y);
       buttonNo.Click += (s, e) =>
       {
+        DataClass.update = false;
         this.Close();
       };
 

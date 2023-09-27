@@ -1,4 +1,5 @@
 ﻿using LauncherNet.Elements;
+using LauncherNet.Front;
 using LauncherNet.Settings;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,16 @@ namespace LauncherNet.Forms
     public ImageSelectionForm()
     {
       InitializeComponent();
+      DoubleBuffered = true;
+      NameFile = string.Empty;
+      NameCategory = string.Empty;
     }
 
-    public void Load()
+    public new void Load()
     {
       new SettingsForms().SettingsImageForm(this);
       new ElementsImageForm().LoadElements(this, NameCategory, NameFile);
+      new DesignElements().LoadDesignImageSelection();
     }
   }
 }

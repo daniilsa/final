@@ -57,7 +57,6 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory">Имя категории.</param>
     public void LocationApp(Form launcher, string pathApp, string nameCategory, string nameFile)
     {
-      //TODO: Если путь не существует, то предложить удалить файл из лаунчера
       string argument = "";
       int lastIndex = pathApp.LastIndexOf("\\");
       for (int index = 0; index < lastIndex; index++)
@@ -99,7 +98,7 @@ namespace LauncherNet.Functions
     /// <param name="pathImageNew"></param>
     public void ChangeImage(string nameCategory, string nameFile, string pathImageNew)
     {
-      string pathImageOld = DataClass.pathImages+"\\"+nameCategory+"\\"+nameFile+".jpg";
+      string pathImageOld = DataClass.pathImages + "\\" + nameCategory + "\\" + nameFile + ".jpg";
       if (File.Exists(pathImageNew))
       {
         FileInfo fileInfo = new FileInfo(pathImageOld);
@@ -107,7 +106,7 @@ namespace LauncherNet.Functions
         File.Move(pathImageNew, pathImageOld);
       }
       else
-      { 
+      {
         MessageBox.Show($"Новая картинка не найдена!");
       }
     }
@@ -157,12 +156,26 @@ namespace LauncherNet.Functions
     {
       if (Directory.Exists($@"{DataClass.pathImages}\{nameCategory}"))
       {
-        using (WebClient client = new WebClient()) client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+        try
+        {
+          using (WebClient client = new WebClient()) client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+        }
+        catch
+        {
+          MessageBox.Show("Ошибка при скачивании обложки. Пожалуйста, попробуйте загрузить обложку самостоятельно!");
+        }
       }
       else
       {
         Directory.CreateDirectory($@"{DataClass.pathImages}\{nameCategory}");
-        using (WebClient client = new WebClient()) client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+        try
+        {
+          using (WebClient client = new WebClient()) client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+        }
+        catch
+        {
+          MessageBox.Show("Ошибка при скачивании обложки. Пожалуйста, попробуйте загрузить обложку самостоятельно!");
+        }
       }
     }
   }

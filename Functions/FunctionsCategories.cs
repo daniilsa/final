@@ -1,13 +1,15 @@
 ﻿using Launcher.Controls;
-using LauncherNet.Design;
+using LauncherNet.Controls;
 using LauncherNet.Elements;
 using LauncherNet.Forms;
+using LauncherNet.Front;
 using LauncherNet.Settings;
 using System;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -16,56 +18,114 @@ namespace LauncherNet.Functions
 {
   public class FunctionsCategories
   {
+
+
+    private bool openProgramm = true;
+
     /// <summary>
     /// Открытие категории или её функций.
     /// </summary>
-    public void LoadFunctionCategory(MouseEventArgs e, ContextMenuStrip contextMenuButton, TextElement categoryPanel, Panel panelApps, Form launcher)
+    public void LoadFunctionCategory(TextElement categoryPanel, ScrollBarElement panelApps, Form launcher)
     {
-      if (e == null || e.Button == MouseButtons.Left)
+
+      if (DataClass.activeAppPanelLauncher == panelApps && !openProgramm)
+        return;
+      openProgramm = false;
+
+      if (DataClass.activeAppPanelLauncher == null)
       {
-        categoryPanel.BackColor = Color.Red;
-        if (DataClass.activeAppPanel == null)
-        {
-          DataClass.activeAppPanel = panelApps;
-          DataClass.lastAppPanel = panelApps;
+        DataClass.activeAppPanelLauncher = panelApps;
+        DataClass.lastAppPanelLauncher = panelApps;
 
-          DataClass.activeCategoryPanel = categoryPanel;
-          DataClass.lastCategoryPanel = categoryPanel;
-        }
-        else
-        {
-          DataClass.lastAppPanel = DataClass.activeAppPanel;
-          DataClass.activeAppPanel = panelApps;
+        DataClass.activeCategoryPanelLauncher = categoryPanel;
+        DataClass.lastCategoryPanelLauncher = categoryPanel;
+      }
+      else
+      {
+        DataClass.lastAppPanelLauncher = DataClass.activeAppPanelLauncher;
+        DataClass.activeAppPanelLauncher = panelApps;
 
-          DataClass.lastCategoryPanel = DataClass.activeCategoryPanel;
-          DataClass.activeCategoryPanel = categoryPanel;
-
-        }
-        DataClass.lastAppPanel.Visible = false;
-        DataClass.activeAppPanel.Visible = true;
-        
-        DataClass.lastCategoryPanel.BackColor = new ColorElements().GetHeaderColor();
-        DataClass.activeCategoryPanel.BackColor = new ColorElements().GetActiveHeaderColor();
-
-        DataClass.lastCategoryPanel.ForeColor = new FontElements().GetHeaderFontColor();
-        DataClass.activeCategoryPanel.ForeColor = new FontElements().GetActiveHeaderFontColor();
-
-        launcher.Text = DataClass.activeAppPanel.Name;
-
-        DataClass.allApps.Clear();
-
-        foreach (Panel item in DataClass.activeAppPanel.Controls)
-        {
-          DataClass.allApps.Add(item);
-        }
-
-        new ElementsLauncherForm().LocationApps();
+        DataClass.lastCategoryPanelLauncher = DataClass.activeCategoryPanelLauncher;
+        DataClass.activeCategoryPanelLauncher = categoryPanel;
 
       }
-      else if (e.Button == MouseButtons.Right)
+
+      launcher.Text = DataClass.activeAppPanelLauncher.Name;
+
+      DataClass.appsElementLauncher.Clear();
+
+      foreach (var item in DataClass.activeAppPanelLauncher.Controls)
       {
-        contextMenuButton.Show(System.Windows.Forms.Cursor.Position);
+        try
+        {
+          DataClass.appsElementLauncher.Add((item as Panel));
+        }
+        catch 
+        { 
+          // TODO: Проверить, почему тут try catch
+          // Нам нужны только панели, а не Panel item он ругался. Так что это, какого-то рода, костыль)
+        }
       }
+
+      new ElementsLauncherForm().LocationApps();
+      new ElementsLauncherForm().SizeElements();
+      DataClass.lastAppPanelLauncher.Visible = false;
+      DataClass.activeAppPanelLauncher.Visible = true;
+      DataClass.activeAppPanelLauncher.Open = true;
+      new DesignElements().DesignCategoryElementLauncher(DataClass.lastCategoryPanelLauncher);
+      new DesignElements().DesignCategoryElementLauncher(DataClass.activeCategoryPanelLauncher);
+    }
+
+    /// <summary>
+    /// Открытие категории или её функций.
+    /// </summary>
+    public void LoadFunctionCategory2(TextElement categoryPanel, ScrollBarElement panelApps, Form launcher)
+    {
+
+      if (DataClass.activeAppPanelLauncher == panelApps)
+        return;
+
+      if (DataClass.activeAppPanelLauncher == null)
+      {
+        DataClass.activeAppPanelLauncher = panelApps;
+        DataClass.lastAppPanelLauncher = panelApps;
+
+        DataClass.activeCategoryPanelLauncher = categoryPanel;
+        DataClass.lastCategoryPanelLauncher = categoryPanel;
+      }
+      else
+      {
+        DataClass.lastAppPanelLauncher = DataClass.activeAppPanelLauncher;
+        DataClass.activeAppPanelLauncher = panelApps;
+
+        DataClass.lastCategoryPanelLauncher = DataClass.activeCategoryPanelLauncher;
+        DataClass.activeCategoryPanelLauncher = categoryPanel;
+
+      }
+
+      launcher.Text = DataClass.activeAppPanelLauncher.Name;
+
+      DataClass.appsElementLauncher.Clear();
+
+      foreach (var item in DataClass.activeAppPanelLauncher.Controls)
+      {
+        try
+        {
+          DataClass.appsElementLauncher.Add((item as Panel));
+        }
+        catch 
+        {
+          // TODO: Проверить, почему тут try catch
+          // Нам нужны только панели, а не Panel item он ругался. Так что это, какого-то рода, костыль)
+        }
+      }
+
+      new ElementsLauncherForm().LocationApps();
+      new ElementsLauncherForm().SizeElements();
+      DataClass.lastAppPanelLauncher.Visible = false;
+      DataClass.activeAppPanelLauncher.Visible = true;
+      DataClass.activeAppPanelLauncher.Open = true;
+
     }
 
     /// <summary>
@@ -74,13 +134,18 @@ namespace LauncherNet.Functions
     /// <param name="launcher">Экземпляр формы лаунчера.</param>
     /// <param name="functionCategory">Вызванная функция.</param>
     /// <param name="nameCategory">Имя категории.</param>
-    public void StartFunction(Form launcher, DataClass.FunctionCategory functionCategory, Panel panelApps, string nameCategory)
+    public void StartFunction(Form launcher, DataClass.FunctionCategory functionCategory, ScrollBarElement panelApps, string nameCategory)
     {
       if (functionCategory == DataClass.FunctionCategory.AddCategory) FormCategory(nameCategory);
       else if (functionCategory == DataClass.FunctionCategory.RenameCategory) FormRenameCategory(nameCategory);
       else if (functionCategory == DataClass.FunctionCategory.DeleteCategory) Delete(nameCategory);
       else if (functionCategory == DataClass.FunctionCategory.AddApp) FormAddApp(panelApps, nameCategory);
-      new SettingsForms().UpdateLauncher(launcher);
+
+      if (DataClass.update)
+      {
+        new SettingsForms().UpdateLauncher(launcher);
+        DataClass.update = false;
+      }
     }
 
     /// <summary>
@@ -104,9 +169,9 @@ namespace LauncherNet.Functions
     /// <summary>
     /// Запускает форму для добавления приложения в опредлённую категорию.
     /// </summary>
-    private void FormAddApp(Panel panelApps, string nameCategory)
+    private void FormAddApp(ScrollBarElement panelApps, string nameCategory)
     {
-      DataClass.activeAppPanel = panelApps;
+      DataClass.activeAppPanelLauncher = panelApps;
       FunctionalForm functionalForm = new FunctionalForm();
       functionalForm.CategoryForm(DataClass.FunctionCategory.AddApp, nameCategory);
     }
@@ -153,7 +218,8 @@ namespace LauncherNet.Functions
     /// <param name="newName">Новое имя категории.</param>
     public void RenameCategory(string oldName, string newName)
     {
-      File.Move($@"{DataClass.categoriesPathFiles}\{oldName}", $@"{DataClass.categoriesPathFiles}\\{newName}");
+      File.Move($@"{DataClass.categoriesPathFiles}\{oldName}", $@"{DataClass.categoriesPathFiles}\{newName}");
+      Directory.Move($@"{DataClass.pathImages}\{oldName}", $@"{DataClass.pathImages}\{newName}");
       Task.Delay(1000).Wait();
     }
 
@@ -180,12 +246,8 @@ namespace LauncherNet.Functions
               break;
             }
           }
-
           if (next)
           {
-            //TODO: Триггер для теста формы поиска картинок, потом выключить
-            //triggerImage = true;
-
             if (!triggerImage)
             {
               ImageSelectionForm iamgeForm = new ImageSelectionForm();
@@ -193,9 +255,11 @@ namespace LauncherNet.Functions
               iamgeForm.NameCategory = nameCategory;
               iamgeForm.Load();
               iamgeForm.ShowDialog();
-            } /*new SearchImage().StartSearch(nameCategory, nameFile);*/
+            }
             else
             {
+              DataClass.locationImage = imagePath;
+
               try
               {
                 File.Copy(imagePath, $@"{DataClass.pathImages}\{nameCategory}\{nameFile}\.jpg");
@@ -206,8 +270,13 @@ namespace LauncherNet.Functions
                 File.Copy(imagePath, $@"{DataClass.pathImages}\{nameCategory}\{nameFile}\.jpg");
               }
             }
-            if (collection.Length > 0) File.AppendAllText($@"{DataClass.categoriesPathFiles}\{nameCategory}", $"\r\n{DataClass.code}{nameFile}{DataClass.code}{pathFile}{DataClass.code}");
-            else File.AppendAllText($@"{DataClass.categoriesPathFiles}\{nameCategory}", $"{DataClass.code}{nameFile}{DataClass.code}{pathFile}{DataClass.code}");
+
+            if (DataClass.locationImage != string.Empty)
+            {
+              if (collection.Length > 0) File.AppendAllText($@"{DataClass.categoriesPathFiles}\{nameCategory}", $"\r\n{DataClass.code}{nameFile}{DataClass.code}{pathFile}{DataClass.code}");
+              else File.AppendAllText($@"{DataClass.categoriesPathFiles}\{nameCategory}", $"{DataClass.code}{nameFile}{DataClass.code}{pathFile}{DataClass.code}");
+            }
+            else return false;
           }
           else return false;
         }
