@@ -10,6 +10,10 @@ namespace LauncherNet.DesignFront
   {
     #region Свойства
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     /// <summary>
     /// Возвращает цвет фона формы.
     /// </summary>
@@ -54,6 +58,7 @@ namespace LauncherNet.DesignFront
     /// Возвращает цвет фона имени приложения.
     /// </summary>
     static public Color DefaultBackColorTextApp { get; }
+<<<<<<< HEAD
     
     /// <summary>
     /// Возвращает текст фоона имени приложения при наведении.
@@ -65,6 +70,8 @@ namespace LauncherNet.DesignFront
     /// </summary>
     static public Color BackColorImageSelectionForm { get; }
 
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 
     #endregion
 
@@ -110,8 +117,11 @@ namespace LauncherNet.DesignFront
       BackColorMainApps = BackColorForm;
       BackColorAppElement = NewColor(BackColorForm, 30);
       DefaultBackColorTextApp = BackColorAppElement;
+<<<<<<< HEAD
       BackColorImageSelectionForm = BackColorTopElement;
       HoverBackColorTextApp = BackColorCategoriesElement;
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     }
 
     #endregion

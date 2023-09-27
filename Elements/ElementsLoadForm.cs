@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 ﻿using LauncherNet.DesignFront;
+=======
+﻿using LauncherNet.Design;
+using LauncherNet.DesignFront;
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 using LauncherNet.Forms;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,8 @@
 ﻿using Launcher.Controls;
+<<<<<<< HEAD
 using LauncherNet.Controls;
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 using LauncherNet.Elements;
 using LauncherNet.Forms;
 using LauncherNet.Front;
@@ -34,8 +37,15 @@ namespace LauncherNet.Functions
 
       if (DataClass.activeAppPanelLauncher == null)
       {
+<<<<<<< HEAD
         DataClass.activeAppPanelLauncher = panelApps;
         DataClass.lastAppPanelLauncher = panelApps;
+=======
+        if (DataClass.activeAppPanel == null)
+        {
+          DataClass.activeAppPanel = panelApps;
+          DataClass.lastAppPanel = panelApps;
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 
         DataClass.activeCategoryPanelLauncher = categoryPanel;
         DataClass.lastCategoryPanelLauncher = categoryPanel;
@@ -45,8 +55,40 @@ namespace LauncherNet.Functions
         DataClass.lastAppPanelLauncher = DataClass.activeAppPanelLauncher;
         DataClass.activeAppPanelLauncher = panelApps;
 
+<<<<<<< HEAD
         DataClass.lastCategoryPanelLauncher = DataClass.activeCategoryPanelLauncher;
         DataClass.activeCategoryPanelLauncher = categoryPanel;
+=======
+          DataClass.lastCategoryPanel = DataClass.activeCategoryPanel;
+          DataClass.activeCategoryPanel = categoryPanel;
+
+        }
+        DataClass.lastAppPanel.Visible = false;
+        DataClass.activeAppPanel.Visible = true;
+
+        //TODO: На подумать
+        //DataClass.lastCategoryPanel.BackColor = new ColorElements().GetHeaderColor();
+        //DataClass.activeCategoryPanel.BackColor = new ColorElements().GetActiveHeaderColor();
+        //
+        //DataClass.lastCategoryPanel.ForeColor = new FontElements().GetHeaderFontColor();
+        //DataClass.activeCategoryPanel.ForeColor = new FontElements().GetActiveHeaderFontColor();
+
+        launcher.Text = DataClass.activeAppPanel.Name;
+
+        DataClass.appsElement.Clear();
+
+        foreach (var item in DataClass.activeAppPanel.Controls)
+        {
+          try
+          {
+            DataClass.appsElement.Add((item as Panel));
+          }
+          catch { }
+        }
+
+        new ElementsLauncherForm().LocationApps();
+        new ElementsLauncherForm().SizeElements();
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 
       }
 

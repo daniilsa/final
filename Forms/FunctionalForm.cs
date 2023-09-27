@@ -366,11 +366,16 @@ namespace LauncherNet.Forms
       {
         if (new FunctionsCategories().CreateApp(textBoxNameCategory.Text, textBoxNameFile.Text, textBoxPathFile.Text, imagePath, addImageButton.Text, triggerImage))
         {
+<<<<<<< HEAD
           if (DataClass.locationImage != null && DataClass.locationImage != string.Empty)
           {
             DataClass.update = true;
             this.Close();
           }
+=======
+          DataClass.update = true;
+          this.Close(); 
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
         }
       };
 

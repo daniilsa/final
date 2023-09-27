@@ -13,7 +13,10 @@ namespace LauncherNet
     {
       ApplicationConfiguration.Initialize();
       Application.Run(StartProgramm.Open());
+<<<<<<< HEAD
       //Application.Run(new TestForm());
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     }
   }
 }

@@ -39,6 +39,7 @@ namespace LauncherNet.Front
     /// <summary>
     /// Возвращает цвет текста приложения.
     /// </summary>
+<<<<<<< HEAD
     static public Color DefaultForeColorApp { get; set; }
 
     /// <summary>
@@ -80,6 +81,9 @@ namespace LauncherNet.Front
       fontCollection.AddFontFile($@"{font}");
       return new Font(fontCollection.Families[0], 9);
     }
+=======
+    static public Color ForeColorApp { get; set; }
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 
     #endregion
 
@@ -93,6 +97,32 @@ namespace LauncherNet.Front
       UpdateFont();
     }
 
+<<<<<<< HEAD
+=======
+    static public void UpdateFont()
+    {
+      PrivateFontCollection fontCollection = new PrivateFontCollection();
+      FontCategory = new Font("Segoe UI", 15);
+      FontApp = new Font("Segoe UI", 9);
+      DefaultForeColorCategory = BackColorElements.BackColorForm;
+      ActiveForeColorCategory = BackColorElements.BackColorTopElement;
+      ForeColorApp = ActiveForeColorCategory;
+
+      string font = FontResource.String1;
+      fontCollection.AddFontFile($@"{font}");
+      FontCategory = new Font(fontCollection.Families[0], 15);
+      FontApp = new Font(fontCollection.Families[0], 9);
+    }
+
+    static public Font GetFont()
+    {
+      PrivateFontCollection fontCollection = new PrivateFontCollection();
+      string font = FontResource.String1;
+      fontCollection.AddFontFile($@"{font}");
+      return new Font(fontCollection.Families[0], 9);
+    }
+
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     #endregion
   }
 }

@@ -10,10 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.VisualStudio.Shell.Interop" Version="17.7.37355" />
   </ItemGroup>
 
   <ItemGroup>
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     <Compile Update="Settings\FontResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

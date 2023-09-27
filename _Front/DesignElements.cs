@@ -1,5 +1,8 @@
 ﻿using Launcher.Controls;
+<<<<<<< HEAD
 using LauncherNet.Controls;
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 using LauncherNet.DesignFront;
 using LauncherNet.Settings;
 using System;
@@ -13,6 +16,7 @@ namespace LauncherNet.Front
 {
   public class DesignElements
   {
+<<<<<<< HEAD
 
     #region Общие настройки "Дизайна"
 
@@ -85,10 +89,42 @@ namespace LauncherNet.Front
           {
           DesignAppAddElements(value);
           }
+=======
+    /// <summary>
+    /// Настраивает внешний вид всех элементов на форме.
+    /// </summary>
+    public void Load()
+    {
+      try
+      {
+        if (FontElements.FontCategory.Name.Contains("Parameter is not valid")) 
+          new SettingsForms().UpdateLauncher(DataClass.launcher);
+        else
+        {
+          DesignForm(DataClass.launcher);
+          DesignTopElement(DataClass.topElement);
+          DesignCategoriesElement(DataClass.categoriesElement);
+
+          if (DataClass.categoryElement != null)
+            foreach (TextElement value in DataClass.categoryElement)
+            {
+              DesignCategoryElement(value);
+            }
+
+          if (DataClass.mainAppsControl != null)
+            foreach (Panel value in DataClass.mainAppsControl)
+            {
+              DesignAppsElement(value);
+            }
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
         }
       }
       catch
       {
+<<<<<<< HEAD
+=======
+        
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
         new SettingsForms().UpdateLauncher(DataClass.launcher);
       }
     }
@@ -96,15 +132,33 @@ namespace LauncherNet.Front
     /// <summary>
     /// Настраивает внешний вид формы.
     /// </summary>
+<<<<<<< HEAD
     private void DesignLauncher(Form value)
+=======
+    private void DesignForm(Form value)
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     {
       value.BackColor = BackColorElements.BackColorForm;
     }
 
     /// <summary>
+<<<<<<< HEAD
     /// Настраивает внешний вид  элемента со всеми категориями.
     /// </summary>
     private void DesignCategoriesElementLauncher(Panel value)
+=======
+    /// Настраивает внешний вид верхней панели.
+    /// </summary>
+    private void DesignTopElement(Panel value)
+    {
+      value.BackColor = BackColorElements.BackColorTopElement;
+    }
+
+    /// <summary>
+    /// Настраивает внешний вид  элемента со всеми категориями.
+    /// </summary>
+    private void DesignCategoriesElement(Panel value)
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     {
       value.BackColor = BackColorElements.BackColorCategoriesElement;
     }
@@ -112,6 +166,7 @@ namespace LauncherNet.Front
     /// <summary>
     /// Настраивает внешний вид элемента категории.
     /// </summary>
+<<<<<<< HEAD
     public void DesignCategoryElementLauncher(TextElement value)
     {
       value.Font = FontElements.FontCategory;
@@ -130,18 +185,45 @@ namespace LauncherNet.Front
       {
         DataClass.lastCategoryPanelLauncher.ForeColor = FontElements.DefaultForeColorCategory;
         DataClass.lastCategoryPanelLauncher.BackColor = BackColorElements.DefaultBackColorCategory;
+=======
+    private void DesignCategoryElement(TextElement value)
+    {
+      value.Font = FontElements.FontCategory;
+      value.ForeColor = FontElements.DefaultForeColorCategory;
+
+      value.MouseEnter += (s, e) =>
+      {
+        if (value != DataClass.activeCategoryPanel) value.BackColor = BackColorElements.HoverBackColorCategory;
+      };
+      value.MouseLeave += (s, e) =>
+      {
+        if (value != DataClass.activeCategoryPanel) value.BackColor = BackColorElements.DefaultBackColorCategory;
+      };
+      value.MouseDown += (s, e) =>
+      {
+        DataClass.lastCategoryPanel.ForeColor = FontElements.DefaultForeColorCategory;
+        DataClass.lastCategoryPanel.BackColor = BackColorElements.DefaultBackColorCategory;
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
         value.BackColor = BackColorElements.ActiveBackColorCategory;
         value.ForeColor = FontElements.ActiveForeColorCategory;
       };
 
+<<<<<<< HEAD
       if (DataClass.activeCategoryPanelLauncher != null)
       {
         DataClass.activeCategoryPanelLauncher.ForeColor = FontElements.ActiveForeColorCategory;
         DataClass.activeCategoryPanelLauncher.BackColor = BackColorElements.ActiveBackColorCategory;
+=======
+      if (DataClass.activeCategoryPanel != null)
+      {
+        DataClass.activeCategoryPanel.ForeColor = FontElements.ActiveForeColorCategory;
+        DataClass.activeCategoryPanel.BackColor = BackColorElements.ActiveBackColorCategory;
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
       }
     }
 
     /// <summary>
+<<<<<<< HEAD
     /// Настраивает внешний вид элмента создания новой категории.
     /// </summary>
     /// <param name="value"></param>
@@ -183,12 +265,23 @@ namespace LauncherNet.Front
       catch
       {
         // Сюда, ПОЧЕМУ-ТО попадает плашка добавления приложения, так что пусть будет
+=======
+    /// Настраивает внешний вид элемента со всеми приложениями.
+    /// </summary>
+    private void DesignAppsElement(Panel value)
+    {
+      value.BackColor = BackColorElements.BackColorMainApps;
+      foreach (Panel panel in value.Controls)
+      {
+        DesignAppElement(panel);
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
       }
     }
 
     /// <summary>
     /// Настраивает внешний вид элемента с приложением.
     /// </summary>
+<<<<<<< HEAD
     private void DesignAppElementLauncher(Panel value)
     {
       if (value.Controls[0].GetType() == new PictureBox().GetType() && value.Controls[1].GetType() == new TextElement().GetType())
@@ -201,6 +294,14 @@ namespace LauncherNet.Front
             break;
           }
 
+=======
+    private void DesignAppElement(Panel value)
+    {
+      if (value.Controls[0].GetType() == new PictureBox().GetType() && value.Controls[1].GetType() == new TextElement().GetType())
+      {
+
+        PictureBox picture = value.Controls[0] as PictureBox;
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
         picture.BackgroundImageLayout = ImageLayout.Zoom;
         picture.BackColor = BackColorElements.BackColorAppElement;
 
@@ -209,6 +310,10 @@ namespace LauncherNet.Front
 
         if (File.Exists(pathImages + picture.Name + ".jpg"))
         {
+<<<<<<< HEAD
+=======
+
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
           using (var imgStream = File.OpenRead(pathImages + picture.Name + ".jpg"))
           {
             picture.BackgroundImage = Image.FromStream(imgStream);
@@ -229,6 +334,7 @@ namespace LauncherNet.Front
           }
         }
 
+<<<<<<< HEAD
         TextElement text = new TextElement();
         foreach (var textElement in value.Controls)
           if (textElement.GetType() == new TextElement().GetType())
@@ -368,3 +474,14 @@ namespace LauncherNet.Front
 
 }
 
+=======
+        TextElement text = value.Controls[1] as TextElement;
+        text.BackColor = BackColorElements.DefaultBackColorTextApp;
+        text.Font = FontElements.FontApp;
+        text.ForeColor = FontElements.ForeColorApp;
+      }
+    }
+
+  }
+}
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f

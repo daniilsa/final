@@ -146,6 +146,7 @@ namespace LauncherNet.Elements
       //TODO: Разбить на разные методы
       for (int i = 0; i < DataClass.countImageSearch; i++)
       {
+<<<<<<< HEAD
         // Главный элемент выбора картинки.
         Panel fileСontrols = new Panel
         {
@@ -159,6 +160,18 @@ namespace LauncherNet.Elements
           Height = DataClass.sizeAppElement.Height - 40,
           Dock = DockStyle.Top,
         };
+=======
+        Panel fileСontrols = new Panel();
+        fileСontrols.Size = new System.Drawing.Size(DataClass.sizeAppElement.Width, DataClass.sizeAppElement.Height);
+        fileСontrols.BorderStyle = BorderStyle.FixedSingle;
+
+        // Картинка файла
+        PictureBox pictureBoxImageApp = new PictureBox();
+        pictureBoxImageApp.Height = DataClass.sizeAppElement.Height - 40;
+        pictureBoxImageApp.Dock = DockStyle.Top;
+        pictureBoxImageApp.BackColor = Color.Green;
+
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
         if (imageResources != null)
         {
           pictureBoxImageApp.SizeMode = PictureBoxSizeMode.Zoom;
@@ -228,8 +241,13 @@ namespace LauncherNet.Elements
         }
         else
         {
+<<<<<<< HEAD
           locationX = 24;
           locationY += DataClass.sizeAppElement.Height + 19;
+=======
+          locationX = 40;
+          locationY += DataClass.sizeAppElement.Height + 22;
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
           fileСontrols.Location = new System.Drawing.Point(locationX, locationY);
           locationX += DataClass.sizeAppElement.Width + 10;
         }

@@ -1,6 +1,16 @@
+<<<<<<< HEAD
 ﻿using LauncherNet;
 using LauncherNet.Front;
 using LauncherNet.Settings;
+=======
+﻿
+using System.Reflection.Metadata;
+using System;
+using LauncherNet.Settings;
+using LauncherNet;
+using LauncherNet.Front;
+using System.Drawing.Text;
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 
 namespace Launcher.Controls
 {
@@ -28,6 +38,7 @@ namespace Launcher.Controls
     protected override void OnPaint(PaintEventArgs e)
     {
       base.OnPaint(e);
+
       Graphics graphics = e.Graphics;
       graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
@@ -36,6 +47,7 @@ namespace Launcher.Controls
 
       try
       {
+<<<<<<< HEAD
         if (FontElements.FontCategory.Name.Contains("Parameter is not valid")) return;
       }
       catch
@@ -45,6 +57,18 @@ namespace Launcher.Controls
 
       graphics.FillRectangle(new SolidBrush(BackColor), rectangle);
       graphics.DrawString(Text, Font, new SolidBrush(ForeColor), rectangleText, SF);
+=======
+        if (FontElements.FontCategory.Name.Contains("Parameter is not valid"))
+          new SettingsForms().UpdateLauncher(DataClass.launcher);
+      }
+      catch
+      {
+        this.Font = FontElements.GetFont();
+      }
+
+      graphics.DrawRectangle(new Pen(this.BackColor), rectangle);
+      graphics.DrawString(Text, this.Font, new SolidBrush(this.ForeColor), rectangleText, SF);
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     }
 
     /// <summary>

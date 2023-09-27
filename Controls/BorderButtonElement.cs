@@ -9,7 +9,11 @@ namespace LauncherNet.Controls
   public class BorderButtonElement : Control
   {
     /// <summary>
+<<<<<<< HEAD
     /// Спсиок элементов управления.
+=======
+    /// Выбор элемента управления.
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     /// </summary>
     public enum Choice
     {
@@ -19,6 +23,7 @@ namespace LauncherNet.Controls
       Nope
     }
 
+<<<<<<< HEAD
     /// <summary>
     /// Задаёт или возвращает элемент управления.
     /// </summary>
@@ -28,6 +33,10 @@ namespace LauncherNet.Controls
     /// Отрисовка элемента управления.
     /// </summary>
     /// <param name="e">Данные для рисования.</param>
+=======
+    public Choice ChoiceElement { get; set; }
+
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     protected override void OnPaint(PaintEventArgs e)
     {
       base.OnPaint(e);
@@ -61,11 +70,16 @@ namespace LauncherNet.Controls
         int locationY = (this.Height - widthRect) / 2 - widthRect / 6;
 
         Graphics graphics = e.Graphics;
+<<<<<<< HEAD
+=======
+
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
         graphics.DrawRectangle(new Pen(this.ForeColor, 1), locationX, locationY, widthRect, heightRect);
         graphics.FillRectangle(new SolidBrush(this.BackColor), locationX + 1, locationY + 1, widthRect - 1, heightRect - 1);
 
         locationX = (this.Width - widthRect) / 2 - widthRect / 4;
         locationY = (this.Height - widthRect) / 2;
+<<<<<<< HEAD
        
         graphics.DrawRectangle(new Pen(this.ForeColor, 1), locationX, locationY, widthRect, heightRect);
         graphics.FillRectangle(new SolidBrush(this.BackColor), locationX + 1, locationY + 1, widthRect - 1, heightRect - 1);
@@ -75,12 +89,23 @@ namespace LauncherNet.Controls
     /// <summary>
     /// Задаёт параметры по-умолчанию.
     /// </summary>
+=======
+        graphics.DrawRectangle(new Pen(this.ForeColor, 1), locationX, locationY, widthRect, heightRect);
+        graphics.FillRectangle(new SolidBrush(this.BackColor), locationX + 1, locationY + 1, widthRect - 1, heightRect - 1);
+
+      }
+    }
+
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     public BorderButtonElement()
     {
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);
       DoubleBuffered = true;
       ChoiceElement = Choice.Nope;
+<<<<<<< HEAD
       Size = new Size(20,20);
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     }
   }
 }

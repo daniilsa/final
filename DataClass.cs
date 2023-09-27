@@ -13,6 +13,27 @@ namespace LauncherNet
 {
   static public class DataClass
   {
+
+    #region Позже раскидать по категориям.
+
+    static public bool downloadStage = false;
+    static public Form launcher;
+    static public Panel topElement;
+    static public Panel categoriesElement;
+    static public List<TextElement> categoryElement;
+    static public List<Panel> mainAppsControl;
+
+    static public Panel mainPanel;
+
+    static public bool update;
+
+    /// <summary>
+    /// Список приложений актовной категории. 
+    /// </summary>
+    static public List<Panel> appsElement;
+
+    #endregion
+
     #region Поля
 
     #region Триггеры
@@ -43,6 +64,14 @@ namespace LauncherNet
 
     /// <summary>
     /// Размер формы до прилипания.
+<<<<<<< HEAD
+=======
+    /// </summary>
+    static public Size sizeStickingForm;
+
+    /// <summary>
+    /// Размер элемента с категориями.
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     /// </summary>
     static public Size sizeStickingForm;
 
@@ -83,9 +112,12 @@ namespace LauncherNet
     /// </summary>
     static public Location locationForm;
 
+<<<<<<< HEAD
     /// <summary>
     /// Последняя позиция формы до "Прилипания".
     /// </summary>
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     static public Location locationStickingForm;
 
     #endregion
@@ -140,12 +172,17 @@ namespace LauncherNet
 
     #region Экземпляры элементов
 
+<<<<<<< HEAD
     /*==ЛАУНЧЕР==*/
 
     /// <summary>
     /// Экземпляр формы лаунчера.
     /// </summary>
     static public Form launcher;
+=======
+
+
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
 
     /// <summary>
     /// Активная панель с приложениями.
@@ -194,6 +231,8 @@ namespace LauncherNet
     /// Последняя активная панель категории.
     /// </summary>
     static public TextElement lastCategoryPanelLauncher;
+
+    static public Sticking stickingForm;
 
     /// <summary>
     /// Экземпляры панелей категории лаунчера.
@@ -276,6 +315,7 @@ namespace LauncherNet
       RightBottom,
       Nope
     }
+<<<<<<< HEAD
 
     #endregion
 
@@ -291,6 +331,8 @@ namespace LauncherNet
     /// </summary>
     static public int countImageSearch = 9;
 
+=======
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     #endregion
 
     #endregion
@@ -314,6 +356,7 @@ namespace LauncherNet
       code = "$SPRTR$";
       keyCategory = "lastCategory";
 
+<<<<<<< HEAD
       appsElementLauncher = new List<Panel>();
       stickingForm = Sticking.Nope;
 
@@ -323,6 +366,13 @@ namespace LauncherNet
       imageElementsSelectionForm = new List<Panel>();
       controlAddApp = new List<ControlAddElement>();
       locationImage = string.Empty;
+=======
+      appsElement = new List<Panel>();
+      stickingForm = Sticking.Nope;
+
+      categoryElement = new List<TextElement>();
+      mainAppsControl = new List<Panel>();
+>>>>>>> e7ab0e6a4aec6a4e47cb71bec0d9ef36d6e9208f
     }
 
     #endregion
