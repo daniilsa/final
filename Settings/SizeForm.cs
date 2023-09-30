@@ -10,16 +10,16 @@ namespace LauncherNet.Settings
   public  class SizeForm
   {
 
-    public void ResizeForm(DataClass.Expand expandForm, bool expand, Point startPoint, Location locationForm, Size sizeForm )
+    public async void ResizeForm(DataClass.Expand expandForm, bool expand, Point startPoint, Location locationForm, Size sizeForm )
     {
       if (expandForm != DataClass.Expand.Nope && expand)
       {
+        
         if (expandForm == DataClass.Expand.Left)
         {
           int differenceWidth = Cursor.Position.X - startPoint.X;
-
           //differenceWidth = DataClass.sizeAppElement.Width*2*(-1);
-
+          
           DataClass.launcher.Size = new Size(sizeForm.Width - differenceWidth, DataClass.launcher.Size.Height);
           if (DataClass.launcher.Size.Width > DataClass.launcher.MinimumSize.Width)
             DataClass.launcher.Location = new Point(locationForm.X + differenceWidth, DataClass.launcher.Location.Y);

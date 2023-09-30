@@ -1,4 +1,7 @@
-﻿using LauncherNet.Info;
+﻿using LauncherNet.Front;
+using LauncherNet.Info;
+using System.Xml.Linq;
+using static LauncherNet.DataClass;
 
 namespace LauncherNet.Controls
 {
@@ -10,7 +13,7 @@ namespace LauncherNet.Controls
     /// <summary>
     /// Высота одного элемента.
     /// </summary>
-    private int heightElement = 0;
+    private Size sizeElement = new(0, 0);
 
     /// <summary>
     /// Кол-во линий с элементами.
@@ -18,14 +21,39 @@ namespace LauncherNet.Controls
     private int countLines = 1;
 
     /// <summary>
+    /// Элементов на линии.
+    /// </summary>
+    private int elementsOnTheLine = 0;
+
+    /// <summary>
+    /// Можно ли изменить количество элементов на линии.
+    /// </summary>
+    private bool calculationOfElements;
+
+
+    /// <summary>
+    /// Смена локации scroll.
+    /// </summary>
+    private bool expectationScroll = false;
+
+    /// <summary>
+    /// Смена локации main.
+    /// </summary>
+    private bool expectationMain = false;
+
+    /// <summary>
     /// Экземпляр панели, в которую добавляются элементы из вне.
     /// </summary>
     private readonly Panel mainPanel;
 
+    private readonly Panel scrollBar;
+
+    private readonly Panel caretScroll;
+
     /// <summary>
     /// Плавность хода.
     /// </summary>
-    private readonly int smoothing = 2;
+    private readonly int smoothing = 1;
 
     #endregion
 
@@ -35,12 +63,12 @@ namespace LauncherNet.Controls
     /// <summary>
     /// Возвращает или задаёт цвет заднего фона элемента скролла.
     /// </summary>
-    public Color BackColorScroll { get; set; }
+    public Color BackColorScroll { get { return scrollBar.BackColor; } set { scrollBar.BackColor = value; } }
 
     /// <summary>
     /// Возвращает или задаёт цвет фона каретки скролла.
     /// </summary>
-    public Color BackColorCaret { get; set; }
+    public Color BackColorCaret { get { return caretScroll.BackColor; } set { caretScroll.BackColor = value; } }
 
     /// <summary>
     /// Возвращает или задаёт ширину скролла.
@@ -64,10 +92,6 @@ namespace LauncherNet.Controls
     #endregion
 
     #region Private
-    /// <summary>
-    /// Возвращает или задаёт позицию картеки по оси Y.
-    /// </summary>
-    private int CaretLocationY { get; set; }
 
     /// <summary>
     /// Возвращает или задаёт высоту каретки
@@ -85,80 +109,9 @@ namespace LauncherNet.Controls
 
     #region Методы
 
-    /// <summary>
-    /// Отрисовка элемента.
-    /// </summary>
-    /// <param name="e">Данные для обработки события рисования на элементе.</param>
-    protected override void OnPaint(PaintEventArgs e)
-    {
-      base.OnPaint(e);
-      mainPanel.Width = Width - WidthScroll;
 
-      if (mainPanel.Location.Y == 40) mainPanel.Location = new Point(0, 0);
-      if (Open)
-      {
-        mainPanel.Location = new Point(0, 0);
-        Open = false;
-      }
-      else mainPanel.Location = new Point(0, mainPanel.Location.Y);
-      LocationApps();
 
-      Rectangle rectangleAll = new(0, 0, Width, Height);
-
-      Graphics graphics = e.Graphics;
-      graphics.FillRectangle(new SolidBrush(BackColor), rectangleAll);
-
-      if (mainPanel.Height > Height)
-      {
-        CarriageHeightAndStepCalculation();
-
-        Rectangle rectangleBackScroll = new(Width - WidthScroll, 0, WidthScroll, Height);
-        graphics.FillRectangle(new SolidBrush(BackColorScroll), rectangleBackScroll);
-
-        Rectangle rectangleCaret = new(Width - WidthScroll, CaretLocationY, WidthScroll, CaretHeight);
-        graphics.FillRectangle(new SolidBrush(BackColorCaret), rectangleCaret);
-      }
-    }
-
-    /// <summary>
-    /// Прокрутка колесика мыши.
-    /// </summary>
-    /// <param name="e">Данные для обработки события прокрутки колесика мыши на элементе.</param>
-    protected override void OnMouseWheel(MouseEventArgs e)
-    {
-      base.OnMouseWheel(e);
-
-      if (mainPanel.Height > Height)
-      {
-        if (e.Delta < 0)
-        {
-          if (CaretLocationY + CaretHeight + (DistanceCaret / smoothing) <= Height)
-          {
-            CaretLocationY = Convert.ToInt32(CaretLocationY + (DistanceCaret / smoothing));
-            mainPanel.Location = new Point(0, mainPanel.Location.Y - ((heightElement + Y_AxisIndentation) / smoothing));
-          }
-          else
-          {
-            CaretLocationY = Height - CaretHeight;
-            mainPanel.Location = new Point(0, -(mainPanel.Height - Height) - Y_AxisIndentation * 3);
-          }
-        }
-        else if (e.Delta > 0)
-        {
-          if (CaretLocationY - (DistanceCaret / smoothing) >= 0)
-          {
-            CaretLocationY = Convert.ToInt32(CaretLocationY - (DistanceCaret / smoothing));
-            mainPanel.Location = new Point(0, mainPanel.Location.Y + ((heightElement + Y_AxisIndentation) / smoothing));
-          }
-          else
-          {
-            CaretLocationY = 0;
-            mainPanel.Location = new Point(0, 0);
-          }
-        }
-        Invalidate();
-      }
-    }
+    #region Расчёты для скролла
 
     /// <summary>
     /// Расчёт высоты и "дистанции" картеки
@@ -172,6 +125,7 @@ namespace LauncherNet.Controls
       new InfoElement().ColorTwoParameters("Видимая часть элементов(%) = ", visiblePartAsPercentage.ToString(), ConsoleColor.Green, false);
 
       CaretHeight = GetСarriageHeight(onePercent, visiblePartAsPercentage);
+      caretScroll.Height = CaretHeight;
       new InfoElement().ColorTwoParameters("Высота каретки(пиксели) = ", CaretHeight.ToString(), ConsoleColor.Green, false);
 
       int distentionRestScroll = GetEmptyScrollLength();
@@ -228,7 +182,7 @@ namespace LauncherNet.Controls
     /// <returns></returns>
     private Double GetPercentageInvisibleLines()
     {
-      return Math.Abs(countLines - (Convert.ToDouble(Height) / heightElement));
+      return Math.Abs(countLines - (Convert.ToDouble(Height) / sizeElement.Height));
     }
 
     /// <summary>
@@ -242,58 +196,325 @@ namespace LauncherNet.Controls
       return Convert.ToInt32(distentionRestScroll / numberInvisibleLines);
     }
 
+    #endregion
+
+    /// <summary>
+    /// Прокрутка колесика мыши.
+    /// </summary>
+    /// <param name="e">Данные для обработки события прокрутки колесика мыши на элементе.</param>
+    protected override async void OnMouseWheel(MouseEventArgs e)
+    {
+      base.OnMouseWheel(e);
+      if (mainPanel.Height > Height && !expectationMain)
+      {
+        scrollBar.Visible = true;
+        if (e.Delta < 0)
+        {
+          MouseWheelDown();
+        }
+        else if (e.Delta > 0)
+        {
+          MouseWheelUp();
+        }
+      }
+    }
+
+    public async void MouseWheelDown()
+    {
+      if (mainPanel.Height > Height && !expectationMain)
+      {
+        scrollBar.Visible = true;
+        if (caretScroll.Height + caretScroll.Location.Y < Height)
+        {
+          if (caretScroll.Location.Y + CaretHeight + (DistanceCaret / smoothing) <= Height)
+          {
+            int count = 0;
+            int mainLocationY = mainPanel.Location.Y - ((sizeElement.Height + Y_AxisIndentation) / smoothing);
+            int temporaryLocationY = mainPanel.Location.Y;
+            int scroolLocationY = Convert.ToInt32(caretScroll.Location.Y + (DistanceCaret / smoothing));
+
+            // Для адеватного расчёта дистанции каретки (появилось при плавности) )
+            while (!expectationMain && temporaryLocationY >= mainLocationY)
+            {
+              if (temporaryLocationY <= mainPanel.Height - Height - Y_AxisIndentation * 3)
+              {
+                temporaryLocationY -= 10;
+                count++;
+              }
+              else
+              {
+                break;
+              }
+            }
+
+            int distance = scroolLocationY / count;
+
+            while (!expectationMain || !expectationScroll)
+            {
+              expectationMain = true;
+              expectationScroll = true;
+
+              await Task.Delay(1);
+              if (mainPanel.Location.Y <= mainPanel.Height - Height - Y_AxisIndentation * 3)
+              {
+                if (mainPanel.Location.Y >= mainLocationY)
+                {
+                  mainPanel.Location = new Point(0, mainPanel.Location.Y - 10);
+                  expectationMain = false;
+                }
+              }
+
+              if ((caretScroll.Height + caretScroll.Location.Y + distance) <= Height)
+              {
+                if (caretScroll.Location.Y <= scroolLocationY)
+                {
+                  caretScroll.Location = new Point(0, caretScroll.Location.Y + distance);
+                  expectationScroll = false;
+                }
+              }
+            }
+
+            mainPanel.Location = new Point(0, mainLocationY);
+            scrollBar.Location = new Point(0, scroolLocationY);
+            expectationMain = false;
+            expectationScroll = false;
+          }
+          else
+          {
+            int count = 0;
+            int mainLocationY = -(mainPanel.Height - Height) - Y_AxisIndentation * 3;
+            int temporaryLocationY = mainPanel.Location.Y;
+            int scroolLocationY = Height - CaretHeight;
+
+            // Для адеватного расчёта дистанции каретки (появилось при плавности) )
+            while (temporaryLocationY >= mainLocationY)
+            {
+              if (temporaryLocationY <= mainPanel.Height - Height - Y_AxisIndentation * 3)
+              {
+                temporaryLocationY -= 10;
+                count++;
+              }
+              else
+              {
+                break;
+              }
+            }
+
+            int distance = (Height - caretScroll.Location.Y - caretScroll.Height) / count;
+            if (distance <= 0)
+              distance = 1;
+
+            while (!expectationMain || !expectationScroll)
+            {
+              expectationMain = true;
+              expectationScroll = true;
+
+              await Task.Delay(1);
+              if (mainPanel.Location.Y <= mainPanel.Height - Height - Y_AxisIndentation * 3)
+              {
+                if (mainPanel.Location.Y >= mainLocationY)
+                {
+                  mainPanel.Location = new Point(0, mainPanel.Location.Y - 10);
+                  expectationMain = false;
+                }
+              }
+
+              if ((caretScroll.Height + caretScroll.Location.Y + distance) <= Height)
+              {
+                if (caretScroll.Location.Y <= scroolLocationY)
+                {
+                  caretScroll.Location = new Point(0, caretScroll.Location.Y + distance);
+                  expectationScroll = false;
+                }
+              }
+            }
+
+            caretScroll.Location = new Point(0, Height - CaretHeight);
+            mainPanel.Location = new Point(0, -(mainPanel.Height - Height) - Y_AxisIndentation * 3);
+            expectationMain = false;
+            expectationScroll = false;
+          }
+        }
+      }
+    }
+
+    public async void MouseWheelUp()
+    {
+      if (caretScroll.Location.Y > 0)
+      {
+        if (caretScroll.Location.Y - (DistanceCaret / smoothing) >= 0)
+        {
+          int count = 0;
+          int mainLocationY = mainPanel.Location.Y + ((sizeElement.Height + Y_AxisIndentation) / smoothing);
+          int temporaryLocationY = mainPanel.Location.Y;
+          int scroolLocationY = Convert.ToInt32(caretScroll.Location.Y - (DistanceCaret / smoothing));
+          int difference = caretScroll.Location.Y - scroolLocationY;
+
+          // Для адеватного расчёта дистанции каретки (появилось при плавности).
+          while (!expectationMain && temporaryLocationY <= mainLocationY)
+          {
+            if (temporaryLocationY <= mainLocationY)
+            {
+              temporaryLocationY += 10;
+              count++;
+            }
+            else
+            {
+              break;
+            }
+          }
+
+          int distance = difference / count;
+
+          while (!expectationMain || !expectationScroll)
+          {
+            expectationMain = true;
+            expectationScroll = true;
+
+            await Task.Delay(1);
+            if (mainPanel.Location.Y <= 0)
+            {
+              if (mainPanel.Location.Y <= mainLocationY)
+              {
+                mainPanel.Location = new Point(0, mainPanel.Location.Y + 10);
+                expectationMain = false;
+              }
+            }
+
+            if (caretScroll.Location.Y >= 0)
+            {
+              if (caretScroll.Location.Y >= scroolLocationY)
+              {
+                caretScroll.Location = new Point(0, caretScroll.Location.Y - distance);
+                expectationScroll = false;
+              }
+            }
+          }
+
+          mainPanel.Location = new Point(0, mainLocationY);
+          scrollBar.Location = new Point(0, scroolLocationY);
+          expectationMain = false;
+          expectationScroll = false;
+        }
+        else
+        {
+          int count = 0;
+          int mainLocationY = 0;
+          int temporaryLocationY = mainPanel.Location.Y;
+          int scroolLocationY = 0;
+          int difference = caretScroll.Location.Y - scroolLocationY;
+
+          // Для адеватного расчёта дистанции каретки (появилось при плавности).
+          while (!expectationMain && temporaryLocationY <= mainLocationY)
+          {
+            if (temporaryLocationY <= mainLocationY)
+            {
+              temporaryLocationY += 10;
+              count++;
+            }
+            else
+            {
+              break;
+            }
+          }
+
+          int distance = difference / count;
+
+          while (!expectationMain || !expectationScroll)
+          {
+            expectationMain = true;
+            expectationScroll = true;
+
+            await Task.Delay(1);
+            if (mainPanel.Location.Y <= mainLocationY)
+            {
+              mainPanel.Location = new Point(0, mainPanel.Location.Y + 10);
+              expectationMain = false;
+            }
+
+            if (caretScroll.Location.Y >= scroolLocationY)
+            {
+              caretScroll.Location = new Point(0, caretScroll.Location.Y - distance);
+              expectationScroll = false;
+            }
+          }
+
+          caretScroll.Location = new Point(0, mainLocationY);
+          mainPanel.Location = new Point(0, scroolLocationY);
+          expectationMain = false;
+          expectationScroll = false;
+        }
+      }
+
+    }
+
     /// <summary>
     /// Меняет размеры элемента.
     /// </summary>
     /// <param name="width">Ширина элемента.</param>
     /// <param name="height">Высота элемента.</param>
-    public void Resize(int width, int height)
+    public new void Resize(int width, int height)
     {
       Width = width;
       Height = height;
+      scrollBar.Visible = true;
 
       mainPanel.Width = Width - WidthScroll;
       mainPanel.Location = new Point(mainPanel.Location.X, 0);
-      CaretLocationY = 0;
+
+      if (mainPanel.Height <= Height) scrollBar.Visible = false;
+      else scrollBar.Visible = true;
+
+      caretScroll.Location = new Point(0, 0);
       CarriageHeightAndStepCalculation();
+
+      //TODO: Расчитать момент расчёта локации
+      //if (elementsOnTheLine * (sizeAppElement.Width + X_AxisIndentation) >= mainPanel.Width)
+      //  LocationApps();
+      //
+      //else if ((elementsOnTheLine + 1) * (sizeAppElement.Width + X_AxisIndentation) <= mainPanel.Width)
+      //  LocationApps();
+
       LocationApps();
-      Invalidate();
 
       new InfoElement().WriteInfoElement(DataClass.launcher, "Вся форма");
       new InfoElement().WriteInfoElement(mainPanel, "Панель с приложениями");
-      new InfoElement().ColorTwoParameters("Позиция каретки", CaretLocationY.ToString(), ConsoleColor.Green, false);
+      new InfoElement().ColorTwoParameters("Позиция каретки", caretScroll.Location.Y.ToString(), ConsoleColor.Green, false);
     }
 
     /// <summary>
     /// Расчёт локации элементов с приложениями.
     /// </summary>
-    public void LocationApps()
+    private async void LocationApps()
     {
       int locationX = 40;
       int locationY = 40;
+      elementsOnTheLine = 0;
       countLines = 1;
-      mainPanel.Height = heightElement + Y_AxisIndentation;
+      calculationOfElements = true;
+      mainPanel.Height = sizeElement.Height + Y_AxisIndentation;
       int i = 0;
 
       foreach (Control app in mainPanel.Controls)
       {
         i++;
-        if (locationX + app.Width + 25 < DataClass.activeAppPanelLauncher.Width)
+        if (locationX + app.Width + X_AxisIndentation < DataClass.activeAppPanelLauncher.Width)
         {
           app.Location = new System.Drawing.Point(locationX, locationY);
           locationX += DataClass.sizeAppElement.Width + X_AxisIndentation;
+          if (calculationOfElements) elementsOnTheLine++;
         }
         else
         {
-          mainPanel.Height += (heightElement + Y_AxisIndentation);
+          mainPanel.Height += (sizeElement.Height + Y_AxisIndentation);
           countLines++;
           locationX = 40;
           locationY += DataClass.sizeAppElement.Height + Y_AxisIndentation;
           app.Location = new System.Drawing.Point(locationX, locationY);
           locationX += DataClass.sizeAppElement.Width + X_AxisIndentation;
+          calculationOfElements = false;
         }
       }
-
       mainPanel.Height += Y_AxisIndentation;
       Console.WriteLine($"Кол-во линий: {countLines}");
     }
@@ -304,7 +525,8 @@ namespace LauncherNet.Controls
     /// <param name="value">Экземпляр элемента.</param>
     public void AddControl(Control value)
     {
-      if (heightElement < value.Height) heightElement = value.Height;
+      sizeElement.Width = value.Width;
+      if (sizeElement.Height < value.Height) sizeElement.Height = value.Height;
       mainPanel.Controls.Add(value);
       Invalidate();
     }
@@ -318,25 +540,47 @@ namespace LauncherNet.Controls
     /// </summary>
     public ScrollBarElement()
     {
-      SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);
       DoubleBuffered = true;
+      UpdateStyles();
+      SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.DoubleBuffer | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);
+
       Width = 100;
       Height = 100;
       BackColor = Color.Red;
-      BackColorScroll = Color.Orange;
-      BackColorCaret = Color.Yellow;
+
       WidthScroll = 10;
-      CaretLocationY = 0;
       DistanceCaret = 0;
-      mainPanel = new Panel()
+      mainPanel = new()
       {
         BackColor = Color.LightBlue,
         Name = "System.ScrollBarElement.mainPanel",
       };
+
+      scrollBar = new()
+      {
+        Width = WidthScroll,
+        Height = Height,
+        Dock = DockStyle.Right,
+      };
+      scrollBar.BackColor = BackColorScroll;
+
+      caretScroll = new()
+      {
+        Width = WidthScroll,
+        Height = Height,
+        Location = new Point(0, 0),
+      };
+      caretScroll.BackColor = BackColorCaret;
+
+      BackColorScroll = Color.Orange;
+      BackColorCaret = Color.Yellow;
+
       X_AxisIndentation = 10;
       Y_AxisIndentation = 20;
       mainPanel.Location = new Point(0, 0);
+      scrollBar.Controls.Add(caretScroll);
       Controls.Add(mainPanel);
+      Controls.Add(scrollBar);
     }
 
     #endregion

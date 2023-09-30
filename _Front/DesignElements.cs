@@ -30,7 +30,7 @@ namespace LauncherNet.Front
           foreach (var buttonElements in ((Panel)panel).Controls)
             if (buttonElements.GetType() == new BorderButtonElement().GetType())
             {
-              BorderButtonElement? button = buttonElements as BorderButtonElement;
+              BorderButtonElement button = buttonElements as BorderButtonElement;
 
               button.MouseEnter += (s, a) =>
               {
@@ -83,7 +83,7 @@ namespace LauncherNet.Front
 
           foreach (ControlAddElement value in DataClass.controlAddApp)
           {
-          DesignAppAddElements(value);
+            DesignAppAddElements(value);
           }
         }
       }
@@ -142,7 +142,7 @@ namespace LauncherNet.Front
     }
 
     /// <summary>
-    /// Настраивает внешний вид элмента создания новой категории.
+    /// Настраивает внешний вид элемента создания новой категории.
     /// </summary>
     /// <param name="value"></param>
     private void DesignCategoryAddElement(ControlAddElement value)
@@ -153,6 +153,10 @@ namespace LauncherNet.Front
       value.MouseLeave += (s, e) => value.Opacity = 80;
     }
 
+    /// <summary>
+    /// Настраивает внешний вид элемента добавления приложения.
+    /// </summary>
+    /// <param name="value"></param>
     private void DesignAppAddElements(ControlAddElement value)
     {
       value.BackColor = BackColorElements.BackColorAppElement;
@@ -193,7 +197,7 @@ namespace LauncherNet.Front
     {
       if (value.Controls[0].GetType() == new PictureBox().GetType() && value.Controls[1].GetType() == new TextElement().GetType())
       {
-        PictureBox picture = new PictureBox();
+        PictureBox picture = new();
         foreach (var pictureBox in value.Controls)
           if (pictureBox.GetType() == new PictureBox().GetType())
           {
@@ -209,19 +213,15 @@ namespace LauncherNet.Front
 
         if (File.Exists(pathImages + picture.Name + ".jpg"))
         {
-          using (var imgStream = File.OpenRead(pathImages + picture.Name + ".jpg"))
-          {
-            picture.BackgroundImage = Image.FromStream(imgStream);
-          }
+          using var imgStream = File.OpenRead(pathImages + picture.Name + ".jpg");
+          picture.BackgroundImage = Image.FromStream(imgStream);
         }
         else
         {
           try
           {
-            using (var imgStream = File.OpenRead(@$"{DataClass.pathImages}\Default.jpg"))
-            {
-              picture.BackgroundImage = Image.FromStream(imgStream);
-            }
+            using var imgStream = File.OpenRead(@$"{DataClass.pathImages}\Default.jpg");
+            picture.BackgroundImage = Image.FromStream(imgStream);
           }
           catch
           {
@@ -229,7 +229,7 @@ namespace LauncherNet.Front
           }
         }
 
-        TextElement text = new TextElement();
+        TextElement text = new();
         foreach (var textElement in value.Controls)
           if (textElement.GetType() == new TextElement().GetType())
           {
@@ -254,6 +254,108 @@ namespace LauncherNet.Front
 
       }
     }
+
+    #endregion
+
+    #region Настройки "Дизайна" функций программы (Создания катгеорий, добавления приложений, выбор изображения)
+
+    public void LoadDesignFunctionalForm()
+    {
+      Panel panelSettings = null;
+      if (DataClass.functionalForm.Controls.Count <= 0) return;
+
+      for (int i = 0; i < DataClass.functionalForm.Controls.Count; i++)
+      {
+        if (DataClass.functionalForm.Controls[i].GetType() == new Panel().GetType())
+        {
+          panelSettings = DataClass.functionalForm.Controls[i] as Panel;
+          break;
+        }
+      }
+
+      if (panelSettings != null)
+      {
+        DesignPanelFunctionalForm(panelSettings);
+        int widthElements = 0;
+        foreach (var item in panelSettings.Controls)
+        {
+          if (item.GetType() == new TextBox().GetType())
+          {
+            DesignTextBoxFunctionalForm(item as TextBox);
+            widthElements = (item as TextBox).Width;
+          }
+
+          else if (item.GetType() == new Label().GetType())
+          {
+            if ((item as Label).Name != "Info")
+              DesignLabelFunctionalForm(item as Label);
+            else
+              DesignLabelInfoFunctionalForm(item as Label, widthElements);
+          }
+
+          else if (item.GetType() == new Button().GetType())
+          {
+            DesignButtonFunctionalForm(item as Button);
+          }
+        }
+      }
+    }
+
+    /// <summary>
+    /// Настройка внешнего вида панели.
+    /// </summary>
+    /// <param name="value"></param>
+    private void DesignPanelFunctionalForm(Panel value)
+    {
+      value.BackColor = Color.FromArgb(20, 20, 30);
+    }
+
+    /// <summary>
+    /// Настройка внешнего вида элемента отображемого текста.
+    /// </summary>
+    /// <param name="value"></param>
+    private void DesignLabelFunctionalForm(Label value)
+    {
+      value.Font = new System.Drawing.Font("Winston Bold", 14);
+      value.ForeColor = Color.White;
+      value.Width = TextRenderer.MeasureText(value.Text, value.Font).Width;
+    }
+
+
+    private void DesignLabelInfoFunctionalForm(Label value, int widthpanel)
+    {
+      value.Font = new System.Drawing.Font("Winston Bold", 9);
+      value.ForeColor = Color.White;
+      double height = TextRenderer.MeasureText(value.Text, value.Font).Width / Convert.ToDouble(widthpanel);
+      double temporary = Math.IEEERemainder(height, 1.00);
+      if (temporary != 0) height ++;
+      value.Height = (int)height * TextRenderer.MeasureText(value.Text, value.Font).Height;
+    }
+
+    /// <summary>
+    /// Настройка внешнего вида элемента ввода текста.
+    /// </summary>
+    /// <param name="value"></param>
+    private void DesignTextBoxFunctionalForm(TextBox value)
+    {
+      value.BackColor = Color.FromArgb(40, 40, 50);
+      value.ForeColor = Color.White;
+      value.Font = new System.Drawing.Font("Winston Bold", 14);
+      value.BorderStyle = BorderStyle.None;
+    }
+
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    private void DesignButtonFunctionalForm(Button value)
+    {
+      value.ForeColor = Color.White;
+    }
+
+
 
     #endregion
 
@@ -297,9 +399,9 @@ namespace LauncherNet.Front
     /// <param name="value"></param>
     private void DesignImaggeElementSelection(Panel value)
     {
-      Panel fileControl = new Panel();
-      TextElement textElement = new TextElement();
-      CheckBoxElement checkBoxElement = new CheckBoxElement();
+      Panel fileControl = new();
+      TextElement textElement = new();
+      CheckBoxElement checkBoxElement = new();
 
       foreach (var item in value.Controls)
       {

@@ -19,10 +19,9 @@ namespace LauncherNet.Settings
   public class SettingsForms
   {
 
-    private bool drag = false;
     private bool openProgramm = true;
     private bool expand = false;
-    private Point startPoint = new Point(0, 0);
+    private Point startPoint = new(0, 0);
 
     Size sizeForm;
     Location locationForm;

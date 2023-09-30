@@ -1,10 +1,8 @@
 ﻿using Launcher.Controls;
 using LauncherNet.BackUp;
 using LauncherNet.Controls;
-using LauncherNet.DesignFront;
 using LauncherNet.Functions;
 using LauncherNet.Settings;
-using System.Xml.Linq;
 using static LauncherNet.DataClass;
 
 namespace LauncherNet.Elements
@@ -22,7 +20,7 @@ namespace LauncherNet.Elements
     /// <summary>
     /// Стартовая позиция.
     /// </summary>
-    private Point startPoint = new Point(0, 0);
+    private Point startPoint = new(0, 0);
 
     /// <summary>
     /// Загрузка элементов на форму.
@@ -31,7 +29,7 @@ namespace LauncherNet.Elements
     public void LoadElements(Form launcher)
     {
       activeCategory = false;
-      drag= false;
+      drag = false;
 
       CreateTopElement(launcher);
       CreateCategoriesElement(launcher);
@@ -44,8 +42,8 @@ namespace LauncherNet.Elements
     /// <param name="launcher">Экземпляр формы.</param>
     private void CreateTopElement(Form launcher)
     {
-      //Вся верхняя панель
-      Panel topPanel = new Panel()
+      // Вся верхняя панель
+      Panel topPanel = new()
       {
         Dock = DockStyle.Top,
         Height = 50,
@@ -53,20 +51,20 @@ namespace LauncherNet.Elements
       };
       topPanel.MouseDown += (s, a) =>
       {
-        drag = true;
-        startPoint = new Point(a.X, a.Y);
+        this.drag = true;
+        this.startPoint = new Point(a.X, a.Y);
         if (launcher.WindowState == FormWindowState.Maximized)
         {
           launcher.WindowState = FormWindowState.Normal;
           launcher.Location = new Point(Cursor.Position.X - launcher.Width / 2, 0);
-          startPoint = launcher.Location;
+          this.startPoint = launcher.Location;
         }
 
         if (DataClass.stickingForm == DataClass.Sticking.Top || DataClass.stickingForm == DataClass.Sticking.Bottom)
         {
           launcher.Size = DataClass.sizeStickingForm;
           launcher.Location = DataClass.locationStickingForm.LocationElement;
-          startPoint = launcher.Location;
+          this.startPoint = launcher.Location;
           DataClass.stickingForm = DataClass.Sticking.Nope;
         }
         else if (DataClass.stickingForm == DataClass.Sticking.Left || DataClass.stickingForm == DataClass.Sticking.Right)
@@ -79,11 +77,14 @@ namespace LauncherNet.Elements
       };
       topPanel.MouseMove += (s, a) =>
       {
-        if (drag) launcher.Location = new Point(Cursor.Position.X - startPoint.X, Cursor.Position.Y - startPoint.Y);
+        if (this.drag)
+        {
+          launcher.Location = new Point(Cursor.Position.X - this.startPoint.X, Cursor.Position.Y - this.startPoint.Y);
+        }
       };
       topPanel.MouseUp += (s, a) =>
       {
-        drag = false;
+        this.drag = false;
         if (launcher.Location.Y < 0)
         {
           DataClass.sizeStickingForm = launcher.Size;
@@ -124,10 +125,10 @@ namespace LauncherNet.Elements
 
       };
 
-      Size buttonSize = new Size(topPanel.Height, topPanel.Height);
+      Size buttonSize = new(topPanel.Height, topPanel.Height);
 
-      //Кнопка "скрыть" форму
-      BorderButtonElement minimaze = new BorderButtonElement()
+      // Кнопка "скрыть" форму
+      BorderButtonElement minimaze = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
@@ -138,7 +139,7 @@ namespace LauncherNet.Elements
       minimaze.MouseDown += (s, a) => launcher.WindowState = FormWindowState.Minimized;
 
       // Кнопка "развернуть" форму на весь экран
-      BorderButtonElement maximaze = new BorderButtonElement()
+      BorderButtonElement maximaze = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
@@ -152,8 +153,8 @@ namespace LauncherNet.Elements
         else launcher.WindowState = FormWindowState.Maximized;
       };
 
-      //Кнопка закрыть форму
-      BorderButtonElement exit = new BorderButtonElement()
+      // Кнопка закрыть форму
+      BorderButtonElement exit = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
@@ -178,7 +179,7 @@ namespace LauncherNet.Elements
     private void CreateCategoriesElement(Form launcher)
     {
       // Панель с категориями.
-      Panel categoriesPanel = new Panel()
+      Panel categoriesPanel = new()
       {
         Size = new Size(DataClass.sizeForm.Width / 8, DataClass.sizeForm.Height - DataClass.topElementLauncher.Height - borderFormWidth),
         Location = new Point(borderFormWidth, DataClass.topElementLauncher.Height),
@@ -191,14 +192,14 @@ namespace LauncherNet.Elements
 
       for (int i = nameFile.Length - 1; i >= 0; i--)
       {
-        string name = nameFile[i].Substring(nameFile[i].LastIndexOf("\\") + 1, nameFile[i].Length - (nameFile[i].LastIndexOf("\\") + 1));
+        string name = nameFile[i][(nameFile[i].LastIndexOf("\\") + 1)..];
 
         //Панель со всеми приложениями
         ScrollBarElement panelApps = CreateAppsElement(launcher, name);
         launcher.Controls.Add(panelApps);
 
         // Панель категории.
-        TextElement categoryPanel = new TextElement()
+        TextElement categoryPanel = new()
         {
           Height = DataClass.sizeForm.Height / 15,
           Width = categoriesPanel.Width,
@@ -206,7 +207,7 @@ namespace LauncherNet.Elements
           Name = name,
         };
 
-        ContextMenuStrip functionCategories = new ContextMenuStrip();
+        ContextMenuStrip functionCategories = new();
         functionCategories.Items.Add("Добавить приложение");
         functionCategories.Items.Add("Переименовать категорию");
         functionCategories.Items.Add("Создать новую категорию");
@@ -234,7 +235,7 @@ namespace LauncherNet.Elements
           DataClass.activeCategoryPanelLauncher = categoryPanel;
           activeCategory = true;
         }
-          
+
 
         DataClass.mainAppsLauncher.Add(panelApps);
         DataClass.categoryElementLauncher.Add(categoryPanel);
@@ -253,7 +254,7 @@ namespace LauncherNet.Elements
     /// <returns></returns>
     public ScrollBarElement CreateAppsElement(Form launcher, string nameCategoty)
     {
-      ScrollBarElement panelApps = new ScrollBarElement
+      ScrollBarElement panelApps = new()
       {
         Visible = false,
         Name = nameCategoty,
@@ -265,7 +266,6 @@ namespace LauncherNet.Elements
 
 
       string pathFile = DataClass.categoriesPathFiles + "\\" + nameCategoty;
-      string pathImages = DataClass.pathImages + "\\" + nameCategoty + "\\";
 
       if (File.Exists(pathFile))
       {
@@ -275,7 +275,7 @@ namespace LauncherNet.Elements
         {
           try
           {
-            Panel elementApp = CreateAppElement(launcher, pathFile, pathImages, dataFile, panelApps.Name);
+            Panel elementApp = CreateAppElement(launcher, pathFile, dataFile, panelApps.Name);
             panelApps.AddControl(elementApp);
           }
           catch
@@ -301,23 +301,23 @@ namespace LauncherNet.Elements
     /// <param name="dataFile">Данные файла?)</param>
     /// <param name="nameCategory">Имя категориию</param>
     /// <returns></returns>
-    private Panel CreateAppElement(Form launcher, string pathFile, string pathImages, string dataFile, string nameCategory)
+    private Panel CreateAppElement(Form launcher, string pathFile, string dataFile, string nameCategory)
     {
       int indexFerst = dataFile.IndexOf(DataClass.code) + DataClass.code.Length;
       int indexLast = dataFile.IndexOf("$", indexFerst);
-      string nameFile = dataFile.Substring(indexFerst, (indexLast - indexFerst));
+      string nameFile = dataFile[indexFerst..indexLast];
       indexFerst = indexLast + DataClass.code.Length;
       indexLast = dataFile.IndexOf("$", indexFerst);
-      string pathApp = dataFile.Substring(indexFerst, (indexLast - indexFerst));
+      string pathApp = dataFile[indexFerst..indexLast];
 
       // Главная панель
-      Panel fileСontrols = new Panel()
+      Panel fileСontrols = new()
       {
         Size = new System.Drawing.Size(DataClass.sizeAppElement.Width, DataClass.sizeAppElement.Height)
       };
 
       // Картинка файла
-      PictureBox pictureBoxImageApp = new PictureBox
+      PictureBox pictureBoxImageApp = new()
       {
         Height = DataClass.sizeAppElement.Height - 40,
         Dock = DockStyle.Top,
@@ -326,7 +326,7 @@ namespace LauncherNet.Elements
       };
 
       // Для запуска файла
-      TextElement labelFileName = new TextElement
+      TextElement labelFileName = new()
       {
         Height = fileСontrols.Height - pictureBoxImageApp.Height,
         Width = pictureBoxImageApp.Width,
@@ -337,7 +337,7 @@ namespace LauncherNet.Elements
       labelFileName.MouseEnter += (s, a) => labelFileName.Text = "Открыть";
       labelFileName.MouseLeave += (s, a) => labelFileName.Text = nameFile;
 
-      ContextMenuStrip contextMenuButton = new ContextMenuStrip();
+      ContextMenuStrip contextMenuButton = new();
       contextMenuButton.Items.Add("Открыть");
       contextMenuButton.Items.Add("Расположение файла");
       contextMenuButton.Items.Add("Сменить обложку");
@@ -347,7 +347,7 @@ namespace LauncherNet.Elements
       contextMenuButton.Items[1].Click += (s, e) => new FunctionsApps().LocationApp(launcher, pathApp, nameCategory, nameFile);
       contextMenuButton.Items[2].Click += (s, e) =>
       {
-        new FunctionsApps().FormImage(nameCategory, nameFile, pathImages);
+        new FunctionsApps().FormImage(nameCategory, nameFile);
         if (DataClass.update)
         {
           DataClass.update = false;
@@ -381,7 +381,7 @@ namespace LauncherNet.Elements
     /// <returns></returns>
     private ControlAddElement CreateAddCategoryElement(Panel categoriesPanel)
     {
-      ControlAddElement controlAddElement = new ControlAddElement()
+      ControlAddElement controlAddElement = new()
       {
         Height = DataClass.sizeForm.Height / 15,
         Width = categoriesPanel.Width,
@@ -401,7 +401,7 @@ namespace LauncherNet.Elements
     /// <returns></returns>
     private ControlAddElement CreateAddAppElement()
     {
-      ControlAddElement controlAddElement = new ControlAddElement()
+      ControlAddElement controlAddElement = new()
       {
         Height = DataClass.sizeAppElement.Height,
         Width = DataClass.sizeAppElement.Width,
@@ -419,7 +419,7 @@ namespace LauncherNet.Elements
     /// </summary>
     public void LocationApps()
     {
-      DataClass.activeAppPanelLauncher.LocationApps();
+      //DataClass.activeAppPanelLauncher.LocationApps();
     }
 
     /// <summary>

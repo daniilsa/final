@@ -34,13 +34,13 @@ namespace LauncherNet.Elements
       Panel topPanel = CreateTopPanel();
       DataClass.topElementSelectionForm = topPanel;
 
-      Panel mainPanel = MainElement( topPanel);
+      Panel mainPanel = MainElement(topPanel);
       DataClass.mainAppsSelectionForm = mainPanel;
 
-      Panel bottomPanel = BottomElement(mainPanel,nameFile,nameCategory);
+      Panel bottomPanel = BottomElement(mainPanel, nameFile, nameCategory);
       DataClass.bottomElementSelectionForm = bottomPanel;
 
-      mainPanel = LoadImageSelection( mainPanel, nameCategory, nameFile);
+      mainPanel = LoadImageSelection(mainPanel, nameFile);
       imageForm.Controls.Add(topPanel);
       imageForm.Controls.Add(mainPanel);
     }
@@ -52,40 +52,40 @@ namespace LauncherNet.Elements
     private Panel CreateTopPanel()
     {
       // Вся верхняя панель.
-      Panel topPanel = new Panel()
+      Panel topPanel = new()
       {
         Dock = DockStyle.Top,
         Height = 50,
       };
 
       // Панель с кнопками упралвения формой.
-      Panel panelButtons = new Panel()
+      Panel panelButtons = new()
       {
         Dock = DockStyle.Right,
       };
 
-      Size buttonSize = new Size(topPanel.Height, topPanel.Height);
-      DataClass.Location buttonLocation = new DataClass.Location(0, 0);
+      Size buttonSize = new(topPanel.Height, topPanel.Height);
+      DataClass.Location buttonLocation = new(0, 0);
 
-      BorderButtonElement minimaze = new BorderButtonElement()
+      BorderButtonElement minimaze = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
         ChoiceElement = BorderButtonElement.Choice.Minimaze,
         ForeColor = Color.White,
+        Location = new Point(buttonLocation.X, buttonLocation.Y)
       };
-      minimaze.Location = new Point(buttonLocation.X, buttonLocation.Y);
       minimaze.MouseDown += (s, a) => imageForm.WindowState = FormWindowState.Minimized;
       buttonLocation.LocationElement = new Point(minimaze.Width + minimaze.Location.X, buttonLocation.Y);
 
-      BorderButtonElement maximaze = new BorderButtonElement()
+      BorderButtonElement maximaze = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
         ChoiceElement = BorderButtonElement.Choice.Maximaze,
         ForeColor = Color.White,
+        Location = new Point(buttonLocation.X, buttonLocation.Y)
       };
-      maximaze.Location = new Point(buttonLocation.X, buttonLocation.Y);
       maximaze.MouseDown += (s, a) =>
       {
         if (imageForm.WindowState == FormWindowState.Maximized) imageForm.WindowState = FormWindowState.Normal;
@@ -93,16 +93,16 @@ namespace LauncherNet.Elements
       };
       buttonLocation.LocationElement = new Point(maximaze.Width + maximaze.Location.X, buttonLocation.Y);
 
-      BorderButtonElement exit = new BorderButtonElement()
+      BorderButtonElement exit = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
         ForeColor = Color.White,
         ChoiceElement = BorderButtonElement.Choice.Exit,
+        Location = new Point(buttonLocation.X, buttonLocation.Y)
       };
-      exit.Location = new Point(buttonLocation.X, buttonLocation.Y);
       exit.MouseDown += (s, a) => imageForm.Close();
-      panelButtons.Width = (minimaze.Width * 6) / 2;
+      panelButtons.Width = minimaze.Width * 6 / 2;
 
       panelButtons.Controls.Add(minimaze);
       panelButtons.Controls.Add(maximaze);
@@ -118,7 +118,7 @@ namespace LauncherNet.Elements
     /// <returns></returns>
     private Panel MainElement(Panel topPanel)
     {
-      Panel mainPanel = new Panel()
+      Panel mainPanel = new()
       {
         Height = imageForm.Height - topPanel.Height,
         Width = imageForm.Width,
@@ -134,10 +134,9 @@ namespace LauncherNet.Elements
     /// </summary>
     /// <param name="imageForm">Экземляр формы.</param>
     /// <param name="mainPanel">Главная панель со всеми элементами.</param>
-    /// <param name="nameCategory">Имя категории.</param>
     /// <param name="nameFile">Имя добавляемого файла.</param>
     /// <returns></returns>
-    private Panel LoadImageSelection(Panel mainPanel, string nameCategory, string nameFile)
+    private Panel LoadImageSelection(Panel mainPanel, string nameFile)
     {
       List<string> imageResources = new SearchImage().ImageSearch(nameFile);
       int locationX = 24;
@@ -147,14 +146,14 @@ namespace LauncherNet.Elements
       for (int i = 0; i < DataClass.countImageSearch; i++)
       {
         // Главный элемент выбора картинки.
-        Panel fileСontrols = new Panel
+        Panel fileСontrols = new()
         {
           Size = new System.Drawing.Size(DataClass.sizeAppElement.Width, DataClass.sizeAppElement.Height),
           BorderStyle = BorderStyle.FixedSingle,
         };
 
         // Картинка файла
-        PictureBox pictureBoxImageApp = new PictureBox
+        PictureBox pictureBoxImageApp = new()
         {
           Height = DataClass.sizeAppElement.Height - 40,
           Dock = DockStyle.Top,
@@ -166,7 +165,7 @@ namespace LauncherNet.Elements
         }
 
         // Для запуска файла
-        Panel choisePanel = new Panel
+        Panel choisePanel = new()
         {
           Height = fileСontrols.Height - pictureBoxImageApp.Height,
           Width = fileСontrols.Width,
@@ -174,7 +173,7 @@ namespace LauncherNet.Elements
         choisePanel.Location = new Point(0, fileСontrols.Height - choisePanel.Height);
 
         // Выбор картинки
-        CheckBoxElement checkBoxElement = new CheckBoxElement
+        CheckBoxElement checkBoxElement = new()
         {
           Width = 20,
           Height = 20,
@@ -182,7 +181,7 @@ namespace LauncherNet.Elements
         };
         checkBoxElement.Location = new Point(10, (choisePanel.Height - checkBoxElement.Height) / 2);
 
-        TextElement labelFileName = new TextElement
+        TextElement labelFileName = new()
         {
           Height = choisePanel.Height,
           Text = "Выбрать",
@@ -215,7 +214,7 @@ namespace LauncherNet.Elements
           lastTextElment = labelFileName;
           checkBoxElement.Active = true;
           labelFileName.Text = "Выбрано";
-        
+
         };
 
         fileСontrols.Controls.Add(pictureBoxImageApp);
@@ -249,14 +248,14 @@ namespace LauncherNet.Elements
     private Panel BottomElement(Panel mainPanel, string nameFile, string nameCategory)
     {
       //TODO: Подумать про раскидку элементов по отдельным методам
-      Panel bottomPanel = new Panel
+      Panel bottomPanel = new()
       {
         Height = 80,
         Dock = DockStyle.Bottom,
         //BorderStyle = BorderStyle.None
       };
 
-      TextElement yes = new TextElement
+      TextElement yes = new()
       {
         //BackColor = BackColorElements.BackColorForm,
         //Font = FontElements.FontApp,
@@ -283,13 +282,12 @@ namespace LauncherNet.Elements
       {
         if (DataClass.locationImage != null && DataClass.locationImage != string.Empty)
         {
-          DataClass.locationImage = DataClass.locationImage;
           new FunctionsApps().SaveImagefromInternet(nameCategory, nameFile);
           imageForm.Close();
         }
       };
 
-      TextElement no = new TextElement
+      TextElement no = new()
       {
         Height = 40,
         Width = Convert.ToInt32(Math.Abs(DataClass.sizeAppElement.Width * 1.5)),

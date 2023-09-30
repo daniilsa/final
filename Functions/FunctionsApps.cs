@@ -34,7 +34,7 @@ namespace LauncherNet.Functions
         if (result == DialogResult.Yes)
         {
           string[] temporaryString = System.IO.File.ReadAllLines(pathFile);
-          List<string> newfileLine = new List<string>();
+          List<string> newfileLine = new();
 
           for (int i = 0; i < temporaryString.Length; i++)
           {
@@ -84,10 +84,10 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory"></param>
     /// <param name="nameFile"></param>
     /// <param name="pathImage"></param>
-    public void FormImage(string nameCategory, string nameFile, string pathImage)
+    public void FormImage(string nameCategory, string nameFile)
     {
-      FunctionalForm functionalForm = new FunctionalForm();
-      functionalForm.AppForm(DataClass.FunctionApp.ChangeImage, nameCategory, nameFile, pathImage);
+      FunctionalForm functionalForm = new();
+      functionalForm.AppForm(DataClass.FunctionApp.ChangeImage, nameCategory, nameFile);
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ namespace LauncherNet.Functions
       string pathImageOld = DataClass.pathImages + "\\" + nameCategory + "\\" + nameFile + ".jpg";
       if (File.Exists(pathImageNew))
       {
-        FileInfo fileInfo = new FileInfo(pathImageOld);
+        FileInfo fileInfo = new(pathImageOld);
         fileInfo.Delete();
         File.Move(pathImageNew, pathImageOld);
       }
@@ -125,9 +125,9 @@ namespace LauncherNet.Functions
         string nameFiliDelete = nameFile;
         string pathFildeDelete = DataClass.categoriesPathFiles + "\\" + nameCategory;
         string[] readText = File.ReadAllLines(pathFildeDelete);
-        string[] newText = new string[readText.Count() - 1];
+        string[] newText = new string[readText.Length - 1];
         int j = 0;
-        for (int index = 0; index < readText.Count(); index++)
+        for (int index = 0; index < readText.Length; index++)
           if (readText[index].LastIndexOf(nameFiliDelete) == -1) { newText[j] = readText[index]; j++; }
         File.WriteAllLines(pathFildeDelete, newText);
         new SettingsForms().UpdateLauncher(launcher);
@@ -138,9 +138,9 @@ namespace LauncherNet.Functions
         string nameFiliDelete = nameFile;
         string pathFildeDelete = DataClass.categoriesPathFiles + "\\" + nameCategory;
         string[] readText = File.ReadAllLines(pathFildeDelete);
-        string[] newText = new string[readText.Count() - 1];
+        string[] newText = new string[readText.Length - 1];
         int j = 0;
-        for (int index = 0; index < readText.Count(); index++)
+        for (int index = 0; index < readText.Length; index++)
           if (readText[index].LastIndexOf(nameFiliDelete) == -1) { newText[j] = readText[index]; j++; }
         File.WriteAllLines(pathFildeDelete, newText);
         new SettingsForms().UpdateLauncher(launcher);
@@ -158,7 +158,8 @@ namespace LauncherNet.Functions
       {
         try
         {
-          using (WebClient client = new WebClient()) client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+          using WebClient client = new();
+          client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
         }
         catch
         {
@@ -170,7 +171,8 @@ namespace LauncherNet.Functions
         Directory.CreateDirectory($@"{DataClass.pathImages}\{nameCategory}");
         try
         {
-          using (WebClient client = new WebClient()) client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+          using WebClient client = new(); 
+          client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
         }
         catch
         {

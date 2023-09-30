@@ -23,24 +23,32 @@ namespace LauncherNet.Elements
 
     private Panel MainPanel(Form loadForm)
     {
-      Panel main = new Panel();
-      main.Width = loadForm.Width;
-      main.Height = loadForm.Height;
+      Panel main = new()
+      {
+        Width = loadForm.Width,
+        Height = loadForm.Height
+      };
 
-      Panel leftPanel = new Panel();
-      leftPanel.Dock = DockStyle.Left;
-      leftPanel.Width = main.Width / 10/2;
-      leftPanel.BackColor = Color.FromArgb(223,155,44);
+      Panel leftPanel = new()
+      {
+        Dock = DockStyle.Left,
+        Width = main.Width / 10 / 2,
+        BackColor = Color.FromArgb(223, 155, 44)
+      };
 
-      Label checkProgrammText = new Label();
-      checkProgrammText.Text = "ЗАПУСК ПРОГРАММЫ";
-      //checkProgrammText.Font = new FontElements().GetHeaderFont();
-      checkProgrammText.ForeColor = leftPanel.BackColor;
+      Label checkProgrammText = new()
+      {
+        Text = "ЗАПУСК ПРОГРАММЫ",
+        //checkProgrammText.Font = new FontElements().GetHeaderFont();
+        ForeColor = leftPanel.BackColor
+      };
       checkProgrammText.Size = TextRenderer.MeasureText(checkProgrammText.Text, loadForm.Font);
 
-      Label infoProgress = new Label();
-      infoProgress.Text = "Обрабатываем данные. Это может занять некоторое время";
-      infoProgress.ForeColor = leftPanel.BackColor;
+      Label infoProgress = new()
+      {
+        Text = "Обрабатываем данные. Это может занять некоторое время",
+        ForeColor = leftPanel.BackColor
+      };
       infoProgress.Size = TextRenderer.MeasureText(infoProgress.Text, loadForm.Font);
 
       Panel progressBar = CreateProgressBar(loadForm, main, leftPanel, infoProgress.Width);
@@ -65,21 +73,27 @@ namespace LauncherNet.Elements
     /// <returns></returns>
     private Panel CreateProgressBar(Form loadForm, Panel main, Panel leftPanel, int width)
     {
-      Panel panelProgressBar = new Panel();
-      panelProgressBar.Width = width;
-      panelProgressBar.BackColor = BackColorElements.BackColorTopElement;
-      panelProgressBar.Height = 20;
+      Panel panelProgressBar = new()
+      {
+        Width = width,
+        BackColor = BackColorElements.BackColorTopElement,
+        Height = 20
+      };
       panelProgressBar.Location = new Point(leftPanel.Location.X + leftPanel.Width + 20, (main.Height - panelProgressBar.Height) / 2);
 
-      Panel progressBar = new Panel();
-      progressBar.Location = new Point(-40, 0);
-      progressBar.Width = 50;
-      progressBar.BackColor = Color.FromArgb(223, 155, 44);
-      progressBar.Height = 20;
+      Panel progressBar = new()
+      {
+        Location = new Point(-40, 0),
+        Width = 50,
+        BackColor = Color.FromArgb(223, 155, 44),
+        Height = 20
+      };
 
-      System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-      timer.Interval = 10;
-      timer.Tick += async (s, ev) =>
+      System.Windows.Forms.Timer timer = new()
+      {
+        Interval = 10
+      };
+      timer.Tick += (s, ev) =>
       {
         if (!DataClass.downloadStage)
         {
