@@ -1,6 +1,6 @@
 ﻿namespace LauncherNet.Forms
 {
-  partial class FunctionalForm
+  partial class TestForm
   {
     /// <summary>
     /// Required designer variable.
@@ -28,16 +28,18 @@
     /// </summary>
     private void InitializeComponent()
     {
-      SuspendLayout();
+      this.SuspendLayout();
       // 
-      // FunctionalForm
+      // TestForm
       // 
-      AutoScaleDimensions = new SizeF(7F, 15F);
-      AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(247, 62);
-      Name = "FunctionalForm";
-      Text = "FunctionalForm";
-      ResumeLayout(false);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.ClientSize = new System.Drawing.Size(800, 450);
+      this.Name = "TestForm";
+      this.Text = "TestForm";
+      this.Load += new System.EventHandler(this.TestForm_Load_1);
+      this.ResumeLayout(false);
+
     }
 
     #endregion
