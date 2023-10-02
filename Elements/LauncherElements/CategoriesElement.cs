@@ -64,7 +64,7 @@ namespace LauncherNet.Elements.LauncherElements
     /// <param name="panelApps"></param>
     private void CheckLastCategory(TextElement categoryPanel, ScrollBarElement panelApps)
     {
-      string lastCategory = new BackUpClass().GetCategory();
+      string lastCategory = new LastSessionClass().GetCategory();
       if (categoryPanel.Text == lastCategory)
       {
         DataClass.lastAppPanelLauncher = panelApps;

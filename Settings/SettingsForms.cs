@@ -67,7 +67,7 @@ namespace LauncherNet.Settings
         }
       };
       launcher.LocationChanged += (s, a) => DataClass.locationForm = new DataClass.Location(launcher.Location.X, launcher.Location.Y);
-      launcher.FormClosing += (s, a) => new BackUpClass().SetCategory();
+      launcher.FormClosing += (s, a) => new LastSessionClass().SetCategory();
       launcher.MouseEnter += (s, a) =>
       {
 
@@ -156,7 +156,7 @@ namespace LauncherNet.Settings
       launcher.Controls.Clear();
       launcher.Hide();
       DataClass.appsElementLauncher.Clear();
-      new BackUpClass().SetCategory();
+      new LastSessionClass().SetCategory();
       new CreateElementsLauncherForm().LoadElements(launcher);
       new DesignElements().LoadDesignLauncher();
       Thread.Sleep(100);
