@@ -1,37 +1,62 @@
 ﻿using Launcher.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LauncherNet.Controls;
 
 namespace LauncherNet
 {
-  static public class DataClass
+  public static class DataClass
   {
     #region Поля
+
+    #region Триггеры
+
+    /// <summary>
+    /// "Триггер" загрузки приложения
+    /// </summary>
+    static public bool downloadStage = false;
+
+    /// <summary>
+    /// "Триггер" обновления элементов приложения.
+    /// </summary>
+    static public bool update;
+
+    /// <summary>
+    /// Есть ли активная категория.
+    /// </summary>
+    static public bool activeCategory = false;
+
+    /// <summary>
+    /// Перетаскивание формы
+    /// </summary>
+    static public bool drag = false;
+
+    #endregion
 
     #region Размеры элементов 
 
     /// <summary>
     /// Размер элемента с приложением.
     /// </summary>
-    static public Size sizelAppElement;
+    public static Size sizeAppElement;
 
     /// <summary>
     /// Размер всего приложения.
     /// </summary>
-    static public Size sizeForm;
+    public static Size sizeForm;
 
     /// <summary>
-    /// Размер элемента с категориями.
+    /// Размер формы до прилипания.
     /// </summary>
-    public static Size sizeCategoriesElement;
+    public static Size sizeStickingForm;
 
     /// <summary>
     /// Разрешение экрана в пикселях.
     /// </summary>
-    static public Size screenSize;
+    public static Size screenSize;
+
+    /// <summary>
+    /// Ширина рамки формы.
+    /// </summary>
+    public static int borderFormWidth = 3;
 
     #endregion
 
@@ -42,21 +67,28 @@ namespace LauncherNet
     /// </summary>
     public struct Location
     {
-      private int[] location = new int[2];
+      private Point location = new Point();
 
-      public int[] LocationElement { get { return location; } }
+      public Point LocationElement { get { return location; } set { location = value; } }
+
+      public int X { get { return location.X; } }
+      public int Y { get { return location.Y; } }
 
       public Location(int x, int y)
       {
-        location[0] = x;
-        location[1] = y;
+        location = new Point(x, y);
       }
     }
 
     /// <summary>
     /// Локация приложения.
     /// </summary>
-    static public Location locationForm;
+    public static Location locationForm;
+
+    /// <summary>
+    /// Последняя позиция формы до "Прилипания".
+    /// </summary>
+    public static Location locationStickingForm;
 
     #endregion
 
@@ -86,7 +118,7 @@ namespace LauncherNet
     /// Путь к шрифтам
     /// </summary>
     public static string pathFont;
-    
+
     /// <summary>
     /// Путь к выбранно йкртинке из интернета;
     /// </summary>
@@ -108,46 +140,120 @@ namespace LauncherNet
 
     #endregion
 
-    #region Работа с панелями категорий
+    #region Экземпляры элементов
+
+
+    #region Лаунчер (Основная форма)
 
     /// <summary>
-    /// Список приложений актовной категории. 
+    /// Экземпляр формы лаунчера.
     /// </summary>
-    static public List<Panel> allApps;
+    public static Form launcher;
 
     /// <summary>
     /// Активная панель с приложениями.
     /// </summary>
-    static public Panel activeAppPanel;
+    public static ScrollBarElement activeAppPanelLauncher;
 
     /// <summary>
     /// Последняя активная панель с приложениями.
     /// </summary>
-    static public Panel lastAppPanel;
+    public static ScrollBarElement lastAppPanelLauncher;
+
+    /// <summary>
+    /// Активный элемент с файлами лаунчера.
+    /// </summary>
+    public static Panel activeMainPanelLauncher;
+
+    /// <summary>
+    /// Экземпляр верхней панели лаунчера.
+    /// </summary>
+    public static Panel topElementLauncher;
+
+    /// <summary>
+    /// Экземпляр панели с категориями лаунчера.
+    /// </summary>
+    public static Panel categoriesElementLauncher;
+
+    /// <summary>
+    /// Экземпляры панелей с файлами лаунчера.
+    /// </summary>
+    public static List<ScrollBarElement> mainAppsLauncher;
+
+    /// <summary>
+    /// Список приложений актовной категории. 
+    /// </summary>
+    public static List<Panel> appsElementLauncher;
 
     /// <summary>
     /// Активная панель категории.
     /// </summary>
-    static public TextElement activeCategoryPanel;
+    public static TextElement activeCategoryPanelLauncher;
 
     /// <summary>
     /// Последняя активная панель категории.
     /// </summary>
-    static public TextElement lastCategoryPanel;
-
-    #endregion
-
-    #region Шрифт
-
-
-    #endregion
-
-    #region Другое
+    public static TextElement lastCategoryPanelLauncher;
 
     /// <summary>
-    /// Количетсво искомых картинок в интернете.
+    /// Экземпляры панелей категории лаунчера.
     /// </summary>
-    static public int countImageSearch = 10;
+    public static List<TextElement> categoryElementLauncher;
+
+    /// <summary>
+    /// Экземпляр элемента добавления категории.
+    /// </summary>
+    public static ControlAddElement controlAddCategory;
+
+    /// <summary>
+    /// Экземпляр элемента добавления приложения в категорию.
+    /// </summary>
+    public static List<ControlAddElement> controlAddApp;
+
+    #endregion
+
+    #region Форма добавления категории.
+
+    /// <summary>
+    /// Экзмепляр формы добавления категории.
+    /// </summary>
+    static public Form functionalForm;
+
+    #endregion
+
+
+    #region Форма выбора картинок
+
+    /// <summary>
+    /// Экземпляр формы выбора картинок.
+    /// </summary>
+    public static Form imageSelectionForm;
+
+    /// <summary>
+    /// Экземпляр элемента верхнего меню.
+    /// </summary>
+    public static Panel topElementSelectionForm;
+
+    /// <summary>
+    /// Экземпляр контрола со всеми элементами.
+    /// </summary>
+    public static Panel mainAppsSelectionForm;
+
+    /// <summary>
+    /// Список экземпляров элементов с картинками.
+    /// </summary>
+    public static List<Panel> imageElementsSelectionForm;
+
+    /// <summary>
+    /// Экземпляр элемента нижнего меню.
+    /// </summary>
+    public static Panel bottomElementSelectionForm;
+
+    #endregion
+
+    #endregion
+
+    #region Перечисления
 
     /// <summary>
     /// Функции категорий.
@@ -180,8 +286,108 @@ namespace LauncherNet
     /// </summary>
     public enum FunctionApp
     {
+
+      /// <summary>
+      /// Открыть приложение.
+      /// </summary>
+      Open,
+
+      /// <summary>
+      /// Открыть расположение файла.
+      /// </summary>
+      PathFile,
+
+      /// <summary>
+      /// Смена картинки приложения.
+      /// </summary>
       ChangeImage,
+
+      /// <summary>
+      /// Удалить из лаунчера.
+      /// </summary>
+      Delete
     }
+
+    /// <summary>
+    /// Список возможных "прилипаний" формы к границам экрана.
+    /// </summary>
+    public enum Sticking
+    {
+      /// <summary>
+      /// Левая граница экрана.
+      /// </summary>
+      Left,
+
+      /// <summary>
+      /// Правая граница экрана.
+      /// </summary>
+      Right,
+
+      /// <summary>
+      /// Верхняя граница экрана.
+      /// </summary>
+      Top,
+
+      /// <summary>
+      /// Нижняя граница экрана.
+      /// </summary>
+      Bottom,
+
+      /// <summary>
+      /// Не прилипает к границе экрана.
+      /// </summary>
+      Nope
+    }
+
+    /// <summary>
+    /// Список возможных границ изменений формы.
+    /// </summary>
+    public enum Expand
+    {
+      /// <summary>
+      /// Левая граница формы.
+      /// </summary>
+      Left,
+
+      /// <summary>
+      /// Правая граница формы.
+      /// </summary>
+      Right,
+
+      /// <summary>
+      /// НИжняя граница формы.
+      /// </summary>
+      Bottom,
+
+      /// <summary>
+      /// Левая нижняя граница формы.
+      /// </summary>
+      LeftBottom,
+
+      /// <summary>
+      /// Правая нижняяя граница формы.
+      /// </summary>
+      RightBottom,
+
+      /// <summary>
+      /// Никакая из перечисленных граница формы.
+      /// </summary>
+      Nope
+    }
+
+    #endregion
+
+    #region Другое
+
+    /// <summary>
+    /// Сторона монитора, к которой "прилипает" форма.
+    /// </summary>
+    public static Sticking stickingForm;
+
+    /// <summary>
+    /// Количество искомых картинок в интернете.
+    /// </summary>
+    public static int countImageSearch = 9;
 
     #endregion
 
@@ -194,11 +400,11 @@ namespace LauncherNet
     /// </summary>
     static DataClass()
     {
-      sizelAppElement = new Size(167, 268);
+      sizeAppElement = new Size(167, 268);
       screenSize = Screen.PrimaryScreen.Bounds.Size;
 
       pathFiles = @".\Files";
-      pathBackup = pathFiles + "\\backup";
+      pathBackup = @".\BackUp\backup";
       categoriesPathFiles = @".\Files\Categories";
       pathImages = @".\Images";
       pathFont = @".\Font";
@@ -206,7 +412,15 @@ namespace LauncherNet
       code = "$SPRTR$";
       keyCategory = "lastCategory";
 
-      allApps = new List<Panel>();
+      appsElementLauncher = new List<Panel>();
+      stickingForm = Sticking.Nope;
+
+      categoryElementLauncher = new List<TextElement>();
+      mainAppsLauncher = new List<ScrollBarElement>();
+      //mainAppsLauncher = new List<Panel>();
+      imageElementsSelectionForm = new List<Panel>();
+      controlAddApp = new List<ControlAddElement>();
+      locationImage = string.Empty;
     }
 
     #endregion

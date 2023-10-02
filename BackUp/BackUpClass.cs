@@ -14,10 +14,9 @@ namespace LauncherNet.BackUp
     /// </summary>
     public string GetCategory()
     {
-      string activeCategory = null;
+      string activeCategory = string.Empty;
       if (File.Exists(DataClass.pathBackup))
       {
-
         string[] backup = File.ReadAllLines(DataClass.pathBackup);
         try
         {
@@ -39,7 +38,9 @@ namespace LauncherNet.BackUp
         }
         catch
         {
-
+          // Может не найти нужные строчки. Ну не нашёл дык не нашёл)
+          // Скорее всего это означает, что приложение запущенно впервые.
+          // Или кто-то залез в эти файлы, или ещё чот-то... Крч не суть важно.
         }
       }
       else
@@ -56,7 +57,7 @@ namespace LauncherNet.BackUp
     {
       string name = String.Empty;
       bool search = true;
-      if (DataClass.activeAppPanel != null) name = DataClass.activeAppPanel.Name;
+      if (DataClass.activeAppPanelLauncher != null) name = DataClass.activeAppPanelLauncher.Name;
       string query = "lastCategory" + DataClass.code + name + DataClass.code;
       string[] backup = File.ReadAllLines(DataClass.pathBackup);
       for (int i = 0; i < backup.Length; i++)

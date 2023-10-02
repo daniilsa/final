@@ -1,4 +1,5 @@
 using LauncherNet.Forms;
+using LauncherNet.Settings;
 
 namespace LauncherNet
 {
@@ -11,7 +12,8 @@ namespace LauncherNet
     static void Main()
     {
       ApplicationConfiguration.Initialize();
-      Application.Run(new LauncherForm());
+      Application.Run(StartProgramm.Open());
+      //Application.Run(new TestForm());
     }
   }
 }
