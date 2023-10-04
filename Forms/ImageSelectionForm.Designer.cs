@@ -1,6 +1,6 @@
 ﻿namespace LauncherNet.Forms
 {
-  partial class FunctionalForm
+  partial class ImageSelectionForm
   {
     /// <summary>
     /// Required designer variable.
@@ -28,16 +28,10 @@
     /// </summary>
     private void InitializeComponent()
     {
-      SuspendLayout();
-      // 
-      // FunctionalForm
-      // 
-      AutoScaleDimensions = new SizeF(7F, 15F);
+      components = new System.ComponentModel.Container();
       AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(247, 62);
-      Name = "FunctionalForm";
-      Text = "FunctionalForm";
-      ResumeLayout(false);
+      ClientSize = new Size(800, 450);
+      Text = "ImageSelection";
     }
 
     #endregion

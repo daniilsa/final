@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@ namespace LauncherNet.Functions
         if (result == DialogResult.Yes)
         {
           string[] temporaryString = System.IO.File.ReadAllLines(pathFile);
-          List<string> newfileLine = new List<string>();
+          List<string> newfileLine = new();
 
           for (int i = 0; i < temporaryString.Length; i++)
           {
@@ -56,7 +57,6 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory">Имя категории.</param>
     public void LocationApp(Form launcher, string pathApp, string nameCategory, string nameFile)
     {
-      //TODO: Если путь не существует, то предложить удалить файл из лаунчера
       string argument = "";
       int lastIndex = pathApp.LastIndexOf("\\");
       for (int index = 0; index < lastIndex; index++)
@@ -84,10 +84,10 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory"></param>
     /// <param name="nameFile"></param>
     /// <param name="pathImage"></param>
-    public void FormImage(string nameCategory, string nameFile, string pathImage)
+    public void FormImage(string nameCategory, string nameFile)
     {
-      FunctionalForm functionalForm = new FunctionalForm();
-      functionalForm.AppForm(DataClass.FunctionApp.ChangeImage, nameCategory, nameFile, pathImage);
+      FunctionalForm functionalForm = new();
+      functionalForm.AppForm(DataClass.FunctionApp.ChangeImage, nameCategory, nameFile);
     }
 
     /// <summary>
@@ -98,15 +98,15 @@ namespace LauncherNet.Functions
     /// <param name="pathImageNew"></param>
     public void ChangeImage(string nameCategory, string nameFile, string pathImageNew)
     {
-      string pathImageOld = DataClass.pathImages+"\\"+nameCategory+"\\"+nameFile+".jpg";
+      string pathImageOld = DataClass.pathImages + "\\" + nameCategory + "\\" + nameFile + ".jpg";
       if (File.Exists(pathImageNew))
       {
-        FileInfo fileInfo = new FileInfo(pathImageOld);
+        FileInfo fileInfo = new(pathImageOld);
         fileInfo.Delete();
         File.Move(pathImageNew, pathImageOld);
       }
       else
-      { 
+      {
         MessageBox.Show($"Новая картинка не найдена!");
       }
     }
@@ -125,9 +125,9 @@ namespace LauncherNet.Functions
         string nameFiliDelete = nameFile;
         string pathFildeDelete = DataClass.categoriesPathFiles + "\\" + nameCategory;
         string[] readText = File.ReadAllLines(pathFildeDelete);
-        string[] newText = new string[readText.Count() - 1];
+        string[] newText = new string[readText.Length - 1];
         int j = 0;
-        for (int index = 0; index < readText.Count(); index++)
+        for (int index = 0; index < readText.Length; index++)
           if (readText[index].LastIndexOf(nameFiliDelete) == -1) { newText[j] = readText[index]; j++; }
         File.WriteAllLines(pathFildeDelete, newText);
         new SettingsForms().UpdateLauncher(launcher);
@@ -138,12 +138,46 @@ namespace LauncherNet.Functions
         string nameFiliDelete = nameFile;
         string pathFildeDelete = DataClass.categoriesPathFiles + "\\" + nameCategory;
         string[] readText = File.ReadAllLines(pathFildeDelete);
-        string[] newText = new string[readText.Count() - 1];
+        string[] newText = new string[readText.Length - 1];
         int j = 0;
-        for (int index = 0; index < readText.Count(); index++)
+        for (int index = 0; index < readText.Length; index++)
           if (readText[index].LastIndexOf(nameFiliDelete) == -1) { newText[j] = readText[index]; j++; }
         File.WriteAllLines(pathFildeDelete, newText);
         new SettingsForms().UpdateLauncher(launcher);
+      }
+    }
+
+    /// <summary>
+    /// Сохранение картинки из интернета.
+    /// </summary>
+    /// <param name="nameCategory"></param>
+    /// <param name="nameFile"></param>
+    public void SaveImagefromInternet(string nameCategory, string nameFile)
+    {
+      if (Directory.Exists($@"{DataClass.pathImages}\{nameCategory}") && DataClass.locationImage!=null)
+      {
+        try
+        {
+          using WebClient client = new();
+          client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+        }
+        catch
+        {
+          MessageBox.Show("Ошибка при скачивании обложки. Пожалуйста, попробуйте загрузить обложку самостоятельно!");
+        }
+      }
+      else if (DataClass.locationImage != null)
+      {
+        Directory.CreateDirectory($@"{DataClass.pathImages}\{nameCategory}");
+        try
+        {
+          using WebClient client = new(); 
+          client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+        }
+        catch
+        {
+          MessageBox.Show("Ошибка при скачивании обложки. Пожалуйста, попробуйте загрузить обложку самостоятельно!");
+        }
       }
     }
   }
