@@ -1,8 +1,3 @@
-
-using LauncherNet.BackUp;
-using LauncherNet.Elements;
-using LauncherNet.Settings;
-
 namespace LauncherNet
 {
   public partial class LauncherForm : Form
@@ -10,15 +5,8 @@ namespace LauncherNet
     public LauncherForm()
     {
       DoubleBuffered = true;
+      SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);
       InitializeComponent();
-      Load();
-    }
-
-    public void Load()
-    { 
-      new CheckingFiles().CheckingResources();
-      new SettingsForms().SettingsLauncherForm(this);
-      new ElementsLauncherForm().LoadElements(this);
     }
   }
 }

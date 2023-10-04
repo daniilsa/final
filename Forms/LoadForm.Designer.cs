@@ -1,6 +1,6 @@
 ﻿namespace LauncherNet.Forms
 {
-  partial class FunctionalForm
+  partial class LoadForm
   {
     /// <summary>
     /// Required designer variable.
@@ -30,13 +30,15 @@
     {
       SuspendLayout();
       // 
-      // FunctionalForm
+      // LoadForm
       // 
       AutoScaleDimensions = new SizeF(7F, 15F);
       AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(247, 62);
-      Name = "FunctionalForm";
-      Text = "FunctionalForm";
+      ClientSize = new Size(322, 107);
+      Name = "LoadForm";
+      StartPosition = FormStartPosition.CenterParent;
+      Text = "LoadForm";
+      Load += LoadForm_Load;
       ResumeLayout(false);
     }
 
