@@ -25,7 +25,7 @@ namespace LauncherNet.Functions
     /// <summary>
     /// Открытие категории или её функций.
     /// </summary>
-    public void LoadFunctionCategory(TextElement categoryPanel, ScrollBarElement panelApps, Form launcher)
+    public void LoadFunctionCategory(TextControl categoryPanel, ScrollBarControl panelApps, Form launcher)
     {
 
       if (DataClass.activeAppPanelLauncher == panelApps && !openProgramm)
@@ -52,33 +52,35 @@ namespace LauncherNet.Functions
 
       launcher.Text = DataClass.activeAppPanelLauncher.Name;
 
-      DataClass.appsElementLauncher.Clear();
+      DataClass.appsElementLauncher?.Clear();
 
       foreach (var item in DataClass.activeAppPanelLauncher.Controls)
       {
         try
         {
-          DataClass.appsElementLauncher.Add((item as Panel));
+          DataClass.appsElementLauncher.Add(((Panel)item));
         }
-        catch 
-        { 
-          // TODO: Проверить, почему тут try catch
+        catch
+        {
           // Нам нужны только панели, а не Panel item он ругался. Так что это, какого-то рода, костыль)
         }
       }
-           
+
       new SettingsForms().SizeElements();
       DataClass.lastAppPanelLauncher.Visible = false;
       DataClass.activeAppPanelLauncher.Visible = true;
       DataClass.activeAppPanelLauncher.Open = true;
-      new DesignElements().DesignCategoryElementLauncher(DataClass.lastCategoryPanelLauncher);
-      new DesignElements().DesignCategoryElementLauncher(DataClass.activeCategoryPanelLauncher);
+      if (DataClass.lastCategoryPanelLauncher != null)
+        new DesignElements().DesignCategoryElementLauncher(DataClass.lastCategoryPanelLauncher);
+
+      if (DataClass.activeCategoryPanelLauncher != null)
+        new DesignElements().DesignCategoryElementLauncher(DataClass.activeCategoryPanelLauncher);
     }
 
     /// <summary>
     /// Открытие категории или её функций.
     /// </summary>
-    public void LoadFunctionCategory2(TextElement categoryPanel, ScrollBarElement panelApps, Form launcher)
+    public void LoadFunctionCategory2(TextControl categoryPanel, ScrollBarControl panelApps, Form launcher)
     {
 
       if (DataClass.activeAppPanelLauncher == panelApps)
@@ -104,17 +106,16 @@ namespace LauncherNet.Functions
 
       launcher.Text = DataClass.activeAppPanelLauncher.Name;
 
-      DataClass.appsElementLauncher.Clear();
+      DataClass.appsElementLauncher?.Clear();
 
       foreach (var item in DataClass.activeAppPanelLauncher.Controls)
       {
         try
         {
-          DataClass.appsElementLauncher.Add((item as Panel));
+          DataClass.appsElementLauncher?.Add((Panel)item);
         }
-        catch 
+        catch
         {
-          // TODO: Проверить, почему тут try catch
           // Нам нужны только панели, а не Panel item он ругался. Так что это, какого-то рода, костыль)
         }
       }
@@ -132,14 +133,24 @@ namespace LauncherNet.Functions
     /// <param name="launcher">Экземпляр формы лаунчера.</param>
     /// <param name="functionCategory">Вызванная функция.</param>
     /// <param name="nameCategory">Имя категории.</param>
-    public void StartFunction(Form launcher, DataClass.FunctionCategory functionCategory, ScrollBarElement panelApps, string nameCategory)
+    public void StartFunction(Form? launcher, DataClass.FunctionCategory functionCategory, ScrollBarControl? panelApps, string? nameCategory)
     {
-      if (functionCategory == DataClass.FunctionCategory.AddCategory) FormCategory(nameCategory);
-      else if (functionCategory == DataClass.FunctionCategory.RenameCategory) FormRenameCategory(nameCategory);
-      else if (functionCategory == DataClass.FunctionCategory.DeleteCategory) Delete(nameCategory);
-      else if (functionCategory == DataClass.FunctionCategory.AddApp) FormAddApp(panelApps, nameCategory);
+      if (functionCategory == DataClass.FunctionCategory.AddCategory) FormCategory();
+      else if (functionCategory == DataClass.FunctionCategory.RenameCategory)
+      {
+        if (nameCategory != null) FormRenameCategory(nameCategory);
+      }
+      else if (functionCategory == DataClass.FunctionCategory.DeleteCategory)
+      {
+        if (nameCategory != null) Delete(nameCategory);
+      }
+      else if (functionCategory == DataClass.FunctionCategory.AddApp)
+      {
+        if (panelApps != null && nameCategory != null) FormAddApp(panelApps, nameCategory);
+        else if (panelApps != null) FormAddApp(panelApps, string.Empty);
+      }
 
-      if (DataClass.update)
+      if (launcher!= null && DataClass.update)
       {
         new SettingsForms().UpdateLauncher(launcher);
         DataClass.update = false;
@@ -149,10 +160,10 @@ namespace LauncherNet.Functions
     /// <summary>
     /// Запускает форму создания новой категории.
     /// </summary>
-    private void FormCategory(string nameCategory)
+    private void FormCategory()
     {
       FunctionalForm functionalForm = new FunctionalForm();
-      functionalForm.CategoryForm(DataClass.FunctionCategory.AddCategory, nameCategory);
+      functionalForm.CategoryForm(DataClass.FunctionCategory.AddCategory, string.Empty);
     }
 
     /// <summary>
@@ -167,7 +178,7 @@ namespace LauncherNet.Functions
     /// <summary>
     /// Запускает форму для добавления приложения в опредлённую категорию.
     /// </summary>
-    private void FormAddApp(ScrollBarElement panelApps, string nameCategory)
+    private void FormAddApp(ScrollBarControl panelApps, string nameCategory)
     {
       DataClass.activeAppPanelLauncher = panelApps;
       FunctionalForm functionalForm = new FunctionalForm();
@@ -198,7 +209,7 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory">Имя категории.</param>
     public void CreateCategory(string nameCategory)
     {
-      FileStream fstream = null;
+      FileStream? fstream = null;
       try
       {
         fstream = new FileStream($@"{DataClass.categoriesPathFiles}\{nameCategory}", FileMode.Create);
@@ -227,7 +238,7 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory">Имя категории.</param>
     /// <param name="nameFile">Имя файла.</param>
     /// <param name="pathFile">Путь к приложению.</param>
-    public bool CreateApp(string nameCategory, string nameFile, string pathFile, string imagePath, string nameImage, bool triggerImage)
+    public bool CreateApp(string nameCategory, string nameFile, string pathFile, string? imagePath, string nameImage, bool triggerImage)
     {
       if (File.Exists(pathFile))
       {
@@ -260,12 +271,15 @@ namespace LauncherNet.Functions
 
               try
               {
-                File.Copy(imagePath, $@"{DataClass.pathImages}\{nameCategory}\{nameFile}\.jpg");
+                if (imagePath != null)
+                  File.Copy(imagePath, $@"{DataClass.pathImages}\{nameCategory}\{nameFile}\.jpg");
               }
               catch
               {
                 File.Delete($@"{DataClass.pathImages}\{nameCategory}\{nameFile}\.jpg");
-                File.Copy(imagePath, $@"{DataClass.pathImages}\{nameCategory}\{nameFile}\.jpg");
+
+                if (imagePath != null)
+                  File.Copy(imagePath, $@"{DataClass.pathImages}\{nameCategory}\{nameFile}\.jpg");
               }
             }
 

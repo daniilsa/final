@@ -1,4 +1,5 @@
 ﻿using Launcher.Controls;
+using LauncherNet._Front;
 using LauncherNet.Controls;
 using LauncherNet.DesignFront;
 using LauncherNet.Settings;
@@ -28,18 +29,21 @@ namespace LauncherNet.Front
         if (panel.GetType() == new Panel().GetType())
         {
           foreach (var buttonElements in ((Panel)panel).Controls)
-            if (buttonElements.GetType() == new BorderButtonElement().GetType())
+            if (buttonElements.GetType() == new BorderButtonControl().GetType())
             {
-              BorderButtonElement button = buttonElements as BorderButtonElement;
+              BorderButtonControl? button = buttonElements as BorderButtonControl;
 
-              button.MouseEnter += (s, a) =>
+              if (button != null)
               {
-                button.BackColor = BackColorElements.HoverBackColorCategory;
-              };
-              button.MouseLeave += (s, a) =>
-              {
-                button.BackColor = BackColorElements.DefaultColorTopElement;
-              };
+                button.MouseEnter += (s, a) =>
+                {
+                  button.BackColor = BackColorElements.HoverColorCategory;
+                };
+                button.MouseLeave += (s, a) =>
+                {
+                  button.BackColor = BackColorElements.DefaultColorTopElement;
+                };
+              }
             }
 
           break;
@@ -57,39 +61,67 @@ namespace LauncherNet.Front
     /// </summary>
     public void LoadDesignLauncher()
     {
-      try
+      if (DataClass.launcher != null)
       {
-        if (FontElements.FontCategory.Name.Contains("Parameter is not valid"))
-          new SettingsForms().UpdateLauncher(DataClass.launcher);
-        else
+        try
         {
-          DesignLauncher(DataClass.launcher);
-          DesignTopElement(DataClass.topElementLauncher);
-          DesignCategoriesElementLauncher(DataClass.categoriesElementLauncher);
-
-          if (DataClass.categoryElementLauncher != null)
+          if (FontElements.FontCategory.Name.Contains("Parameter is not valid"))
+            new SettingsForms().UpdateLauncher(DataClass.launcher);
+          else
           {
-            foreach (TextElement value in DataClass.categoryElementLauncher)
-              DesignCategoryElementLauncher(value);
+            DesignLauncher(DataClass.launcher);
+            if (DataClass.topElementLauncher != null)
+              DesignTopElement(DataClass.topElementLauncher);
 
-            DesignCategoryAddElement(DataClass.controlAddCategory);
-          }
+            if (DataClass.categoriesElementLauncher != null)
+              DesignCategoriesElementLauncher(DataClass.categoriesElementLauncher);
 
-          if (DataClass.mainAppsLauncher != null)
-            foreach (ScrollBarElement value in DataClass.mainAppsLauncher)
+            if (DataClass.categoryElementLauncher != null)
             {
-              DesignMainAppsElementLauncher(value);
+              foreach (TextControl value in DataClass.categoryElementLauncher)
+                DesignCategoryElementLauncher(value);
             }
 
-          foreach (ControlAddElement value in DataClass.controlAddApp)
-          {
-            DesignAppAddElements(value);
+            if (DataClass.controlAddCategory != null)
+              DesignCategoryAddElement(DataClass.controlAddCategory);
+
+            if (DataClass.mainAppsLauncher != null)
+              foreach (ScrollBarControl value in DataClass.mainAppsLauncher)
+              {
+                DesignMainAppsElementLauncher(value);
+              }
+
+            if (DataClass.controlAddApp != null)
+              foreach (ControlAddControl value in DataClass.controlAddApp)
+              {
+                DesignAppAddElements(value);
+              }
+
+            if (DataClass.functionApp != null)
+            {
+              foreach (ContextMenuStrip? item in DataClass.functionApp)
+              {
+                if (item != null)
+                  DesignContextMenuFunctionsApp(item);
+              }
+              ;
+            }
+
+            if (DataClass.functionCategories != null)
+            {
+              foreach (ContextMenuStrip? item in DataClass.functionCategories)
+              {
+                if (item != null)
+                  DesignContextMenuFunctionsApp(item);
+              }
+              
+            }
           }
         }
-      }
-      catch
-      {
-        new SettingsForms().UpdateLauncher(DataClass.launcher);
+        catch
+        {
+          new SettingsForms().UpdateLauncher(DataClass.launcher);
+        }
       }
     }
 
@@ -112,7 +144,7 @@ namespace LauncherNet.Front
     /// <summary>
     /// Настраивает внешний вид элемента категории.
     /// </summary>
-    public void DesignCategoryElementLauncher(TextElement value)
+    public void DesignCategoryElementLauncher(TextControl value)
     {
       value.Font = FontElements.FontCategory;
       value.ForeColor = FontElements.DefaultForeColorCategory;
@@ -120,7 +152,7 @@ namespace LauncherNet.Front
 
       value.MouseEnter += (s, e) =>
       {
-        if (value != DataClass.activeCategoryPanelLauncher) value.BackColor = BackColorElements.HoverBackColorCategory;
+        if (value != DataClass.activeCategoryPanelLauncher) value.BackColor = BackColorElements.HoverColorCategory;
       };
       value.MouseLeave += (s, e) =>
       {
@@ -130,14 +162,14 @@ namespace LauncherNet.Front
       {
         DataClass.lastCategoryPanelLauncher.ForeColor = FontElements.DefaultForeColorCategory;
         DataClass.lastCategoryPanelLauncher.BackColor = BackColorElements.DefaultColorCategory;
-        value.BackColor = BackColorElements.ActiveBackColorCategory;
+        value.BackColor = BackColorElements.ActiveColorCategory;
         value.ForeColor = FontElements.ActiveForeColorCategory;
       };
 
       if (DataClass.activeCategoryPanelLauncher != null)
       {
         DataClass.activeCategoryPanelLauncher.ForeColor = FontElements.ActiveForeColorCategory;
-        DataClass.activeCategoryPanelLauncher.BackColor = BackColorElements.ActiveBackColorCategory;
+        DataClass.activeCategoryPanelLauncher.BackColor = BackColorElements.ActiveColorCategory;
       }
     }
 
@@ -145,7 +177,7 @@ namespace LauncherNet.Front
     /// Настраивает внешний вид элемента создания новой категории.
     /// </summary>
     /// <param name="value"></param>
-    private void DesignCategoryAddElement(ControlAddElement value)
+    private void DesignCategoryAddElement(ControlAddControl value)
     {
       value.BackColor = BackColorElements.DefaultColorCategory;
       value.BorderColor = FontElements.DefaultForeColorCategory;
@@ -157,7 +189,7 @@ namespace LauncherNet.Front
     /// Настраивает внешний вид элемента добавления приложения.
     /// </summary>
     /// <param name="value"></param>
-    private void DesignAppAddElements(ControlAddElement value)
+    private void DesignAppAddElements(ControlAddControl value)
     {
       value.BackColor = BackColorElements.DefaultColorAppElement;
       value.BorderColor = FontElements.DefaultForeColorApp;
@@ -169,7 +201,7 @@ namespace LauncherNet.Front
     /// <summary>
     /// Настраивает внешний вид элемента со всеми приложениями.
     /// </summary>
-    private void DesignMainAppsElementLauncher(ScrollBarElement value)
+    private void DesignMainAppsElementLauncher(ScrollBarControl value)
     {
       try
       {
@@ -195,9 +227,9 @@ namespace LauncherNet.Front
     /// </summary>
     private void DesignAppElementLauncher(Panel value)
     {
-      if (value.Controls[0].GetType() == new PictureBox().GetType() && value.Controls[1].GetType() == new TextElement().GetType())
+      if (value.Controls[0].GetType() == new PictureBox().GetType() && value.Controls[1].GetType() == new TextControl().GetType())
       {
-        PictureBox picture = new();
+        PictureBox? picture = new();
         foreach (var pictureBox in value.Controls)
           if (pictureBox.GetType() == new PictureBox().GetType())
           {
@@ -205,54 +237,70 @@ namespace LauncherNet.Front
             break;
           }
 
-        picture.BackgroundImageLayout = ImageLayout.Zoom;
-        picture.BackColor = BackColorElements.DefaultColorAppElement;
-
-        string pathFile = DataClass.categoriesPathFiles + "\\" + picture.Tag.ToString();
-        string pathImages = DataClass.pathImages + "\\" + picture.Tag.ToString() + "\\";
-
-        if (File.Exists(pathImages + picture.Name + ".jpg"))
+        string pathFile = string.Empty;
+        string pathImages = string.Empty;
+        if (picture != null)
         {
-          using var imgStream = File.OpenRead(pathImages + picture.Name + ".jpg");
-          picture.BackgroundImage = Image.FromStream(imgStream);
+          picture.BackgroundImageLayout = ImageLayout.Zoom;
+          picture.BackColor = BackColorElements.DefaultColorAppElement;
+          pathFile = DataClass.categoriesPathFiles + "\\" + picture.Tag.ToString();
+          pathImages = DataClass.pathImages + "\\" + picture.Tag.ToString() + "\\";
         }
-        else
+        if (pathImages != string.Empty && picture != null)
         {
-          try
+          if (File.Exists(pathImages + picture.Name + ".jpg"))
           {
-            using var imgStream = File.OpenRead(@$"{DataClass.pathImages}\Default.jpg");
+            using var imgStream = File.OpenRead(pathImages + picture.Name + ".jpg");
             picture.BackgroundImage = Image.FromStream(imgStream);
           }
-          catch
+          else
           {
-            picture.BackColor = Color.Red;
+            try
+            {
+              using var imgStream = File.OpenRead(@$"{DataClass.pathImages}\Default.jpg");
+              picture.BackgroundImage = Image.FromStream(imgStream);
+            }
+            catch
+            {
+              picture.BackColor = Color.Red;
+            }
           }
         }
 
-        TextElement text = new();
+        TextControl? text = new();
         foreach (var textElement in value.Controls)
-          if (textElement.GetType() == new TextElement().GetType())
+          if (textElement.GetType() == new TextControl().GetType())
           {
-            text = textElement as TextElement;
+            text = textElement as TextControl;
             break;
           }
-        text.BackColor = BackColorElements.DefaultColorTextApp;
-        text.ForeColor = FontElements.DefaultForeColorApp;
-        text.Font = FontElements.FontApp;
-
-        text.MouseEnter += (s, a) =>
-        {
-          text.BackColor = BackColorElements.HoverBackColorTextApp;
-          text.ForeColor = FontElements.HoverForeColorApp;
-
-        };
-        text.MouseLeave += (s, a) =>
+        if (text != null)
         {
           text.BackColor = BackColorElements.DefaultColorTextApp;
           text.ForeColor = FontElements.DefaultForeColorApp;
-        };
+          text.Font = FontElements.FontApp;
 
+          text.MouseEnter += (s, a) =>
+          {
+            text.BackColor = BackColorElements.HoverColorTextApp;
+            text.ForeColor = FontElements.HoverForeColorApp;
+
+          };
+          text.MouseLeave += (s, a) =>
+          {
+            text.BackColor = BackColorElements.DefaultColorTextApp;
+            text.ForeColor = FontElements.DefaultForeColorApp;
+          };
+        }
       }
+    }
+
+    private void DesignContextMenuFunctionsApp(ContextMenuStrip value)
+    {
+      value.BackColor = BackColorElements.DefaultColorContextMenu;
+      value.ForeColor = FontElements.DefaultColorTextContextMenuStrip;
+      value.Renderer = new ContextMenuStripRenderer();
+
     }
 
     #endregion
@@ -261,10 +309,10 @@ namespace LauncherNet.Front
 
     public void LoadDesignFunctionalForm()
     {
-      Panel panelSettings = null;
-      if (DataClass.functionalForm.Controls.Count <= 0) return;
+      Panel? panelSettings = null;
+      if (DataClass.functionalForm?.Controls.Count <= 0) return;
 
-      for (int i = 0; i < DataClass.functionalForm.Controls.Count; i++)
+      for (int i = 0; i < DataClass.functionalForm?.Controls.Count; i++)
       {
         if (DataClass.functionalForm.Controls[i].GetType() == new Panel().GetType())
         {
@@ -279,23 +327,23 @@ namespace LauncherNet.Front
         int widthElements = 0;
         foreach (var item in panelSettings.Controls)
         {
-          if (item.GetType() == new TextBox().GetType())
+          if (item != null && item.GetType() == new TextBox().GetType())
           {
-            DesignTextBoxFunctionalForm(item as TextBox);
-            widthElements = (item as TextBox).Width;
+            DesignTextBoxFunctionalForm((TextBox)item);
+            widthElements = ((TextBox)item).Width;
           }
 
-          else if (item.GetType() == new Label().GetType())
+          else if (item != null && item.GetType() == new Label().GetType())
           {
-            if ((item as Label).Name != "Info")
-              DesignLabelFunctionalForm(item as Label);
+            if (((Label)item).Name != "Info")
+              DesignLabelFunctionalForm((Label)item);
             else
-              DesignLabelInfoFunctionalForm(item as Label, widthElements);
+              DesignLabelInfoFunctionalForm((Label)item, widthElements);
           }
 
-          else if (item.GetType() == new Button().GetType())
+          else if (item != null && item.GetType() == new Button().GetType())
           {
-            DesignButtonFunctionalForm(item as Button);
+            DesignButtonFunctionalForm((Button)item);
           }
         }
       }
@@ -374,13 +422,20 @@ namespace LauncherNet.Front
     /// </summary>
     public void LoadDesignImageSelection()
     {
-      DesignSelection(DataClass.imageSelectionForm);
-      DesignMainAppsElementSelection(DataClass.mainAppsSelectionForm);
-      foreach (Panel item in DataClass.imageElementsSelectionForm)
-      {
-        DesignImaggeElementSelection(item);
-      }
-      DesignBottomElementSelection(DataClass.bottomElementSelectionForm);
+      if (DataClass.imageSelectionForm != null)
+        DesignSelection(DataClass.imageSelectionForm);
+
+      if (DataClass.mainAppsSelectionForm != null)
+        DesignMainAppsElementSelection(DataClass.mainAppsSelectionForm);
+
+      if (DataClass.imageElementsSelectionForm != null)
+        foreach (Panel item in DataClass.imageElementsSelectionForm)
+        {
+          DesignImaggeElementSelection(item);
+        }
+
+      if (DataClass.bottomElementSelectionForm != null)
+        DesignBottomElementSelection(DataClass.bottomElementSelectionForm);
     }
 
     /// <summary>
@@ -406,33 +461,34 @@ namespace LauncherNet.Front
     /// <param name="value"></param>
     private void DesignImaggeElementSelection(Panel value)
     {
-      Panel fileControl = new();
-      TextElement textElement = new();
-      CheckBoxElement checkBoxElement = new();
+      Panel? fileControl = new();
+      TextControl? textElement = new();
+      CheckBoxControl? checkBoxElement = new();
 
       foreach (var item in value.Controls)
       {
-        if (item.GetType() == new PictureBox().GetType())
+        if (item != null && item.GetType() == new PictureBox().GetType())
         {
-          (item as PictureBox).BackColor = BackColorElements.DefaultColorAppElement;
+          ((PictureBox)item).BackColor = BackColorElements.DefaultColorAppElement;
         }
       }
       foreach (var panel in value.Controls)
       {
-        if (panel.GetType() == new Panel().GetType())
+        if (panel != null && panel.GetType() == new Panel().GetType())
         {
-          fileControl = (panel as Panel);
+          fileControl = panel as Panel;
 
-          foreach (var check in (panel as Panel).Controls)
-            if (check.GetType() == new CheckBoxElement().GetType())
-              checkBoxElement = check as CheckBoxElement;
+          foreach (var check in ((Panel)panel).Controls)
+            if (check.GetType() == new CheckBoxControl().GetType())
+              checkBoxElement = check as CheckBoxControl;
 
-          foreach (var text in (panel as Panel).Controls)
-            if (text.GetType() == new TextElement().GetType())
-              textElement = text as TextElement;
+          foreach (var text in ((Panel)panel).Controls)
+            if (text.GetType() == new TextControl().GetType())
+              textElement = text as TextControl;
         }
+        if (fileControl != null)
+          fileControl.BackColor = BackColorElements.DefaultColorLauncher;
 
-        fileControl.BackColor = BackColorElements.DefaultColorLauncher;
         textElement.Font = FontElements.FontApp;
         checkBoxElement.BackColor = Color.White;
         checkBoxElement.MouseEnter += (s, a) =>
@@ -455,7 +511,7 @@ namespace LauncherNet.Front
     /// <param name="value"></param>
     private void DesignBottomElementSelection(Panel value)
     {
-      foreach (TextElement item in value.Controls)
+      foreach (TextControl item in value.Controls)
       {
         item.BackColor = BackColorElements.DefaultColorLauncher;
         item.Font = FontElements.FontApp;

@@ -13,13 +13,12 @@ namespace LauncherNet.Settings
     /// </summary>
     public void CheckingResources()
     {
+      if (!Directory.Exists(DataClass.pathBackup)) Directory.CreateDirectory(DataClass.pathBackup);
       if (!Directory.Exists(DataClass.pathFiles)) Directory.CreateDirectory(DataClass.pathFiles);
       if (!Directory.Exists(DataClass.categoriesPathFiles)) Directory.CreateDirectory(DataClass.categoriesPathFiles);
       if (!Directory.Exists(DataClass.pathImages)) Directory.CreateDirectory(DataClass.pathImages);
       if (!Directory.Exists(DataClass.pathFont)) Directory.CreateDirectory(DataClass.pathFont);
-      if (!File.Exists(DataClass.pathFiles + "\\backup")) File.Create(DataClass.pathFiles + "\\backup");
-      if (!File.Exists(@$"{DataClass.pathImages}\Default.jpg")) 
-        MessageBox.Show("0_0 Не найден системный файл ПО. Все обложки без картинки будут красного цвета!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      if (!File.Exists(@$"{DataClass.pathFiles}\IconLauncher.ico")) DataClass.trayActive = false;
     }
   }
 }

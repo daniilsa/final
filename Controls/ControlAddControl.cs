@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LauncherNet.Controls
 {
-  public class ControlAddElement : Control
+  public class ControlAddControl : Control
   {
 
     private int opacity;
@@ -78,10 +78,7 @@ namespace LauncherNet.Controls
       graphics.DrawLines(new Pen(new SolidBrush(Color.FromArgb(Opacity, BorderColor)), sizePen), pluse);
     }
 
-
-
-
-    public ControlAddElement()
+    public ControlAddControl()
     {
       DoubleBuffered = true;
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);

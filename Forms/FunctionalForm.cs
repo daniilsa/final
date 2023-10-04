@@ -291,19 +291,22 @@ namespace LauncherNet.Forms
         //Font = new System.Drawing.Font("Winston Bold", 14),
         //BorderStyle = BorderStyle.None
       };
-      textBoxPathFile.MouseDoubleClick += (sender, e) =>
+      textBoxPathFile.MouseDoubleClick += (s, e) =>
       {
-        OpenFileDialog OFD = new()
+        if (s != null)
         {
-          Filter = "Приложение (*.exe)|*.exe"
-        };
-        if (OFD.ShowDialog() == DialogResult.OK)
-        {
-          ((TextBox)sender).Text = OFD.FileName;
-          int indexLast = OFD.FileName.LastIndexOf('.');
-          int indexFerst = OFD.FileName.LastIndexOf('\\') + 1;
-          for (; indexFerst < indexLast; indexFerst++)
-            textBoxNameFile.Text += OFD.FileName[indexFerst];
+          OpenFileDialog OFD = new()
+          {
+            Filter = "Приложение (*.exe)|*.exe"
+          };
+          if (OFD.ShowDialog() == DialogResult.OK)
+          {
+            ((TextBox)s).Text = OFD.FileName;
+            int indexLast = OFD.FileName.LastIndexOf('.');
+            int indexFerst = OFD.FileName.LastIndexOf('\\') + 1;
+            for (; indexFerst < indexLast; indexFerst++)
+              textBoxNameFile.Text += OFD.FileName[indexFerst];
+          }
         }
       };
 
@@ -432,7 +435,6 @@ namespace LauncherNet.Forms
         BorderStyle = BorderStyle.None
       };
 
-      //TODO: Дописать метод добавки пути к картинке
       textBoxPathFile.MouseDoubleClick += (sender, e) =>
       {
         OpenFileDialog OFD = new()

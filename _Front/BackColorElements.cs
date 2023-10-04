@@ -53,27 +53,32 @@ namespace LauncherNet.DesignFront
     /// <summary>
     /// Возвращает цвет фона формы создания или добавления категории.
     /// </summary>
-    static public Color DefaultColorFunctionForm => HoverBackColorCategory;
+    static public Color DefaultColorFunctionForm => HoverColorCategory;
 
+    /// <summary>
+    /// Возвращает цвет фона контекстного меню по умолчанию.
+    /// </summary>
+    static public Color DefaultColorContextMenu => DefaultColorTopElement;
 
     /// <summary>
     /// Возвращает цвет фона категории при наведении мыши.
     /// </summary>
-    static public Color HoverBackColorCategory => NewColor(DefaultColorTopElement, 10);
+    static public Color HoverColorCategory => NewColor(DefaultColorTopElement, 10);
 
     /// <summary>
     /// Возвращает цвет фона активной категории.
     /// </summary>
-    static public Color ActiveBackColorCategory => DefaultColorLauncher;
+    static public Color ActiveColorCategory => DefaultColorLauncher;
 
     /// <summary>
-    /// Возвращает текст фоона имени приложения при наведении.
+    /// Возвращает текст фона имени приложения при наведении.
     /// </summary>
-    static public Color HoverBackColorTextApp => DefaultColorCategoriesElement;
+    static public Color HoverColorTextApp => DefaultColorCategoriesElement;
 
- 
-
-
+    /// <summary>
+    /// Возвращает цвет фона контекстного меню при наведении.
+    /// </summary>
+    static public Color HoverColorContextMenu => DefaultColorLauncher;
     #endregion
 
     #region Методы

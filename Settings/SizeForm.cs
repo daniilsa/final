@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static LauncherNet.DataClass;
-
-namespace LauncherNet.Settings
+﻿namespace LauncherNet.Settings
 {
-  public  class SizeForm
+  public class SizeForm
   {
-
-    public void ResizeForm(DataClass.Expand expandForm, bool expand, Point startPoint, Location locationForm, Size sizeForm )
+    /// <summary>
+    /// Изменение размеров формы.
+    /// </summary>
+    /// <param name="expandForm">Граница "расстяжки".</param>
+    /// <param name="expand">"Менять ли размер формы."</param>
+    /// <param name="startPoint">"Начальная позиция курсора."</param>
+    /// <param name="locationForm">Начальная позиция формы.</param>
+    /// <param name="sizeForm">Размер формы.</param>
+    public void ResizeForm(DataClass.Expand expandForm, bool expand, Point startPoint, DataClass.Location locationForm, Size sizeForm)
     {
-      if (expandForm != DataClass.Expand.Nope && expand)
+      if (expandForm != DataClass.Expand.Nope && expand && DataClass.launcher != null)
       {
-        
+
         if (expandForm == DataClass.Expand.Left)
         {
           int differenceWidth = Cursor.Position.X - startPoint.X;
-          //differenceWidth = DataClass.sizeAppElement.Width*2*(-1);
-          
           DataClass.launcher.Size = new Size(sizeForm.Width - differenceWidth, DataClass.launcher.Size.Height);
           if (DataClass.launcher.Size.Width > DataClass.launcher.MinimumSize.Width)
             DataClass.launcher.Location = new Point(locationForm.X + differenceWidth, DataClass.launcher.Location.Y);
@@ -49,7 +47,6 @@ namespace LauncherNet.Settings
             DataClass.launcher.Location = new Point(locationForm.X + differenceWidth, DataClass.launcher.Location.Y);
         }
       }
-
     }
   }
 }

@@ -1,9 +1,11 @@
 ﻿using Launcher.Controls;
+using LauncherNet._Front;
 using LauncherNet.Controls;
 using LauncherNet.Functions;
 using LauncherNet.Settings;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
@@ -43,7 +45,7 @@ namespace LauncherNet.Elements.LauncherElements
       };
 
       // Для запуска файла
-      TextElement labelFileName = new()
+      TextControl labelFileName = new()
       {
         Height = fileСontrols.Height - pictureBoxImageApp.Height,
         Width = pictureBoxImageApp.Width,
@@ -95,6 +97,7 @@ namespace LauncherNet.Elements.LauncherElements
       };
       functionApp.Items[3].Click += (s, e) => new FunctionsApps().DeleteApp(launcher, nameCategory, nameFile, false);
 
+      DataClass.functionApp.Add(functionApp);
       return functionApp;
     }
 

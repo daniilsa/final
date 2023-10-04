@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LauncherNet.Controls
 {
-  public class CheckBoxElement : Control
+  public class CheckBoxControl : Control
   {
     /// <summary>
     /// Задаёт или возваращет активность элемента(крестик).
@@ -49,7 +49,7 @@ namespace LauncherNet.Controls
     /// <summary>
     /// Задаёт параметры по-умолчанию.
     /// </summary>
-    public CheckBoxElement()
+    public CheckBoxControl()
     {
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);
       DoubleBuffered = true;

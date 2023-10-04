@@ -45,9 +45,13 @@ namespace LauncherNet.Front
     static public Color DefaultForeColorApp { get; set; }
 
     /// <summary>
-    /// Возвращает цвет текста при наведении на элемент.
+    /// Возвращает цвет текста при наведении на элемент текста приложения.
     /// </summary>
     static public Color HoverForeColorApp { get; set; }
+
+    static public Color DefaultColorTextContextMenuStrip => DefaultForeColorCategory;
+
+    static public Color HoverColorTextContextMenuStrip => HoverForeColorApp;
 
     #endregion
 
@@ -66,12 +70,19 @@ namespace LauncherNet.Front
       DefaultForeColorApp = ActiveForeColorCategory;
       HoverForeColorApp = DefaultForeColorCategory;
 
-      string font = FontResource.String1;
-      fontCollection.AddFontFile($@"{font}");
-      FontCategory = new Font(fontCollection.Families[0], 15);
-      FontApp = new Font(fontCollection.Families[0], 9);
-      FontLabel = FontCategory;
-      FontLabelInfo = FontApp;
+      try
+      {
+        string font = FontResource.String1;
+        fontCollection.AddFontFile($@"{font}");
+        FontCategory = new Font(fontCollection.Families[0], 15);
+        FontApp = new Font(fontCollection.Families[0], 9);
+        FontLabel = FontCategory;
+        FontLabelInfo = FontApp;
+      }
+      catch
+      {
+        // Шрифт не найден
+      }
     }
 
     /// <summary>
@@ -95,6 +106,10 @@ namespace LauncherNet.Front
     /// </summary>
     static FontElements()
     {
+      FontCategory = new Font("Segoe UI", 15);
+      FontApp = new Font("Segoe UI", 9);
+      FontLabel = FontCategory;
+      FontLabelInfo = FontApp;
       UpdateFont();
     }
 

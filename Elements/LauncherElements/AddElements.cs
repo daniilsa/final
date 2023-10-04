@@ -1,12 +1,5 @@
 ﻿using LauncherNet.Controls;
 using LauncherNet.Functions;
-using LauncherNet.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static LauncherNet.DataClass;
 
 namespace LauncherNet.Elements.LauncherElements
 {
@@ -17,16 +10,20 @@ namespace LauncherNet.Elements.LauncherElements
     /// Элемент добавления категории.
     /// </summary>
     /// <returns></returns>
-    public ControlAddElement CreateAddCategoryElement(Panel categoriesPanel)
+    public ControlAddControl CreateAddCategoryElement(Panel categoriesPanel)
     {
-      ControlAddElement controlAddElement = new()
+      ControlAddControl controlAddElement = new()
       {
         Height = DataClass.sizeForm.Height / 15,
         Width = categoriesPanel.Width,
         Name = "PlusCategories",
         SizePlus = 4,
       };
-      controlAddElement.Location = new Point(0, DataClass.categoryElementLauncher.Count * controlAddElement.Height);
+
+      if (DataClass.categoryElementLauncher != null)
+      {
+        controlAddElement.Location = new Point(0, DataClass.categoryElementLauncher.Count * controlAddElement.Height);
+      }
       controlAddElement.MouseDown += (s, e) => new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddCategory, null, null);
       DataClass.controlAddCategory = controlAddElement;
       return controlAddElement;
@@ -37,18 +34,25 @@ namespace LauncherNet.Elements.LauncherElements
     /// </summary>
     /// <param name="categoriesPanel">Панель с категориями.</param>
     /// <returns></returns>
-    public ControlAddElement CreateAddAppElement()
+    public ControlAddControl CreateAddAppElement()
     {
-      ControlAddElement controlAddElement = new()
+      ControlAddControl controlAddElement = new()
       {
-        Height = sizeAppElement.Height,
-        Width = sizeAppElement.Width,
+        Height = DataClass.sizeAppElement.Height,
+        Width = DataClass.sizeAppElement.Width,
         Name = "PlusApp",
         SizePlus = 6,
       };
 
-      controlAddElement.MouseDown += (s, e) => new FunctionsCategories().StartFunction(launcher, FunctionCategory.AddApp, activeAppPanelLauncher, activeCategoryPanelLauncher.Name);
-      controlAddApp.Add(controlAddElement);
+      if (DataClass.activeCategoryPanelLauncher != null)
+      {
+        controlAddElement.MouseDown += (s, e) => new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddApp, DataClass.activeAppPanelLauncher, DataClass.activeCategoryPanelLauncher.Name);
+      }
+      else
+      {
+        controlAddElement.MouseDown += (s, e) => new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddApp, DataClass.activeAppPanelLauncher, string.Empty);
+      }
+        DataClass.controlAddApp?.Add(controlAddElement);
       return controlAddElement;
     }
 

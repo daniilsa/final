@@ -12,7 +12,7 @@ namespace LauncherNet.Functions
   {
     public void CheckKeys(object s, KeyEventArgs e)
     {
-      if (e.KeyCode == Keys.F5)
+      if (DataClass.launcher != null && e.KeyCode == Keys.F5)
       {
         new SettingsForms().UpdateLauncher(DataClass.launcher);
       }
@@ -25,27 +25,30 @@ namespace LauncherNet.Functions
       {
         Application.Exit();
       }
-      else if (e.Control)
+      else if (DataClass.launcher != null && e.Control)
       {
         try
         {
           if (e.KeyCode == Keys.A)
           {
-            new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddApp, DataClass.activeAppPanelLauncher, DataClass.activeCategoryPanelLauncher.Name);
+            if (DataClass.activeCategoryPanelLauncher != null)
+              new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddApp, DataClass.activeAppPanelLauncher, DataClass.activeCategoryPanelLauncher.Name);
+            else
+              new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddApp, DataClass.activeAppPanelLauncher, string.Empty);
           }
           else if (e.KeyCode == Keys.Down)
           {
-            DataClass.activeAppPanelLauncher.MouseWheelDown();
+            DataClass.activeAppPanelLauncher?.MouseWheelDown();
           }
           else if (e.KeyCode == Keys.Up)
           {
-            DataClass.activeAppPanelLauncher.MouseWheelUp();
+            DataClass.activeAppPanelLauncher?.MouseWheelUp();
           }
           else
           {
             int key = (int)e.KeyCode - '0';
 
-            if (key != 0)
+            if (DataClass.categoryElementLauncher != null && DataClass.mainAppsLauncher != null && key != 0)
               new FunctionsCategories().LoadFunctionCategory(DataClass.categoryElementLauncher[DataClass.categoryElementLauncher.Count - key], DataClass.mainAppsLauncher[DataClass.categoryElementLauncher.Count - key], DataClass.launcher);
             else if (key == 0) new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddCategory, null, null);
           }

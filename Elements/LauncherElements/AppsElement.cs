@@ -16,17 +16,23 @@ namespace LauncherNet.Elements.LauncherElements
     /// </summary>
     /// <param name="nameCategoty">Имя категории</param>
     /// <returns></returns>
-    public ScrollBarElement CreateAppsElement(Form launcher, string nameCategoty)
+    public ScrollBarControl CreateAppsElement(Form launcher, string nameCategoty)
     {
-      ScrollBarElement panelApps = new()
+      ScrollBarControl panelApps = new()
       {
         Visible = false,
         Name = nameCategoty,
         BackColor = Color.Green,
-        Width = DataClass.sizeForm.Width - DataClass.categoriesElementLauncher.Width - DataClass.borderFormWidth,
-        Height = DataClass.categoriesElementLauncher.Height,
-        Location = new Point(DataClass.categoriesElementLauncher.Width, DataClass.topElementLauncher.Height),
       };
+
+      if (DataClass.categoriesElementLauncher != null)
+      {
+        panelApps.Width = DataClass.sizeForm.Width - DataClass.categoriesElementLauncher.Width - DataClass.borderFormWidth;
+        panelApps.Height = DataClass.categoriesElementLauncher.Height;
+
+        if (DataClass.topElementLauncher != null)
+          panelApps.Location = new Point(DataClass.categoriesElementLauncher.Width, DataClass.topElementLauncher.Height);
+      }
 
       string pathFile = DataClass.categoriesPathFiles + "\\" + nameCategoty;
 

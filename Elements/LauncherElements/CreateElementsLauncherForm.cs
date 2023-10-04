@@ -15,9 +15,12 @@ namespace LauncherNet.Elements.LauncherElements
 
       DataClass.topElementLauncher = new TopElement().CreateTopElement(launcher);
       launcher.Controls.Add(DataClass.topElementLauncher);
+      if (DataClass.trayActive)
+        DataClass.iconLauncher = new Tray().CreateTrayElement();
 
       new CategoriesElement().CreateCategoriesElement(launcher);
-      if (DataClass.activeCategory) new FunctionsCategories().LoadFunctionCategory(DataClass.activeCategoryPanelLauncher, DataClass.activeAppPanelLauncher, launcher);
+      if (DataClass.activeCategory && DataClass.activeCategoryPanelLauncher != null && DataClass.activeAppPanelLauncher != null)
+        new FunctionsCategories().LoadFunctionCategory(DataClass.activeCategoryPanelLauncher, DataClass.activeAppPanelLauncher, launcher);
     }
   }
 }

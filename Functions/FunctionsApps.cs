@@ -154,7 +154,7 @@ namespace LauncherNet.Functions
     /// <param name="nameFile"></param>
     public void SaveImagefromInternet(string nameCategory, string nameFile)
     {
-      if (Directory.Exists($@"{DataClass.pathImages}\{nameCategory}"))
+      if (Directory.Exists($@"{DataClass.pathImages}\{nameCategory}") && DataClass.locationImage!=null)
       {
         try
         {
@@ -166,7 +166,7 @@ namespace LauncherNet.Functions
           MessageBox.Show("Ошибка при скачивании обложки. Пожалуйста, попробуйте загрузить обложку самостоятельно!");
         }
       }
-      else
+      else if (DataClass.locationImage != null)
       {
         Directory.CreateDirectory($@"{DataClass.pathImages}\{nameCategory}");
         try

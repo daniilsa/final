@@ -4,7 +4,7 @@ using LauncherNet.Settings;
 
 namespace Launcher.Controls
 {
-  public class TextElement : Control
+  public class TextControl : Control
   {
     /// <summary>
     /// Положение текста на элементе
@@ -60,7 +60,7 @@ namespace Launcher.Controls
     /// <summary>
     /// Задаёт параметры по-умолчанию.
     /// </summary>
-    public TextElement()
+    public TextControl()
     {
       Dock = DockStyle.Top;
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);

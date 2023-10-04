@@ -1,5 +1,6 @@
 ﻿using Launcher.Controls;
 using LauncherNet.Controls;
+using static LauncherNet.DataClass;
 
 namespace LauncherNet
 {
@@ -28,6 +29,8 @@ namespace LauncherNet
     /// Перетаскивание формы
     /// </summary>
     static public bool drag = false;
+
+    static public bool trayActive = true;
 
     #endregion
 
@@ -122,7 +125,7 @@ namespace LauncherNet
     /// <summary>
     /// Путь к выбранно йкртинке из интернета;
     /// </summary>
-    public static string locationImage;
+    public static string? locationImage;
 
     #endregion
 
@@ -146,108 +149,115 @@ namespace LauncherNet
     #region Лаунчер (Основная форма)
 
     /// <summary>
+    /// Иконка приложения.
+    /// </summary>
+    public static NotifyIcon? iconLauncher;
+
+    /// <summary>
     /// Экземпляр формы лаунчера.
     /// </summary>
-    public static Form launcher;
+    public static Form? launcher;
 
     /// <summary>
     /// Активная панель с приложениями.
     /// </summary>
-    public static ScrollBarElement activeAppPanelLauncher;
+    public static ScrollBarControl? activeAppPanelLauncher;
 
     /// <summary>
     /// Последняя активная панель с приложениями.
     /// </summary>
-    public static ScrollBarElement lastAppPanelLauncher;
+    public static ScrollBarControl? lastAppPanelLauncher;
 
     /// <summary>
     /// Активный элемент с файлами лаунчера.
     /// </summary>
-    public static Panel activeMainPanelLauncher;
+    public static Panel? activeMainPanelLauncher;
 
     /// <summary>
     /// Экземпляр верхней панели лаунчера.
     /// </summary>
-    public static Panel topElementLauncher;
+    public static Panel? topElementLauncher;
 
     /// <summary>
     /// Экземпляр панели с категориями лаунчера.
     /// </summary>
-    public static Panel categoriesElementLauncher;
+    public static Panel? categoriesElementLauncher;
 
     /// <summary>
     /// Экземпляры панелей с файлами лаунчера.
     /// </summary>
-    public static List<ScrollBarElement> mainAppsLauncher;
+    public static List<ScrollBarControl>? mainAppsLauncher;
 
     /// <summary>
     /// Список приложений актовной категории. 
     /// </summary>
-    public static List<Panel> appsElementLauncher;
+    public static List<Panel>? appsElementLauncher;
 
     /// <summary>
     /// Активная панель категории.
     /// </summary>
-    public static TextElement activeCategoryPanelLauncher;
+    public static TextControl? activeCategoryPanelLauncher;
 
     /// <summary>
     /// Последняя активная панель категории.
     /// </summary>
-    public static TextElement lastCategoryPanelLauncher;
+    public static TextControl? lastCategoryPanelLauncher;
 
     /// <summary>
     /// Экземпляры панелей категории лаунчера.
     /// </summary>
-    public static List<TextElement> categoryElementLauncher;
+    public static List<TextControl>? categoryElementLauncher;
 
     /// <summary>
     /// Экземпляр элемента добавления категории.
     /// </summary>
-    public static ControlAddElement controlAddCategory;
+    public static ControlAddControl? controlAddCategory;
 
     /// <summary>
     /// Экземпляр элемента добавления приложения в категорию.
     /// </summary>
-    public static List<ControlAddElement> controlAddApp;
+    public static List<ControlAddControl>? controlAddApp;
+
+    public static List<ContextMenuStrip?> functionApp;
+    public static List<ContextMenuStrip?> functionCategories;
 
     #endregion
 
-    #region Форма добавления категории.
+    #region Форма функций категории.
 
     /// <summary>
     /// Экзмепляр формы добавления категории.
     /// </summary>
-    static public Form functionalForm;
+    static public Form? functionalForm;
 
     #endregion
-
 
     #region Форма выбора картинок
 
     /// <summary>
     /// Экземпляр формы выбора картинок.
     /// </summary>
-    public static Form imageSelectionForm;
+    public static Form? imageSelectionForm;
 
     /// <summary>
     /// Экземпляр элемента верхнего меню.
     /// </summary>
-    public static Panel topElementSelectionForm;
+    public static Panel? topElementSelectionForm;
 
     /// <summary>
     /// Экземпляр контрола со всеми элементами.
     /// </summary>
-    public static Panel mainAppsSelectionForm;
+    public static Panel? mainAppsSelectionForm;
 
     /// <summary>
     /// Список экземпляров элементов с картинками.
     /// </summary>
-    public static List<Panel> imageElementsSelectionForm;
+    public static List<Panel>? imageElementsSelectionForm;
 
     /// <summary>
     /// Экземпляр элемента нижнего меню.
     /// </summary>
-    public static Panel bottomElementSelectionForm;
+    public static Panel? bottomElementSelectionForm;
 
     #endregion
 
@@ -389,6 +399,13 @@ namespace LauncherNet
     /// </summary>
     public static int countImageSearch = 9;
 
+    /// <summary>
+    /// Домен, в которой выполняется приложение.
+    /// </summary>
+    public static AppDomain processLauncher;
+
+    public static bool startProcess = true;
+
     #endregion
 
     #endregion
@@ -404,7 +421,7 @@ namespace LauncherNet
       screenSize = Screen.PrimaryScreen.Bounds.Size;
 
       pathFiles = @".\Files";
-      pathBackup = @".\BackUp\backup";
+      pathBackup = @".\BackUp";
       categoriesPathFiles = @".\Files\Categories";
       pathImages = @".\Images";
       pathFont = @".\Font";
@@ -415,12 +432,15 @@ namespace LauncherNet
       appsElementLauncher = new List<Panel>();
       stickingForm = Sticking.Nope;
 
-      categoryElementLauncher = new List<TextElement>();
-      mainAppsLauncher = new List<ScrollBarElement>();
+      categoryElementLauncher = new List<TextControl>();
+      mainAppsLauncher = new List<ScrollBarControl>();
       //mainAppsLauncher = new List<Panel>();
       imageElementsSelectionForm = new List<Panel>();
-      controlAddApp = new List<ControlAddElement>();
+      controlAddApp = new List<ControlAddControl>();
+      functionApp = new List<ContextMenuStrip?>();
+      functionCategories = new List<ContextMenuStrip?>();
       locationImage = string.Empty;
+      processLauncher = AppDomain.CurrentDomain;
     }
 
     #endregion

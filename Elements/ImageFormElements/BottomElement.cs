@@ -16,7 +16,7 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <summary>
     /// Последняя выбранная картинка.
     /// </summary>
-    TextElement lastTextElment = null;
+    TextControl? lastTextElment = null;
 
     /// <summary>
     /// Нижний элемент формы.
@@ -31,9 +31,9 @@ namespace LauncherNet.Elements.ImageFormElements
         Dock = DockStyle.Bottom,
       };
 
-      TextElement yes = YesElement(imageForm, bottomPanel, nameFile, nameCategory);
+      TextControl yes = YesElement(imageForm, bottomPanel, nameFile, nameCategory);
 
-      TextElement no = NoElement(imageForm, bottomPanel, mainPanel);
+      TextControl no = NoElement(imageForm, bottomPanel, mainPanel);
 
       bottomPanel.Controls.Add(yes);
       bottomPanel.Controls.Add(no);
@@ -50,9 +50,9 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="nameFile">Имя файла.</param>
     /// <param name="nameCategory">Имя категории.</param>
     /// <returns></returns>
-    private TextElement YesElement(Form imageForm, Panel bottomPanel, string nameFile, string nameCategory )
+    private TextControl YesElement(Form imageForm, Panel bottomPanel, string nameFile, string nameCategory )
     {
-      TextElement yes = new()
+      TextControl yes = new()
       {
         //BackColor = BackColorElements.BackColorForm,
         //Font = FontElements.FontApp,
@@ -84,9 +84,9 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="bottomPanel">Нижняя панель.</param>
     /// <param name="mainPanel">Главная панель.</param>
     /// <returns></returns>
-    private TextElement NoElement(Form imageForm, Panel bottomPanel, Panel mainPanel)
+    private TextControl NoElement(Form imageForm, Panel bottomPanel, Panel mainPanel)
     {
-      TextElement no = new()
+      TextControl no = new()
       {
         Height = 40,
         Width = Convert.ToInt32(Math.Abs(DataClass.sizeAppElement.Width * 1.5)),

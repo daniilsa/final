@@ -14,7 +14,7 @@ namespace LauncherNet.Functions
     /// Поиск картинок в интернете.
     /// </summary>
     /// <param name="nameFile">Имя файла</param>
-    public List<string> ImageSearch(string nameFile)
+    public List<string>? ImageSearch(string nameFile)
     {
       WebBrowser webBrowser = new WebBrowser();
       webBrowser.Dock = DockStyle.Left;

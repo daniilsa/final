@@ -15,9 +15,9 @@ namespace LauncherNet.BackUp
     public string GetCategory()
     {
       string activeCategory = string.Empty;
-      if (File.Exists(DataClass.pathBackup))
+      if (File.Exists($@"{DataClass.pathBackup}\backUp"))
       {
-        string[] backup = File.ReadAllLines(DataClass.pathBackup);
+        string[] backup = File.ReadAllLines($@"{DataClass.pathBackup}\backUp");
         try
         {
           int indexStr = 0;
@@ -45,7 +45,7 @@ namespace LauncherNet.BackUp
       }
       else
       {
-        File.Create(DataClass.pathBackup);
+        File.Create($@"{DataClass.pathBackup}\backUp");
       }
       return activeCategory;
     }
@@ -55,26 +55,34 @@ namespace LauncherNet.BackUp
     /// </summary>
     public void SetCategory()
     {
-      string name = String.Empty;
-      bool search = true;
-      if (DataClass.activeAppPanelLauncher != null) name = DataClass.activeAppPanelLauncher.Name;
-      string query = "lastCategory" + DataClass.code + name + DataClass.code;
-      string[] backup = File.ReadAllLines(DataClass.pathBackup);
-      for (int i = 0; i < backup.Length; i++)
+      try
       {
-        if (backup[i].IndexOf(DataClass.keyCategory) > -1)
+        string name = String.Empty;
+        bool search = true;
+        if (DataClass.activeAppPanelLauncher != null) name = DataClass.activeAppPanelLauncher.Name;
+        string query = "lastCategory" + DataClass.code + name + DataClass.code;
+        string[] backup = File.ReadAllLines($@"{DataClass.pathBackup}\backUp");
+        for (int i = 0; i < backup.Length; i++)
         {
-          backup[i] = query;
-          search = false;
-          break;
+          if (backup[i].IndexOf(DataClass.keyCategory) > -1)
+          {
+            backup[i] = query;
+            search = false;
+            break;
+          }
         }
+        if (search)
+        {
+          Array.Resize(ref backup, backup.Length + 1);
+          backup[backup.Length - 1] = query;
+        }
+        File.WriteAllLines($@"{DataClass.pathBackup}\backUp", backup);
       }
-      if (search)
+      catch
       {
-        Array.Resize(ref backup, backup.Length + 1);
-        backup[backup.Length - 1] = query;
+        // Скорее всего, пользователь только зашёл в ПО и выщел, не добавив категорию
+        // В общем, нет категорий в приложении
       }
-      File.WriteAllLines(DataClass.pathBackup, backup);
     }
   }
 }

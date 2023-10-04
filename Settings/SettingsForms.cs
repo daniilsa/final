@@ -8,6 +8,7 @@ using LauncherNet.Front;
 using LauncherNet.Functions;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
@@ -41,18 +42,20 @@ namespace LauncherNet.Settings
       launcher.Text = "Launcher";
       launcher.FormBorderStyle = FormBorderStyle.None;
       launcher.KeyPreview = true;
-      launcher.KeyDown += (s, a) => new HotKeys().CheckKeys(s, a);
-      launcher.LostFocus += (s, a) => 
+      launcher.KeyDown += (s, a) =>
+      {
+        if (s != null)
+          new HotKeys().CheckKeys(s, a);
+      };
+      launcher.LostFocus += (s, a) =>
       {
         if (openProgramm)
         {
           launcher.Activate();
           launcher.Focus();
-          openProgramm= false;
+          openProgramm = false;
         }
       };
-
-
       launcher.SizeChanged += (s, a) =>
       {
         DataClass.sizeForm = launcher.Size;
@@ -67,7 +70,12 @@ namespace LauncherNet.Settings
         }
       };
       launcher.LocationChanged += (s, a) => DataClass.locationForm = new DataClass.Location(launcher.Location.X, launcher.Location.Y);
-      launcher.FormClosing += (s, a) => new LastSessionClass().SetCategory();
+      launcher.FormClosing += (s, a) =>
+      {
+        new LastSessionClass().SetCategory();
+        if (DataClass.iconLauncher != null)
+          new Tray().FromTray(DataClass.iconLauncher);
+      };
       launcher.MouseEnter += (s, a) =>
       {
 
@@ -77,7 +85,7 @@ namespace LauncherNet.Settings
         DataClass.Location locationForm = DataClass.locationForm;
         Size sizeForm = DataClass.sizeForm;
 
-        if (DataClass.launcher.WindowState != FormWindowState.Maximized)
+        if (DataClass.launcher?.WindowState != FormWindowState.Maximized)
         {
           if (pointX <= locationForm.X + 3 && pointY > locationForm.Y + sizeForm.Height - 3)
           {
@@ -139,13 +147,13 @@ namespace LauncherNet.Settings
     public void UpdateLauncher(Form launcher)
     {
       DataClass.appsElementLauncher = new List<Panel>();
-      DataClass.mainAppsLauncher = new List<ScrollBarElement>();
-      DataClass.categoryElementLauncher = new List<TextElement>();
-      DataClass.controlAddApp = new List<ControlAddElement>();
+      DataClass.mainAppsLauncher = new List<ScrollBarControl>();
+      DataClass.categoryElementLauncher = new List<TextControl>();
+      DataClass.controlAddApp = new List<ControlAddControl>();
 
       try
       {
-        if (FontElements.FontCategory.Name.Contains("Parameter is not valid"))
+        if (DataClass.launcher != null && FontElements.FontCategory.Name.Contains("Parameter is not valid"))
           new SettingsForms().UpdateLauncher(DataClass.launcher);
       }
       catch
@@ -197,7 +205,7 @@ namespace LauncherNet.Settings
       loadForm.Size = new Size(408, 150);
       loadForm.FormBorderStyle = FormBorderStyle.None;
       loadForm.Location = new Point((DataClass.screenSize.Width - loadForm.Width) / 2, ((DataClass.screenSize.Height - loadForm.Height) / 2));
-      loadForm.BackColor = BackColorElements.HoverBackColorCategory;
+      loadForm.BackColor = BackColorElements.HoverColorCategory;
     }
 
     /// <summary>
@@ -214,7 +222,7 @@ namespace LauncherNet.Settings
     public void SizeElements()
     {
       DataClass.categoriesElementLauncher.Height = DataClass.sizeForm.Height - DataClass.topElementLauncher.Height - DataClass.borderFormWidth;
-      DataClass.activeAppPanelLauncher.Resize(DataClass.sizeForm.Width - DataClass.categoriesElementLauncher.Width - DataClass.borderFormWidth, DataClass.categoriesElementLauncher.Height);
+      DataClass.activeAppPanelLauncher?.Resize(DataClass.sizeForm.Width - DataClass.categoriesElementLauncher.Width - DataClass.borderFormWidth, DataClass.categoriesElementLauncher.Height);
     }
   }
 }

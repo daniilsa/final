@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LauncherNet.Controls
 {
-  public class BorderButtonElement : Control
+  public class BorderButtonControl : Control
   {
     /// <summary>
     /// Спсиок элементов управления.
@@ -75,7 +75,7 @@ namespace LauncherNet.Controls
     /// <summary>
     /// Задаёт параметры по-умолчанию.
     /// </summary>
-    public BorderButtonElement()
+    public BorderButtonControl()
     {
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);
       DoubleBuffered = true;

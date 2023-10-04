@@ -2,6 +2,9 @@
 using LauncherNet.Forms;
 using LauncherNet.Front;
 using LauncherNet.Settings;
+using Microsoft.VisualBasic;
+using System.Diagnostics;
+using ThreadState = System.Threading.ThreadState;
 
 namespace LauncherNet
 {
@@ -17,6 +20,7 @@ namespace LauncherNet
     /// </summary>
     public static Form Open()
     {
+
       DataClass.launcher = new LauncherForm();
       Thread thread = new Thread(() => new LoadForm().ShowDialog());
       thread.Start();
@@ -40,6 +44,7 @@ namespace LauncherNet
         };
       };
       timer.Start();
+      new ActivateApplication().CheckAndOpenProcess();
 
       while (thread.ThreadState != ThreadState.Stopped) ;
       return DataClass.launcher;

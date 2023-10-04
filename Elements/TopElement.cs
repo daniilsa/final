@@ -1,4 +1,5 @@
 ﻿using LauncherNet.Controls;
+using LauncherNet.Functions;
 using LauncherNet.Settings;
 
 namespace LauncherNet.Elements
@@ -36,42 +37,47 @@ namespace LauncherNet.Elements
       Size buttonSize = new(topPanel.Height, topPanel.Height);
 
       // Кнопка "скрыть" форму
-      BorderButtonElement minimaze = new()
+      BorderButtonControl minimaze = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
-        ChoiceElement = BorderButtonElement.Choice.Minimaze,
+        ChoiceElement = BorderButtonControl.Choice.Minimaze,
         ForeColor = Color.White,
         Dock = DockStyle.Right,
       };
       minimaze.MouseDown += (s, a) => HideTheForm(value);
 
       // Кнопка "развернуть" форму на весь экран
-      BorderButtonElement maximaze = new()
+      BorderButtonControl maximaze = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
-        ChoiceElement = BorderButtonElement.Choice.Maximaze,
+        ChoiceElement = BorderButtonControl.Choice.Maximaze,
         ForeColor = Color.White,
         Dock = DockStyle.Right,
       };
       maximaze.MouseDown += (s, a) => ExpandTheForm(value);
 
       // Кнопка закрыть программу
-      BorderButtonElement exit = new()
+      BorderButtonControl exit = new()
       {
         Size = buttonSize,
         Cursor = Cursors.Hand,
         ForeColor = Color.White,
-        ChoiceElement = BorderButtonElement.Choice.Exit,
+        ChoiceElement = BorderButtonControl.Choice.Exit,
         Dock = DockStyle.Right,
       };
-      exit.MouseDown += (s, a) => ExitProgramm();
+      exit.MouseDown += (s, a) =>
+      {
+        if (DataClass.trayActive)
+          new Tray().InTray(DataClass.iconLauncher);
+        else Application.Exit();
+      };
 
       topPanel.Controls.Add(minimaze);
       topPanel.Controls.Add(maximaze);
       topPanel.Controls.Add(exit);
-      
+
 
       return topPanel;
     }
@@ -83,21 +89,21 @@ namespace LauncherNet.Elements
     {
       DataClass.drag = true;
       startPoint = new Point(e.X, e.Y);
-      if (DataClass.launcher.WindowState == FormWindowState.Maximized)
+      if (DataClass.launcher?.WindowState == FormWindowState.Maximized)
       {
         DataClass.launcher.WindowState = FormWindowState.Normal;
-        DataClass.launcher.Location = new Point(Cursor.Position.X - (DataClass.launcher.Width / 2), 0);
+        DataClass.launcher.Location = new Point(e.X - (DataClass.launcher.Width / 2), 0);
         startPoint = DataClass.launcher.Location;
       }
 
-      if (DataClass.stickingForm == DataClass.Sticking.Top || DataClass.stickingForm == DataClass.Sticking.Bottom)
+      if ((DataClass.stickingForm == DataClass.Sticking.Top || DataClass.stickingForm == DataClass.Sticking.Bottom) && DataClass.launcher != null)
       {
         DataClass.launcher.Size = DataClass.sizeStickingForm;
         DataClass.launcher.Location = DataClass.locationStickingForm.LocationElement;
         startPoint = DataClass.launcher.Location;
         DataClass.stickingForm = DataClass.Sticking.Nope;
       }
-      else if (DataClass.stickingForm == DataClass.Sticking.Left || DataClass.stickingForm == DataClass.Sticking.Right)
+      else if ((DataClass.stickingForm == DataClass.Sticking.Left || DataClass.stickingForm == DataClass.Sticking.Right) && DataClass.launcher != null)
       {
         DataClass.launcher.Size = DataClass.sizeStickingForm;
         DataClass.stickingForm = DataClass.Sticking.Nope;
@@ -111,7 +117,7 @@ namespace LauncherNet.Elements
     /// </summary>
     private void MovingAnElement()
     {
-      if (DataClass.drag)
+      if (DataClass.drag && DataClass.launcher != null)
       {
         DataClass.launcher.Location = new Point(Cursor.Position.X - startPoint.X, Cursor.Position.Y - startPoint.Y);
       }
@@ -123,45 +129,46 @@ namespace LauncherNet.Elements
     private void CheckingForSticking()
     {
       DataClass.drag = false;
-      if (DataClass.launcher.Location.Y < 0)
+      if (DataClass.launcher != null)
       {
-        DataClass.sizeStickingForm = DataClass.launcher.Size;
-        DataClass.stickingForm = DataClass.Sticking.Top;
-        DataClass.locationStickingForm.LocationElement = new Point(DataClass.launcher.Location.X, 0);
-        DataClass.launcher.Location = new Point(0, 0);
-        DataClass.launcher.Width = DataClass.screenSize.Width;
-        DataClass.launcher.Height = DataClass.screenSize.Height / 2;
+        if (DataClass.launcher.Location.Y < 0)
+        {
+          DataClass.sizeStickingForm = DataClass.launcher.Size;
+          DataClass.stickingForm = DataClass.Sticking.Top;
+          DataClass.locationStickingForm.LocationElement = new Point(DataClass.launcher.Location.X, 0);
+          DataClass.launcher.Location = new Point(0, 0);
+          DataClass.launcher.Width = DataClass.screenSize.Width;
+          DataClass.launcher.Height = DataClass.screenSize.Height / 2;
 
+        }
+        else if (DataClass.launcher.Location.X < 0)
+        {
+          DataClass.sizeStickingForm = DataClass.launcher.Size;
+          DataClass.stickingForm = DataClass.Sticking.Left;
+          DataClass.locationStickingForm.LocationElement = new Point(DataClass.launcher.Location.X, 0);
+          DataClass.launcher.Location = new Point(0, 0);
+          DataClass.launcher.Width = DataClass.screenSize.Width / 2;
+          DataClass.launcher.Height = DataClass.screenSize.Height;
+        }
+        else if (DataClass.launcher.Location.X + DataClass.launcher?.Width > DataClass.screenSize.Width)
+        {
+          DataClass.sizeStickingForm = DataClass.launcher.Size;
+          DataClass.stickingForm = DataClass.Sticking.Right;
+          DataClass.locationStickingForm.LocationElement = new Point(DataClass.launcher.Location.X, 0);
+          DataClass.launcher.Location = new Point(DataClass.screenSize.Width / 2, 0);
+          DataClass.launcher.Width = DataClass.screenSize.Width / 2;
+          DataClass.launcher.Height = DataClass.screenSize.Height;
+        }
+        else if (DataClass.launcher.Location.Y + DataClass.launcher.Height > DataClass.screenSize.Height)
+        {
+          DataClass.sizeStickingForm = DataClass.launcher.Size;
+          DataClass.stickingForm = DataClass.Sticking.Bottom;
+          DataClass.locationStickingForm.LocationElement = new Point(DataClass.launcher.Location.X, 0);
+          DataClass.launcher.Location = new Point(0, DataClass.screenSize.Height / 2);
+          DataClass.launcher.Width = DataClass.screenSize.Width;
+          DataClass.launcher.Height = DataClass.screenSize.Height / 2;
+        }
       }
-      else if (DataClass.launcher.Location.X < 0)
-      {
-        DataClass.sizeStickingForm = DataClass.launcher.Size;
-        DataClass.stickingForm = DataClass.Sticking.Left;
-        DataClass.locationStickingForm.LocationElement = new Point(DataClass.launcher.Location.X, 0);
-        DataClass.launcher.Location = new Point(0, 0);
-        DataClass.launcher.Width = DataClass.screenSize.Width / 2;
-        DataClass.launcher.Height = DataClass.screenSize.Height;
-      }
-      else if (DataClass.launcher.Location.X + DataClass.launcher.Width > DataClass.screenSize.Width)
-      {
-        DataClass.sizeStickingForm = DataClass.launcher.Size;
-        DataClass.stickingForm = DataClass.Sticking.Right;
-        DataClass.locationStickingForm.LocationElement = new Point(DataClass.launcher.Location.X, 0);
-        DataClass.launcher.Location = new Point(DataClass.screenSize.Width / 2, 0);
-        DataClass.launcher.Width = DataClass.screenSize.Width / 2;
-        DataClass.launcher.Height = DataClass.screenSize.Height;
-      }
-      else if (DataClass.launcher.Location.Y + DataClass.launcher.Height > DataClass.screenSize.Height)
-      {
-        DataClass.sizeStickingForm = DataClass.launcher.Size;
-        DataClass.stickingForm = DataClass.Sticking.Bottom;
-        DataClass.locationStickingForm.LocationElement = new Point(DataClass.launcher.Location.X, 0);
-        DataClass.launcher.Location = new Point(0, DataClass.screenSize.Height / 2);
-        DataClass.launcher.Width = DataClass.screenSize.Width;
-        DataClass.launcher.Height = DataClass.screenSize.Height / 2;
-      }
-
-
     }
 
     /// <summary>
