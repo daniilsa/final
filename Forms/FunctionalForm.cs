@@ -1,4 +1,5 @@
-﻿using LauncherNet.Front;
+﻿using LauncherNet._Data;
+using LauncherNet._Front;
 using LauncherNet.Functions;
 using LauncherNet.Settings;
 
@@ -15,18 +16,18 @@ namespace LauncherNet.Forms
     /// Запуск формы функций категорий.
     /// </summary>
     /// <param name="functionCategory"></param>
-    public void CategoryForm(DataClass.FunctionCategory functionCategory, string nameCategory)
+    public void CategoryForm(DataEnum.FunctionCategory functionCategory, string nameCategory)
     {
       Location = new Point((DataClass.screenSize.Width - Width) / 2, (DataClass.screenSize.Height - Height) / 2);
-      DataClass.functionalForm = this;
+      DataFunctionalForm.functionalForm = this;
 
       new SettingsForms().SettingsFunctionalForm(this);
-      if (functionCategory == DataClass.FunctionCategory.AddCategory) CreateCategory();
-      else if (functionCategory == DataClass.FunctionCategory.RenameCategory) RenameCategory(nameCategory);
-      else if (functionCategory == DataClass.FunctionCategory.AddApp) CreateApp();
+      if (functionCategory == DataEnum.FunctionCategory.AddCategory) CreateCategory();
+      else if (functionCategory == DataEnum.FunctionCategory.RenameCategory) RenameCategory(nameCategory);
+      else if (functionCategory == DataEnum.FunctionCategory.AddApp) CreateApp();
 
-      new DesignElements().LoadDesignFunctionalForm();
-      
+      new DesignFunctionalForm().LoadDesignFunctionalForm();
+
       ShowDialog();
     }
 
@@ -34,10 +35,10 @@ namespace LauncherNet.Forms
     /// Запуск формы функций приложений.
     /// </summary>
     /// <param name="functionCategory"></param>
-    public void AppForm(DataClass.FunctionApp functionCategory, string nameCategory, string nameFile)
+    public void AppForm(DataEnum.FunctionApp functionCategory, string nameCategory, string nameFile)
     {
       new SettingsForms().SettingsFunctionalForm(this);
-      if (functionCategory == DataClass.FunctionApp.ChangeImage) ChangeImage(nameCategory, nameFile);
+      if (functionCategory == DataEnum.FunctionApp.ChangeImage) ChangeImage(nameCategory, nameFile);
 
       Location = new Point((DataClass.screenSize.Width - Width) / 2, (DataClass.screenSize.Height - Height) / 2);
       ShowDialog();
@@ -81,10 +82,25 @@ namespace LauncherNet.Forms
       };
       buttonYes.Click += (s, e) =>
       {
-        new FunctionsCategories().CreateCategory(textBoxName.Text);
-        DataClass.update = true;
+        if (new FunctionsCategories().CreateCategory(textBoxName.Text))
+        {
+          //DataClass.Update = true;
+        }
         Close();
       };
+
+      textBoxName.KeyDown += (s, a) =>
+        {
+          if (a.KeyCode == Keys.Enter)
+          {
+            if (new FunctionsCategories().CreateCategory(textBoxName.Text))
+            {
+              //DataClass.Update = true;
+            }
+            Close();
+          }
+        };
+
 
       // Кнопка Отменить.
       Button buttonNo = new()
@@ -95,7 +111,7 @@ namespace LauncherNet.Forms
       buttonNo.Location = new Point(textBoxName.Width - buttonNo.Width + 15, buttonYes.Location.Y);
       buttonNo.Click += (s, e) =>
       {
-        DataClass.update = false;
+        DataClass.Update = false;
         Close();
       };
 
@@ -178,12 +194,41 @@ namespace LauncherNet.Forms
       };
       buttonYes.Click += (s, e) =>
       {
-        new FunctionsCategories().RenameCategory(textBoxOldNameCategory.Text, textBoxNewNameFile.Text);
-        Close();
+        if (textBoxNewNameFile.Text != string.Empty)
+        {
+          if (new FunctionsCategories().RenameCategory(textBoxOldNameCategory.Text, textBoxNewNameFile.Text))
+          {
+
+          }
+          Close();
+        }
+        else
+        {
+          MessageBox.Show("Введите новое имя категории!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+      };
+
+      textBoxNewNameFile.KeyDown += (s, e) =>
+      {
+        if (e.KeyCode == Keys.Enter)
+        {
+          if (textBoxNewNameFile.Text != string.Empty)
+          {
+            if (new FunctionsCategories().RenameCategory(textBoxOldNameCategory.Text, textBoxNewNameFile.Text))
+            {
+
+            }
+            Close();
+          }
+          else
+          {
+            MessageBox.Show("Введите новое имя категории!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+          }
+        }
       };
 
       // Кнопка для выхода
-      Button buttonNo = new()
+       Button buttonNo = new()
       {
         Size = new Size(100, 30),
         Text = "Отменить",
@@ -197,9 +242,9 @@ namespace LauncherNet.Forms
 
       // Сбор всего вместе
       panelSettings.Controls.Add(categoryOldName);
+      panelSettings.Controls.Add(textBoxNewNameFile);
       panelSettings.Controls.Add(textBoxOldNameCategory);
       panelSettings.Controls.Add(categoryNewName);
-      panelSettings.Controls.Add(textBoxNewNameFile);
       panelSettings.Controls.Add(buttonNo);
       panelSettings.Controls.Add(buttonYes);
       textBoxOldNameCategory.Focus();
@@ -207,6 +252,7 @@ namespace LauncherNet.Forms
       Controls.Add(panelSettings);
       AutoSize = true;
       Height = buttonNo.Location.Y + buttonNo.Height + 30;
+      textBoxNewNameFile.Focus();
 
     }
 
@@ -247,8 +293,8 @@ namespace LauncherNet.Forms
         //Font = new System.Drawing.Font("Winston Bold", 14),
         //BorderStyle = BorderStyle.None
       };
-      if (DataClass.activeAppPanelLauncher != null && DataClass.activeAppPanelLauncher.Name.Length > 0)
-        textBoxNameCategory.Text = DataClass.activeAppPanelLauncher.Name;
+      if (DataLauncherForm.activeAppPanelLauncher != null && DataLauncherForm.activeAppPanelLauncher.Name.Length > 0)
+        textBoxNameCategory.Text = DataLauncherForm.activeAppPanelLauncher.Name;
 
       // Текст : "Введите имя приложения:"
       Label appName = new()
@@ -291,19 +337,22 @@ namespace LauncherNet.Forms
         //Font = new System.Drawing.Font("Winston Bold", 14),
         //BorderStyle = BorderStyle.None
       };
-      textBoxPathFile.MouseDoubleClick += (sender, e) =>
+      textBoxPathFile.MouseDoubleClick += (s, e) =>
       {
-        OpenFileDialog OFD = new()
+        if (s != null)
         {
-          Filter = "Приложение (*.exe)|*.exe"
-        };
-        if (OFD.ShowDialog() == DialogResult.OK)
-        {
-          ((TextBox)sender).Text = OFD.FileName;
-          int indexLast = OFD.FileName.LastIndexOf('.');
-          int indexFerst = OFD.FileName.LastIndexOf('\\') + 1;
-          for (; indexFerst < indexLast; indexFerst++)
-            textBoxNameFile.Text += OFD.FileName[indexFerst];
+          OpenFileDialog OFD = new()
+          {
+            Filter = "Приложение (*.exe)|*.exe"
+          };
+          if (OFD.ShowDialog() == DialogResult.OK)
+          {
+            ((TextBox)s).Text = OFD.FileName;
+            int indexLast = OFD.FileName.LastIndexOf('.');
+            int indexFerst = OFD.FileName.LastIndexOf('\\') + 1;
+            for (; indexFerst < indexLast; indexFerst++)
+              textBoxNameFile.Text += OFD.FileName[indexFerst];
+          }
         }
       };
 
@@ -353,11 +402,17 @@ namespace LauncherNet.Forms
       };
       buttonYes.Click += (s, e) =>
       {
+        DataClass.InternetСonnection = true;
         if (new FunctionsCategories().CreateApp(textBoxNameCategory.Text, textBoxNameFile.Text, textBoxPathFile.Text, imagePath, addImageButton.Text, triggerImage))
         {
-          if (DataClass.locationImage != null && DataClass.locationImage != string.Empty)
+          if (DataLauncherForm.locationImage != null && DataLauncherForm.locationImage != string.Empty)
           {
-            DataClass.update = true;
+            //DataClass.Update = true;
+            Close();
+          }
+          else if (!DataClass.InternetСonnection)
+          {
+            //DataClass.Update = true;
             Close();
           }
         }
@@ -373,7 +428,7 @@ namespace LauncherNet.Forms
       buttonNo.Location = new Point(textBoxPathFile.Width - buttonNo.Width + 15, buttonYes.Location.Y);
       buttonNo.Click += (s, e) =>
       {
-        DataClass.update = false;
+        DataClass.Update = false;
         Close();
       };
 
@@ -455,7 +510,7 @@ namespace LauncherNet.Forms
       buttonYes.Click += (s, e) =>
       {
         new FunctionsApps().ChangeImage(nameCategory, nameFile, textBoxPathFile.Text);
-        DataClass.update = true;
+        //DataClass.Update = true;
         Close();
       };
 
@@ -469,7 +524,7 @@ namespace LauncherNet.Forms
       buttonNo.Location = new Point(textBoxPathFile.Width - buttonNo.Width + 15, buttonYes.Location.Y);
       buttonNo.Click += (s, e) =>
       {
-        DataClass.update = false;
+        DataClass.Update = false;
         Close();
       };
 

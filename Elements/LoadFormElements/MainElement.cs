@@ -1,11 +1,4 @@
-﻿using Launcher.Controls;
-using LauncherNet.DesignFront;
-using LauncherNet.Forms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LauncherNet.DesignFront;
 
 namespace LauncherNet.Elements.LoadFormElements
 {
@@ -115,7 +108,7 @@ namespace LauncherNet.Elements.LoadFormElements
       Panel panelProgressBar = new()
       {
         Width = width,
-        BackColor = BackColorElements.DefaultColorTopElement,
+        BackColor = BackColorElements.MainDarkColor,
         Height = 20
       };
       panelProgressBar.Location = new Point(leftElement.Location.X + leftElement.Width + 20, (main.Height - panelProgressBar.Height) / 2);
@@ -134,7 +127,7 @@ namespace LauncherNet.Elements.LoadFormElements
       };
       timer.Tick += (s, ev) =>
       {
-        if (!DataClass.downloadStage)
+        if (!DataClass.DownloadStage)
         {
           if (progressBar.Location.X <= (panelProgressBar as Panel).Width)
           {
@@ -147,7 +140,7 @@ namespace LauncherNet.Elements.LoadFormElements
         }
         else
         {
-          DataClass.downloadStage = true;
+          DataClass.DownloadStage = true;
           loadForm.Close();
         }
       };

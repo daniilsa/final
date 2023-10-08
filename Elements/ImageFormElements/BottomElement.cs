@@ -1,13 +1,6 @@
 ﻿using Launcher.Controls;
-using LauncherNet.DesignFront;
-using LauncherNet.Front;
+using LauncherNet._Data;
 using LauncherNet.Functions;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LauncherNet.Elements.ImageFormElements
 {
@@ -16,14 +9,14 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <summary>
     /// Последняя выбранная картинка.
     /// </summary>
-    TextElement lastTextElment = null;
+    private TextControl? lastTextElment = null;
 
     /// <summary>
     /// Нижний элемент формы.
     /// </summary>
     /// <param name="mainPanel">Главная панель.</param>
     /// <returns></returns>
-    public Panel CreateBottomElement(Form imageForm, Panel mainPanel, string nameFile, string nameCategory)
+    public Panel CreateBottomElement(Form imageForm, Panel? mainPanel, string nameFile, string nameCategory)
     {
       Panel bottomPanel = new()
       {
@@ -31,13 +24,12 @@ namespace LauncherNet.Elements.ImageFormElements
         Dock = DockStyle.Bottom,
       };
 
-      TextElement yes = YesElement(imageForm, bottomPanel, nameFile, nameCategory);
-
-      TextElement no = NoElement(imageForm, bottomPanel, mainPanel);
+      TextControl yes = YesElement(imageForm, bottomPanel, nameFile, nameCategory);
+      TextControl no = NoElement(imageForm, bottomPanel, mainPanel);
 
       bottomPanel.Controls.Add(yes);
       bottomPanel.Controls.Add(no);
-      mainPanel.Controls.Add(bottomPanel);
+      mainPanel?.Controls.Add(bottomPanel);
 
       return bottomPanel;
     }
@@ -50,9 +42,9 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="nameFile">Имя файла.</param>
     /// <param name="nameCategory">Имя категории.</param>
     /// <returns></returns>
-    private TextElement YesElement(Form imageForm, Panel bottomPanel, string nameFile, string nameCategory )
+    private TextControl YesElement(Form imageForm, Panel bottomPanel, string nameFile, string nameCategory)
     {
-      TextElement yes = new()
+      TextControl yes = new()
       {
         //BackColor = BackColorElements.BackColorForm,
         //Font = FontElements.FontApp,
@@ -60,7 +52,7 @@ namespace LauncherNet.Elements.ImageFormElements
         TextAlignHorizontal = StringAlignment.Center,
         Dock = DockStyle.None,
         Text = "Применить",
-        Width = Convert.ToInt32(Math.Abs(DataClass.sizeAppElement.Width * 1.5)),
+        Width = Convert.ToInt32(Math.Abs(DataLauncherForm.sizeAppElement.Width * 1.5)),
         Name = "Yes",
       };
       yes.Location = new Point(24, (bottomPanel.Height - yes.Height) / 2);
@@ -84,18 +76,25 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="bottomPanel">Нижняя панель.</param>
     /// <param name="mainPanel">Главная панель.</param>
     /// <returns></returns>
-    private TextElement NoElement(Form imageForm, Panel bottomPanel, Panel mainPanel)
+    private TextControl NoElement(Form imageForm, Panel bottomPanel, Panel? mainPanel)
     {
-      TextElement no = new()
+      TextControl no = new()
       {
         Height = 40,
-        Width = Convert.ToInt32(Math.Abs(DataClass.sizeAppElement.Width * 1.5)),
+        Width = Convert.ToInt32(Math.Abs(DataLauncherForm.sizeAppElement.Width * 1.5)),
         Dock = DockStyle.None,
         Text = "Отменить",
         TextAlignHorizontal = StringAlignment.Center,
         Name = "No",
       };
-      no.Location = new Point(mainPanel.Width - 40 - no.Width, (bottomPanel.Height - no.Height) / 2);
+      if (mainPanel != null)
+      {
+        no.Location = new Point(mainPanel.Width - 40 - no.Width, (bottomPanel.Height - no.Height) / 2);
+      }
+      else
+      {
+        no.Location = new Point(0, (bottomPanel.Height - no.Height) / 2);
+      }
       no.MouseDown += (s, a) => CloseElement(imageForm);
 
       return no;
@@ -109,9 +108,9 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="nameCategory">Имя категории.</param>
     private void SaveImage(Form imageForm, string nameFile, string nameCategory)
     {
-      if (DataClass.locationImage != null && DataClass.locationImage != string.Empty)
+      if (DataLauncherForm.locationImage != null && DataLauncherForm.locationImage != string.Empty)
       {
-        new FunctionsApps().SaveImagefromInternet(nameCategory, nameFile);
+        new FunctionsApps().SaveImageFromInternet(nameCategory, nameFile);
         imageForm.Close();
       }
     }
@@ -122,7 +121,7 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="imageForm">Экземпляр формы.</param>
     private void CloseElement(Form imageForm)
     {
-      DataClass.locationImage = string.Empty;
+      DataLauncherForm.locationImage = string.Empty;
       imageForm.Close();
 
     }

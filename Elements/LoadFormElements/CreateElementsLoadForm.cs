@@ -1,13 +1,4 @@
-﻿using LauncherNet.DesignFront;
-using LauncherNet.Forms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace LauncherNet.Elements.LoadFormElements
+﻿namespace LauncherNet.Elements.LoadFormElements
 {
   public class CreateElementsLoadForm
   {

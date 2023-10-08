@@ -1,4 +1,5 @@
 ﻿using Launcher.Controls;
+using LauncherNet._Data;
 using LauncherNet.Controls;
 using LauncherNet.Functions;
 
@@ -9,37 +10,40 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <summary>
     /// Последний элемент с текстом.
     /// </summary>
-    TextElement lastTextElment = null;
+    private TextControl? lastTextElment = null;
 
     /// <summary>
     /// Последний чек-бокс
     /// </summary>
-    CheckBoxElement lastCheckboxElement = null;
+    private CheckBoxControl? lastCheckboxElement = null;
 
     /// <summary>
     /// Список расположения изображений.
     /// </summary>
-    List<string> imageResources = null;
+    private List<string>? imageResources = null;
 
     /// <summary>
     /// Загрузка элементов выбора изображения для обложки приложения.
     /// </summary>
     /// <param name="nameFile">Имя добавляемого файла.</param>
     /// <returns></returns>
-    public Panel CreateImageSelection(string nameFile)
+    public Panel? CreateImageSelection(string nameFile, ref bool next)
     {
       Panel mainPanel = new()
       {
         AutoScroll = true,
-        Size = DataClass.imageSelectionForm.Size,
         Location = new Point(0, 0),
       };
 
-      imageResources = new SearchImage().ImageSearch(nameFile);
+      if (DataImageSelectionForm.imageSelectionForm != null)
+        mainPanel.Size = DataImageSelectionForm.imageSelectionForm.Size;
+      imageResources = new SearchImage().ImageSearch(nameFile, ref next);
+      if (!next) return null;
+
       int locationX = 24;
       int locationY = 19;
 
-      for (int i = 0; i < DataClass.countImageSearch; i++)
+      for (int i = 0; i < DataImageSelectionForm.countImageSearch; i++)
       {
         Panel fileСontrols = CreateFileElements();
         PictureBox pictureBoxImageApp = CreateImageAppElement();
@@ -52,7 +56,7 @@ namespace LauncherNet.Elements.ImageFormElements
         LocationElements(ref locationX, ref locationY, fileСontrols);
 
         mainPanel.Controls.Add(fileСontrols);
-        DataClass.imageElementsSelectionForm.Add(fileСontrols);
+        DataImageSelectionForm.imageElementsSelectionForm?.Add(fileСontrols);
       }
       return mainPanel;
     }
@@ -65,7 +69,7 @@ namespace LauncherNet.Elements.ImageFormElements
     {
       Panel fileСontrols = new()
       {
-        Size = new Size(DataClass.sizeAppElement.Width, DataClass.sizeAppElement.Height),
+        Size = new Size(DataLauncherForm.sizeAppElement.Width, DataLauncherForm.sizeAppElement.Height),
         BorderStyle = BorderStyle.FixedSingle,
       };
 
@@ -80,7 +84,7 @@ namespace LauncherNet.Elements.ImageFormElements
     {
       PictureBox pictureBoxImageApp = new()
       {
-        Height = DataClass.sizeAppElement.Height - 40,
+        Height = DataLauncherForm.sizeAppElement.Height - 40,
         Dock = DockStyle.Top,
       };
 
@@ -98,8 +102,8 @@ namespace LauncherNet.Elements.ImageFormElements
       int width = 20;
 
       Panel selectionElement = CreateSelectionElement(fileСontrols, pictureBoxImageApp);
-      TextElement labelFileName = CreateTextElement(selectionElement, width);
-      CheckBoxElement checkBoxElement = CreateCheckBox(selectionElement, labelFileName, pictureBoxImageApp, 20);
+      TextControl labelFileName = CreateTextElement(selectionElement, width);
+      CheckBoxControl checkBoxElement = CreateCheckBox(selectionElement, labelFileName, pictureBoxImageApp, 20);
 
       selectionElement.Controls.Add(checkBoxElement);
       selectionElement.Controls.Add(labelFileName);
@@ -131,10 +135,10 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="selectionElement">Панель со всеми элементами выбора картнки.</param>
     /// <param name="width">Ширина элемента.</param>
     /// <returns></returns>
-    private TextElement CreateTextElement(Panel selectionElement, int width)
+    private TextControl CreateTextElement(Panel selectionElement, int width)
     {
 
-      TextElement labelFileName = new()
+      TextControl labelFileName = new()
       {
         Height = selectionElement.Height,
         Text = "Выбрать",
@@ -154,9 +158,9 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="pictureBoxImageApp">Элемент с картинкой.</param>
     /// <param name="width">Ширина элемента.</param>
     /// <returns></returns>
-    private CheckBoxElement CreateCheckBox(Panel selectionElement,TextElement labelFileName, PictureBox pictureBoxImageApp, int width)
+    private CheckBoxControl CreateCheckBox(Panel selectionElement, TextControl labelFileName, PictureBox pictureBoxImageApp, int width)
     {
-      CheckBoxElement checkBoxElement = new()
+      CheckBoxControl checkBoxElement = new()
       {
         Width = width,
         Height = width,
@@ -175,7 +179,7 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="checkBoxElement">Экземпляр чек бокса.</param>
     /// <param name="labelFileName">Экземпляр текста.</param>
     /// <param name="mouseEnter">Наведение мыши.</param>
-    private void TextSelectionElements(CheckBoxElement checkBoxElement, TextElement labelFileName, bool mouseEnter)
+    private void TextSelectionElements(CheckBoxControl checkBoxElement, TextControl labelFileName, bool mouseEnter)
     {
       if (!checkBoxElement.Active && mouseEnter) labelFileName.Text = "Выбрать?";
       else if (!checkBoxElement.Active) labelFileName.Text = "Выбрать";
@@ -186,7 +190,7 @@ namespace LauncherNet.Elements.ImageFormElements
     /// </summary>
     /// <param name="pictureBoxImageApp">Элемент с картинкой.</param>
     /// <param name="index">Номер картинки в списке.</param>
-    private void CheckImageResours(PictureBox pictureBoxImageApp , int index)
+    private void CheckImageResours(PictureBox pictureBoxImageApp, int index)
     {
       if (imageResources != null)
       {
@@ -201,15 +205,15 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="checkBoxElement">Экземпляр чек бокса.</param>
     /// <param name="pictureBoxImageApp">Экземпляр отображения изображения.</param>
     /// <param name="labelFileName">Экземпляр текста.</param>
-    private void ImageSelection(CheckBoxElement checkBoxElement, PictureBox pictureBoxImageApp, TextElement labelFileName)
+    private void ImageSelection(CheckBoxControl checkBoxElement, PictureBox pictureBoxImageApp, TextControl labelFileName)
     {
-      if (lastCheckboxElement != null)
+      if (lastCheckboxElement != null && lastTextElment != null)
       {
         lastCheckboxElement.Active = false;
         lastCheckboxElement.Invalidate();
         lastTextElment.Text = "Выбрать";
       }
-      DataClass.locationImage = pictureBoxImageApp.ImageLocation;
+      DataLauncherForm.locationImage = pictureBoxImageApp.ImageLocation;
       lastCheckboxElement = checkBoxElement;
       lastTextElment = labelFileName;
       checkBoxElement.Active = true;
@@ -224,17 +228,17 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="fileСontrols">"Экземпляр элемента./</param>
     private void LocationElements(ref int locationX, ref int locationY, Panel fileСontrols)
     {
-      if (locationX + fileСontrols.Width + 10 < DataClass.imageSelectionForm.Width)
+      if (locationX + fileСontrols.Width + 10 < DataImageSelectionForm.imageSelectionForm?.Width)
       {
         fileСontrols.Location = new Point(locationX, locationY);
-        locationX += DataClass.sizeAppElement.Width + 10;
+        locationX += DataLauncherForm.sizeAppElement.Width + 10;
       }
       else
       {
         locationX = 24;
-        locationY += DataClass.sizeAppElement.Height + 19;
+        locationY += DataLauncherForm.sizeAppElement.Height + 19;
         fileСontrols.Location = new Point(locationX, locationY);
-        locationX += DataClass.sizeAppElement.Width + 10;
+        locationX += DataLauncherForm.sizeAppElement.Width + 10;
       }
     }
   }

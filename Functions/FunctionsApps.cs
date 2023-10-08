@@ -1,12 +1,9 @@
-﻿using LauncherNet.Forms;
-using LauncherNet.Settings;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using LauncherNet._Data;
+using LauncherNet._Front;
+using LauncherNet.Controls;
+using LauncherNet.Forms;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using static System.Windows.Forms.Control;
 
 namespace LauncherNet.Functions
 {
@@ -72,7 +69,7 @@ namespace LauncherNet.Functions
         {
           if (MessageBox.Show($"Внимание! Приложение удалено или перенесено. Хотите удалить приложение {nameFile} из лаунчера?", "Внимание!", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
           {
-            DeleteApp(launcher, nameCategory, nameFile, true);
+            DeleteApp(nameCategory, nameFile, true);
           }
         }
       }
@@ -87,7 +84,7 @@ namespace LauncherNet.Functions
     public void FormImage(string nameCategory, string nameFile)
     {
       FunctionalForm functionalForm = new();
-      functionalForm.AppForm(DataClass.FunctionApp.ChangeImage, nameCategory, nameFile);
+      functionalForm.AppForm(DataEnum.FunctionApp.ChangeImage, nameCategory, nameFile);
     }
 
     /// <summary>
@@ -98,12 +95,13 @@ namespace LauncherNet.Functions
     /// <param name="pathImageNew"></param>
     public void ChangeImage(string nameCategory, string nameFile, string pathImageNew)
     {
-      string pathImageOld = DataClass.pathImages + "\\" + nameCategory + "\\" + nameFile + ".jpg";
+      string pathImageOld = DataClass.PathImages + "\\" + nameCategory + "\\" + nameFile + ".jpg";
       if (File.Exists(pathImageNew))
       {
         FileInfo fileInfo = new(pathImageOld);
         fileInfo.Delete();
         File.Move(pathImageNew, pathImageOld);
+        ChangeImageApp(nameCategory, nameFile);
       }
       else
       {
@@ -114,36 +112,37 @@ namespace LauncherNet.Functions
     /// <summary>
     /// Удаление приложения из лаунчера
     /// </summary>
-    /// <param name="launcher">Экземпляр формы.</param>
     /// <param name="nameFile">Имя файла.</param>
     /// <param name="nameCategory">Имя категории.</param>
     /// <param name="question">Задавать ли вопрос о удалении файла.</param>
-    public void DeleteApp(Form launcher, string nameCategory, string nameFile, bool question)
+    public void DeleteApp(string nameCategory, string nameFile, bool question)
     {
       if (question)
       {
         string nameFiliDelete = nameFile;
-        string pathFildeDelete = DataClass.categoriesPathFiles + "\\" + nameCategory;
+        string pathFildeDelete = DataClass.CategoriesPathFiles + "\\" + nameCategory;
         string[] readText = File.ReadAllLines(pathFildeDelete);
         string[] newText = new string[readText.Length - 1];
         int j = 0;
         for (int index = 0; index < readText.Length; index++)
           if (readText[index].LastIndexOf(nameFiliDelete) == -1) { newText[j] = readText[index]; j++; }
         File.WriteAllLines(pathFildeDelete, newText);
-        new SettingsForms().UpdateLauncher(launcher);
+        DeleteAppForForm(nameCategory, nameFile);
+        //new SettingsForms().UpdateLauncher(launcher);
 
       }
       else if (MessageBox.Show($"Удалить {nameFile} из категории {nameCategory}?", "Внимание!", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
       {
         string nameFiliDelete = nameFile;
-        string pathFildeDelete = DataClass.categoriesPathFiles + "\\" + nameCategory;
+        string pathFildeDelete = DataClass.CategoriesPathFiles + "\\" + nameCategory;
         string[] readText = File.ReadAllLines(pathFildeDelete);
         string[] newText = new string[readText.Length - 1];
         int j = 0;
         for (int index = 0; index < readText.Length; index++)
           if (readText[index].LastIndexOf(nameFiliDelete) == -1) { newText[j] = readText[index]; j++; }
         File.WriteAllLines(pathFildeDelete, newText);
-        new SettingsForms().UpdateLauncher(launcher);
+        DeleteAppForForm(nameCategory, nameFile);
+        //new SettingsForms().UpdateLauncher(launcher);
       }
     }
 
@@ -152,33 +151,74 @@ namespace LauncherNet.Functions
     /// </summary>
     /// <param name="nameCategory"></param>
     /// <param name="nameFile"></param>
-    public void SaveImagefromInternet(string nameCategory, string nameFile)
+    public void SaveImageFromInternet(string nameCategory, string nameFile)
     {
-      if (Directory.Exists($@"{DataClass.pathImages}\{nameCategory}"))
+      if (Directory.Exists($@"{DataClass.PathImages}\{nameCategory}") && DataLauncherForm.locationImage != null)
       {
         try
         {
           using WebClient client = new();
-          client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+          client.DownloadFile(new Uri(DataLauncherForm.locationImage), $@"{DataClass.PathImages}\{nameCategory}\{nameFile}.jpg");
         }
         catch
         {
           MessageBox.Show("Ошибка при скачивании обложки. Пожалуйста, попробуйте загрузить обложку самостоятельно!");
         }
       }
-      else
+      else if (DataLauncherForm.locationImage != null)
       {
-        Directory.CreateDirectory($@"{DataClass.pathImages}\{nameCategory}");
+        Directory.CreateDirectory($@"{DataClass.PathImages}\{nameCategory}");
         try
         {
-          using WebClient client = new(); 
-          client.DownloadFile(new Uri(DataClass.locationImage), $@"{DataClass.pathImages}\{nameCategory}\{nameFile}.jpg");
+          using WebClient client = new();
+          client.DownloadFile(new Uri(DataLauncherForm.locationImage), $@"{DataClass.PathImages}\{nameCategory}\{nameFile}.jpg");
         }
         catch
         {
           MessageBox.Show("Ошибка при скачивании обложки. Пожалуйста, попробуйте загрузить обложку самостоятельно!");
         }
       }
+    }
+
+    /// <summary>
+    /// Удаление приложения из приложения.
+    /// </summary>
+    /// <param name="nameCategory"></param>
+    /// <param name="nameFile"></param>
+    private void DeleteAppForForm(string nameCategory, string nameFile)
+    {
+      foreach (ScrollBarControl item in DataLauncherForm.mainAppsLauncher)
+      {
+        if (item.Name == nameCategory)
+        {
+          item.DeleteControl(nameFile);
+        }
+      }
+    }
+
+    private void ChangeImageApp(string nameCategory, string nameFile)
+    {
+      ControlCollection? mainCollection = null;
+      foreach (ScrollBarControl item in DataLauncherForm.mainAppsLauncher)
+      {
+        if (item.Name == nameCategory)
+        {
+          mainCollection = item.GetControls();
+        }
+      }
+
+      if (mainCollection != null)
+      {
+        foreach (Control item in mainCollection)
+        {
+          if (item.Name == nameFile)
+          {
+            new DesignLauncherForm().DesignAppElementLauncher((Panel)item);
+          }
+        }
+      }
+
+
     }
   }
 }

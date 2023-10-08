@@ -1,19 +1,13 @@
 ﻿using Launcher.Controls;
+using LauncherNet._Data;
+using LauncherNet._DataStatic;
+using LauncherNet._Front;
 using LauncherNet.BackUp;
 using LauncherNet.Controls;
 using LauncherNet.DesignFront;
-using LauncherNet.Elements;
 using LauncherNet.Elements.LauncherElements;
 using LauncherNet.Front;
 using LauncherNet.Functions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using static LauncherNet.DataClass;
 
 namespace LauncherNet.Settings
 {
@@ -23,198 +17,206 @@ namespace LauncherNet.Settings
     private bool openProgramm = true;
     private bool expand = false;
     private Point startPoint = new(0, 0);
-
-    Size sizeForm;
-    Location locationForm;
+    private Size sizeForm;
+    private DataStruct.Location locationForm;
 
     /// <summary>
     /// Настройка формы лаунчера.
     /// </summary>
-    /// <param name="launcher">"Экземпляр формы</param>
-    public void SettingsLauncherForm(Form launcher)
+    /// <param name="value">"Экземпляр формы</param>
+    public void SettingsLauncherForm(Form value)
     {
-      DataClass.Expand expandForm = DataClass.Expand.Nope;
+      DataEnum.Expand expandForm = DataEnum.Expand.Nope;
 
-      launcher.Size = new Size(700, 600);
-      launcher.MinimumSize = new Size(700, 600);
-      launcher.WindowState = FormWindowState.Maximized;
-      launcher.Text = "Launcher";
-      launcher.FormBorderStyle = FormBorderStyle.None;
-      launcher.KeyPreview = true;
-      launcher.KeyDown += (s, a) => new HotKeys().CheckKeys(s, a);
-      launcher.LostFocus += (s, a) => 
+      value.Size = new Size(700, 600);
+      value.MinimumSize = new Size(700, 600);
+      value.WindowState = FormWindowState.Maximized;
+      value.Text = "Launcher";
+      value.FormBorderStyle = FormBorderStyle.None;
+      value.KeyPreview = true;
+      value.KeyDown += (s, a) =>
+      {
+        if (s != null)
+          new HotKeys().CheckKeys(s, a);
+      };
+      value.LostFocus += (s, a) =>
       {
         if (openProgramm)
         {
-          launcher.Activate();
-          launcher.Focus();
-          openProgramm= false;
+          value.Activate();
+          value.Focus();
+          openProgramm = false;
         }
       };
-
-
-      launcher.SizeChanged += (s, a) =>
+      value.SizeChanged += (s, a) =>
       {
-        DataClass.sizeForm = launcher.Size;
-        if (DataClass.activeAppPanelLauncher != null)
+        DataLauncherForm.sizeMainForm = value.Size;
+        if (DataLauncherForm.activeAppPanelLauncher != null)
         {
-          DataClass.activeAppPanelLauncher.Width = DataClass.sizeForm.Width - DataClass.categoriesElementLauncher.Width - DataClass.borderFormWidth;
-          new SettingsForms().SizeElements();
+          if (DataLauncherForm.categoriesElementLauncher != null)
+          {
+            DataLauncherForm.activeAppPanelLauncher.Width = DataLauncherForm.sizeMainForm.Width - DataLauncherForm.categoriesElementLauncher.Width - DataClass.borderFormWidth;
+          }
+          else
+          {
+            DataLauncherForm.activeAppPanelLauncher.Width = DataLauncherForm.sizeMainForm.Width - DataClass.borderFormWidth;
+          }
+          new SizeSettings().SizeElements();
 
-          launcher.TopMost = true;
-          launcher.TopMost = false;
-
+          value.TopMost = true;
+          value.TopMost = false;
         }
       };
-      launcher.LocationChanged += (s, a) => DataClass.locationForm = new DataClass.Location(launcher.Location.X, launcher.Location.Y);
-      launcher.FormClosing += (s, a) => new LastSessionClass().SetCategory();
-      launcher.MouseEnter += (s, a) =>
+      value.LocationChanged += (s, a) => DataLauncherForm.locationMainForm = new DataStruct.Location(value.Location.X, value.Location.Y);
+      value.FormClosing += (s, a) =>
+      {
+        new LastSessionClass().SetCategory();
+        if (DataClass.iconLauncher != null)
+          new Tray().FromTray(DataClass.iconLauncher);
+      };
+      value.MouseEnter += (s, a) =>
       {
 
         int pointX = Cursor.Position.X;
         int pointY = Cursor.Position.Y;
 
-        DataClass.Location locationForm = DataClass.locationForm;
-        Size sizeForm = DataClass.sizeForm;
+        DataStruct.Location locationForm = DataLauncherForm.locationMainForm;
+        Size sizeForm = DataLauncherForm.sizeMainForm;
 
-        if (DataClass.launcher.WindowState != FormWindowState.Maximized)
+        if (DataLauncherForm.launcher != null && DataLauncherForm.launcher.WindowState != FormWindowState.Maximized)
         {
           if (pointX <= locationForm.X + 3 && pointY > locationForm.Y + sizeForm.Height - 3)
           {
-            launcher.Cursor = Cursors.SizeNESW;
-            expandForm = DataClass.Expand.LeftBottom;
+            value.Cursor = Cursors.SizeNESW;
+            expandForm = DataEnum.Expand.LeftBottom;
           }
-          else if (pointX >= locationForm.X + DataClass.sizeForm.Width - 3 && pointY > locationForm.Y + sizeForm.Height - 3)
+          else if (pointX >= locationForm.X + DataLauncherForm.sizeMainForm.Width - 3 && pointY > locationForm.Y + sizeForm.Height - 3)
           {
-            launcher.Cursor = Cursors.SizeNWSE;
-            expandForm = DataClass.Expand.RightBottom;
+            value.Cursor = Cursors.SizeNWSE;
+            expandForm = DataEnum.Expand.RightBottom;
           }
           else if (pointX <= locationForm.X + 3)
           {
-            launcher.Cursor = Cursors.SizeWE;
-            expandForm = DataClass.Expand.Left;
+            value.Cursor = Cursors.SizeWE;
+            expandForm = DataEnum.Expand.Left;
           }
-          else if (pointX >= locationForm.X + DataClass.sizeForm.Width - 3)
+          else if (pointX >= locationForm.X + DataLauncherForm.sizeMainForm.Width - 3)
           {
-            launcher.Cursor = Cursors.SizeWE;
-            expandForm = DataClass.Expand.Right;
+            value.Cursor = Cursors.SizeWE;
+            expandForm = DataEnum.Expand.Right;
           }
           else if (pointY > locationForm.Y + sizeForm.Height - 3)
           {
-            launcher.Cursor = Cursors.SizeNS;
-            expandForm = DataClass.Expand.Bottom;
+            value.Cursor = Cursors.SizeNS;
+            expandForm = DataEnum.Expand.Bottom;
           }
         }
       };
-      launcher.MouseLeave += (s, a) =>
+      value.MouseLeave += (s, a) =>
       {
-        launcher.Cursor = Cursors.Default;
-        expandForm = DataClass.Expand.Nope;
+        value.Cursor = Cursors.Default;
+        expandForm = DataEnum.Expand.Nope;
       };
-      launcher.MouseDown += (s, a) =>
+      value.MouseDown += (s, a) =>
       {
         startPoint = Cursor.Position;
-        sizeForm = DataClass.launcher.Size;
-        locationForm = new Location(DataClass.launcher.Location.X, DataClass.launcher.Location.Y);
+        sizeForm = value.Size;
+        locationForm = new DataStruct.Location(value.Location.X, value.Location.Y);
         expand = true;
       };
-      launcher.MouseMove += (s, a) =>
+      value.MouseMove += (s, a) =>
       {
-        new SizeForm().ResizeForm(expandForm, expand, startPoint, locationForm, sizeForm);
+        new SizeSettings().ResizeForm(expandForm, expand, startPoint, locationForm, sizeForm);
       };
-      launcher.MouseUp += (s, a) =>
+      value.MouseUp += (s, a) =>
       {
-        expandForm = DataClass.Expand.Nope;
+        expandForm = DataEnum.Expand.Nope;
         expand = false;
       };
 
-      DataClass.sizeForm = new Size(DataClass.screenSize.Width, DataClass.screenSize.Height);
-      DataClass.locationForm = new DataClass.Location(launcher.Location.X, launcher.Location.Y);
+      DataLauncherForm.sizeMainForm = new Size(DataClass.screenSize.Width, DataClass.screenSize.Height);
+      DataLauncherForm.locationMainForm = new DataStruct.Location(value.Location.X, value.Location.Y);
     }
 
     /// <summary>
     /// Обновление элементов в лаунчере.
     /// </summary>
-    /// <param name="launcher">Экземпляр формы</param>
-    public void UpdateLauncher(Form launcher)
+    /// <param name="value">Экземпляр формы</param>
+    public void UpdateLauncher(Form value)
     {
-      DataClass.appsElementLauncher = new List<Panel>();
-      DataClass.mainAppsLauncher = new List<ScrollBarElement>();
-      DataClass.categoryElementLauncher = new List<TextElement>();
-      DataClass.controlAddApp = new List<ControlAddElement>();
+      new CheckingFiles().CheckingChangesFiles();
+      DataLauncherForm.appsElementLauncher = new List<Panel>();
+      DataLauncherForm.mainAppsLauncher = new List<ScrollBarControl>();
+      DataLauncherForm.categoryElementLauncher = new List<TextControl>();
+      DataLauncherForm.controlAddApp = new List<ControlAddControl>();
 
       try
       {
-        if (FontElements.FontCategory.Name.Contains("Parameter is not valid"))
-          new SettingsForms().UpdateLauncher(DataClass.launcher);
+        if (DataLauncherForm.launcher != null && FontElements.FontCategory.Name.Contains("Parameter is not valid"))
+          new SettingsForms().UpdateLauncher(DataLauncherForm.launcher);
       }
       catch
       {
         FontElements.UpdateFont();
       }
 
-      launcher.Controls.Clear();
-      launcher.Hide();
-      DataClass.appsElementLauncher.Clear();
+      value.Controls.Clear();
+      DataLauncherForm.appsElementLauncher.Clear();
       new LastSessionClass().SetCategory();
-      new CreateElementsLauncherForm().LoadElements(launcher);
-      new DesignElements().LoadDesignLauncher();
+      new CreateElementsLauncherForm().LoadElements(value);
+      new DesignLauncherForm().LoadDesignLauncher();
       Thread.Sleep(100);
-      launcher.Show();
     }
 
     /// <summary>
     /// Настройки формы добавления приложений, категорий.
     /// </summary>
-    /// <param name="functional"></param>
-    public void SettingsFunctionalForm(Form functional)
+    /// <param name="value"></param>
+    public void SettingsFunctionalForm(Form value)
     {
-      functional.Width = 400;
-      functional.FormBorderStyle = FormBorderStyle.None;
-      functional.StartPosition = FormStartPosition.CenterScreen;
+      value.Width = 400;
+      value.FormBorderStyle = FormBorderStyle.None;
+      value.StartPosition = FormStartPosition.CenterScreen;
     }
 
     /// <summary>
     /// Настройки формы выбора обложки для приложения.
     /// </summary>
-    /// <param name="imageSelection">Экземпляр формы</param>
-    public void SettingsImageForm(Form imageSelection)
+    /// <param name="value">Экземпляр формы</param>
+    public void SettingsImageForm(Form value)
     {
-      //imageSelection.Size = new Size((DataClass.sizeAppElement.Width * 5) + (10 * 4) + 80, (DataClass.sizeAppElement.Height * 2) + (22 * 1) + 120);
-      imageSelection.Size = new Size(600, 600);
-      imageSelection.StartPosition = FormStartPosition.CenterScreen;
-      imageSelection.Text = "Выбор обложки";
-      imageSelection.FormBorderStyle = FormBorderStyle.None;
+      value.Size = new Size(600, 600);
+      value.StartPosition = FormStartPosition.CenterScreen;
+      value.Text = "Выбор обложки";
+      value.FormBorderStyle = FormBorderStyle.None;
       //
     }
 
     /// <summary>
     /// Настройка формы загрузки приложения.
     /// </summary>
-    /// <param name="loadForm"></param>
-    public void SettingsLoadForm(Form loadForm)
+    /// <param name="value"></param>
+    public void SettingsLoadForm(Form value)
     {
-      loadForm.Size = new Size(408, 150);
-      loadForm.FormBorderStyle = FormBorderStyle.None;
-      loadForm.Location = new Point((DataClass.screenSize.Width - loadForm.Width) / 2, ((DataClass.screenSize.Height - loadForm.Height) / 2));
-      loadForm.BackColor = BackColorElements.HoverBackColorCategory;
+      value.Size = new Size(408, 150);
+      value.FormBorderStyle = FormBorderStyle.None;
+      value.Location = new Point((DataClass.screenSize.Width - value.Width) / 2, (DataClass.screenSize.Height - value.Height) / 2);
+      value.BackColor = BackColorElements.AdditionalDarkColor;
     }
 
     /// <summary>
-    /// Расчёт локации элементов с приложениями.
+    /// Настройки формы помощи.
     /// </summary>
-    public void LocationApps()
+    /// <param name="value"></param>
+    public void SettingsHelpForm(Form value)
     {
-      //DataClass.activeAppPanelLauncher.LocationApps();
-    }
-
-    /// <summary>
-    /// Размер панели с элементамии приложений.
-    /// </summary>
-    public void SizeElements()
-    {
-      DataClass.categoriesElementLauncher.Height = DataClass.sizeForm.Height - DataClass.topElementLauncher.Height - DataClass.borderFormWidth;
-      DataClass.activeAppPanelLauncher.Resize(DataClass.sizeForm.Width - DataClass.categoriesElementLauncher.Width - DataClass.borderFormWidth, DataClass.categoriesElementLauncher.Height);
+      value.FormBorderStyle = FormBorderStyle.None;
+      value.Size = new(800, 600);
+      value.StartPosition = FormStartPosition.CenterScreen;
+      value.FormClosed += (s, a) =>
+        {
+          DataHelpForm.helpForm = null;
+        };
     }
   }
 }

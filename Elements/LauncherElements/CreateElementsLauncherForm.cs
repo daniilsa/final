@@ -1,4 +1,5 @@
-﻿using LauncherNet.Functions;
+﻿using LauncherNet._Data;
+using LauncherNet.Functions;
 
 namespace LauncherNet.Elements.LauncherElements
 {
@@ -10,14 +11,16 @@ namespace LauncherNet.Elements.LauncherElements
     /// <param name="launcher">"Экземпляр формы.</param>
     public void LoadElements(Form launcher)
     {
-      DataClass.activeCategory = false;
-      DataClass.drag = false;
+      DataLauncherForm.activeCategory = false;
 
-      DataClass.topElementLauncher = new TopElement().CreateTopElement(launcher);
-      launcher.Controls.Add(DataClass.topElementLauncher);
+      DataLauncherForm.topElementLauncher = new TopElement().CreateTopElement(launcher);
+      launcher.Controls.Add(DataLauncherForm.topElementLauncher);
+      if (DataClass.TrayActive)
+        DataClass.iconLauncher = new Tray().CreateTrayElement();
 
       new CategoriesElement().CreateCategoriesElement(launcher);
-      if (DataClass.activeCategory) new FunctionsCategories().LoadFunctionCategory(DataClass.activeCategoryPanelLauncher, DataClass.activeAppPanelLauncher, launcher);
+      if (DataLauncherForm.activeCategory && DataLauncherForm.activeCategoryPanelLauncher != null && DataLauncherForm.activeAppPanelLauncher != null)
+        new FunctionsCategories().LoadFunctionCategory(DataLauncherForm.activeCategoryPanelLauncher, DataLauncherForm.activeAppPanelLauncher, launcher);
     }
   }
 }

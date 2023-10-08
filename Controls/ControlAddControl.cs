@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LauncherNet.Controls
+﻿namespace LauncherNet.Controls
 {
-  public class ControlAddElement : Control
+  public class ControlAddControl : Control
   {
 
     private int opacity;
@@ -15,7 +9,7 @@ namespace LauncherNet.Controls
 
     public int SizePlus { get; set; }
 
-    public int Opacity { get {return opacity; } set { opacity = value;  Invalidate(); } }
+    public int Opacity { get { return opacity; } set { opacity = value; Invalidate(); } }
 
 
     protected override void OnPaint(PaintEventArgs e)
@@ -81,7 +75,7 @@ namespace LauncherNet.Controls
 
 
 
-    public ControlAddElement()
+    public ControlAddControl()
     {
       DoubleBuffered = true;
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);

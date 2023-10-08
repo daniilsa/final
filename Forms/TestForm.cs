@@ -1,19 +1,11 @@
-﻿using Launcher.Controls;
-using LauncherNet.Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using LauncherNet.DesignFront;
+using LauncherNet.Front;
 
 namespace LauncherNet.Forms
 {
   public partial class TestForm : Form
   {
+
     public TestForm()
     {
       InitializeComponent();
@@ -21,12 +13,37 @@ namespace LauncherNet.Forms
 
     private void Test()
     {
-      this.BackColor = Color.Black;
-      ControlAddElement controlAddElement = new ControlAddElement();
-      controlAddElement.Location = new Point(0, 0);
-      controlAddElement.Size = new Size(400, 200);
+      this.Size = new(400, 400);
+      Cyotek.Windows.Forms.ColorPickerDialog colorPickerDialog = new Cyotek.Windows.Forms.ColorPickerDialog();
+      colorPickerDialog.BackColor = BackColorElements.MainDarkColor;
+      colorPickerDialog.Show();
 
-      this.Controls.Add(controlAddElement);
+      Console.Clear();
+      foreach (Control item in colorPickerDialog.Controls)
+      {
+        if (item != null && item.GetType() == new Button().GetType())
+        {
+          item.BackColor = BackColorElements.MainDarkColor;
+        }
+
+        if (item != null && item.GetType() == new Cyotek.Windows.Forms.ColorEditor().GetType())
+        {
+          foreach (Control i1 in item.Controls)
+          {
+            if (i1.GetType() == new Label().GetType())
+              i1.ForeColor = FontElements.MainLightColorText;
+
+
+            if (i1.GetType() == new NumericUpDown().GetType())
+            {
+              i1.ForeColor = FontElements.MainLightColorText;
+              i1.BackColor = BackColorElements.AdditionalDarkColor;
+
+            }
+            Console.WriteLine(i1.GetType());
+          }
+        }
+      }
     }
 
     private void TestForm_Load_1(object sender, EventArgs e)

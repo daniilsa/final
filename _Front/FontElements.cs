@@ -1,16 +1,10 @@
 ﻿using LauncherNet.DesignFront;
 using LauncherNet.Settings;
-using System;
-using System.Collections.Generic;
 using System.Drawing.Text;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LauncherNet.Front
 {
-  static public class FontElements
+  public static class FontElements
   {
 
     #region Свойства
@@ -18,36 +12,58 @@ namespace LauncherNet.Front
     /// <summary>
     /// Возвращает шрифт элемента с категорией.
     /// </summary>
-    static public Font FontCategory { get; set; }
+    public static Font FontCategory { get; set; }
 
-    static public Font FontLabel { get; set; }
-    static public Font FontLabelInfo { get; set; }
+    /// <summary>
+    /// Возвращает шрифт подкатегорий.
+    /// </summary>
+    public static Font FontLabel { get; set; }
+
+
+    /// <summary>
+    /// Возвращает шрифт информационного текста.
+    /// </summary>
+    public static Font FontLabelInfo { get; set; }
 
     /// <summary>
     /// Возвращает шрифт элемента с приложением.
     /// </summary>
-    static public Font FontApp { get; set; }
+    public static Font FontApp { get; set; }
+
+
+    public static Color MainLightColorText => BackColorElements.MainLightColor;
+    public static Color MainDarkColorText => BackColorElements.MainDarkColor;
 
     /// <summary>
     /// Возвращает цвет шрифта категорий.
     /// </summary>
     /// <returns></returns>
-    static public Color DefaultForeColorCategory { get; set; }
+    //static public Color DefaultForeColorCategory => BackColorElements.MainLightColor;
 
     /// <summary>
     /// Возвращает цвет текста активной категории.
     /// </summary>
-    static public Color ActiveForeColorCategory { get; set; }
+   // static public Color ActiveForeColorCategory => BackColorElements.MainDarkColor;
 
     /// <summary>
     /// Возвращает цвет текста приложения.
     /// </summary>
-    static public Color DefaultForeColorApp { get; set; }
+    //static public Color DefaultForeColorApp => MainDarkColorText;
 
     /// <summary>
     /// Возвращает цвет текста при наведении на элемент.
     /// </summary>
-    static public Color HoverForeColorApp { get; set; }
+    //static public Color HoverForeColorApp => MainLightColorText;
+
+    /// <summary>
+    /// Возвращает цвет шрифта контекстного меню.
+    /// </summary>
+    //static public Color DefaultColorTextContextMenuStrip => MainLightColorText;
+
+    /// <summary>
+    /// Возвращает цвет шрифта контекстного меню при наведении на элемент.
+    /// </summary>
+    //static public Color HoverColorTextContextMenuStrip => MainLightColorText;
 
     #endregion
 
@@ -56,29 +72,31 @@ namespace LauncherNet.Front
     /// <summary>
     /// Обновляет шрифт
     /// </summary>
-    static public void UpdateFont()
+    public static void UpdateFont()
     {
       PrivateFontCollection fontCollection = new PrivateFontCollection();
       FontCategory = new Font("Segoe UI", 15);
       FontApp = new Font("Segoe UI", 9);
-      DefaultForeColorCategory = BackColorElements.DefaultColorLauncher;
-      ActiveForeColorCategory = BackColorElements.DefaultColorTopElement;
-      DefaultForeColorApp = ActiveForeColorCategory;
-      HoverForeColorApp = DefaultForeColorCategory;
-
-      string font = FontResource.String1;
-      fontCollection.AddFontFile($@"{font}");
-      FontCategory = new Font(fontCollection.Families[0], 15);
-      FontApp = new Font(fontCollection.Families[0], 9);
-      FontLabel = FontCategory;
-      FontLabelInfo = FontApp;
+      try
+      {
+        string font = FontResource.String1;
+        fontCollection.AddFontFile($@"{font}");
+        FontCategory = new Font(fontCollection.Families[0], 15);
+        FontApp = new Font(fontCollection.Families[0], 9);
+        FontLabel = FontCategory;
+        FontLabelInfo = FontApp;
+      }
+      catch
+      {
+        // Шрифт не найден
+      }
     }
 
     /// <summary>
     /// Вовзращщает шрифт.
     /// </summary>
     /// <returns></returns>
-    static public Font GetFont()
+    public static Font GetFont()
     {
       PrivateFontCollection fontCollection = new PrivateFontCollection();
       string font = FontResource.String1;
@@ -95,6 +113,10 @@ namespace LauncherNet.Front
     /// </summary>
     static FontElements()
     {
+      FontCategory = new Font("Segoe UI", 15);
+      FontApp = new Font("Segoe UI", 9);
+      FontLabel = FontCategory;
+      FontLabelInfo = FontApp;
       UpdateFont();
     }
 

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using LauncherNet._Data;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace LauncherNet.Functions
 {
@@ -14,19 +9,17 @@ namespace LauncherNet.Functions
     /// Поиск картинок в интернете.
     /// </summary>
     /// <param name="nameFile">Имя файла</param>
-    public List<string> ImageSearch(string nameFile)
+    public List<string>? ImageSearch(string nameFile, ref bool next)
     {
-      WebBrowser webBrowser = new WebBrowser();
-      webBrowser.Dock = DockStyle.Left;
-      webBrowser.Width = 500;
-      using (Form form = new Form())
+      WebBrowser webBrowser = new();
+      using (Form form = new())
       {
         try
         {
           //Текст запроса
           string requestStart = "https://www.google.ru/search?q=" + nameFile
             + "+&newwindow=1&sxsrf=AJOqlzWdMdNNhjb3bV8rxo6WQTq4Xg_CJw:1677077214554&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjQoYm9r6n9AhWXHXcKHYTUAFEQ_AUoAXoECAEQAw&biw=1920&bih=901r";
-          
+
           // Отправляем запрос
           webBrowser.Navigate(requestStart);
 
@@ -47,7 +40,7 @@ namespace LauncherNet.Functions
 
           List<string> imageResources = new List<string>();
 
-          for (int i = 0; i < DataClass.countImageSearch; i++)
+          for (int i = 0; i < DataImageSelectionForm.countImageSearch; i++)
           {
             indexFirst = source.IndexOf(searchStr, indexFirst);
             indexLast = source.IndexOf(lastStr, indexFirst);
@@ -65,6 +58,7 @@ namespace LauncherNet.Functions
         catch
         {
           MessageBox.Show("Невозможно найти изображение. Возможно отсутсвует подключение к интернету!");
+          next = false;
         }
 
         return null;

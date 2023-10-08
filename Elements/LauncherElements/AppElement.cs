@@ -1,14 +1,7 @@
 ﻿using Launcher.Controls;
-using LauncherNet.Controls;
+using LauncherNet._Data;
 using LauncherNet.Functions;
 using LauncherNet.Settings;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace LauncherNet.Elements.LauncherElements
 {
@@ -30,20 +23,21 @@ namespace LauncherNet.Elements.LauncherElements
       // Главная панель
       Panel fileСontrols = new()
       {
-        Size = new Size(DataClass.sizeAppElement.Width, DataClass.sizeAppElement.Height)
+        Size = new Size(DataLauncherForm.sizeAppElement.Width, DataLauncherForm.sizeAppElement.Height),
+        Name = nameFile,
       };
 
       // Картинка файла
       PictureBox pictureBoxImageApp = new()
       {
-        Height = DataClass.sizeAppElement.Height - 40,
+        Height = DataLauncherForm.sizeAppElement.Height - 40,
         Dock = DockStyle.Top,
         Name = nameFile,
         Tag = nameCategory
       };
 
       // Для запуска файла
-      TextElement labelFileName = new()
+      TextControl labelFileName = new()
       {
         Height = fileСontrols.Height - pictureBoxImageApp.Height,
         Width = pictureBoxImageApp.Width,
@@ -54,10 +48,10 @@ namespace LauncherNet.Elements.LauncherElements
       labelFileName.MouseEnter += (s, a) => labelFileName.Text = "Открыть";
       labelFileName.MouseLeave += (s, a) => labelFileName.Text = nameFile;
 
-      ContextMenuStrip functionApp = CreateContextMenu(launcher, pathFile,pathApp,nameCategory,nameFile);
+      ContextMenuStrip functionsApp = CreateContextMenu(launcher, pathFile, pathApp, nameCategory, nameFile);
 
       //Действие на ЛКМ и ПКМ
-      labelFileName.MouseDown += (s, e) => CheckMouseDown(e, pathFile, pathApp, functionApp);
+      labelFileName.MouseDown += (s, e) => CheckMouseDown(e, pathFile, pathApp, functionsApp);
 
       //Собираем всё вместе
       fileСontrols.Controls.Add(pictureBoxImageApp);
@@ -76,26 +70,26 @@ namespace LauncherNet.Elements.LauncherElements
     /// <returns></returns>
     private ContextMenuStrip CreateContextMenu(Form launcher, string pathFile, string pathApp, string nameCategory, string nameFile)
     {
-      ContextMenuStrip functionApp = new();
-      functionApp.Items.Add("Открыть");
-      functionApp.Items.Add("Расположение файла");
-      functionApp.Items.Add("Сменить обложку");
-      functionApp.Items.Add("Удалить файл из лаунчера");
+      ContextMenuStrip functionsApp = new();
+      functionsApp.Items.Add("Открыть");
+      functionsApp.Items.Add("Расположение файла");
+      functionsApp.Items.Add("Сменить обложку");
+      functionsApp.Items.Add("Удалить файл из лаунчера");
 
-      functionApp.Items[0].Click += (s, e) => new FunctionsApps().StartApp(pathFile, pathApp);
-      functionApp.Items[1].Click += (s, e) => new FunctionsApps().LocationApp(launcher, pathApp, nameCategory, nameFile);
-      functionApp.Items[2].Click += (s, e) =>
+      functionsApp.Items[0].Click += (s, e) => new FunctionsApps().StartApp(pathFile, pathApp);
+      functionsApp.Items[1].Click += (s, e) => new FunctionsApps().LocationApp(launcher, pathApp, nameCategory, nameFile);
+      functionsApp.Items[2].Click += (s, e) =>
       {
         new FunctionsApps().FormImage(nameCategory, nameFile);
-        if (DataClass.update)
+        if (DataClass.Update)
         {
-          DataClass.update = false;
+          DataClass.Update = false;
           new SettingsForms().UpdateLauncher(launcher);
         }
       };
-      functionApp.Items[3].Click += (s, e) => new FunctionsApps().DeleteApp(launcher, nameCategory, nameFile, false);
-
-      return functionApp;
+      functionsApp.Items[3].Click += (s, e) => new FunctionsApps().DeleteApp(nameCategory, nameFile, false);
+      DataLauncherForm.functionsApp?.Add(functionsApp);
+      return functionsApp;
     }
 
     /// <summary>
@@ -106,11 +100,11 @@ namespace LauncherNet.Elements.LauncherElements
     /// <param name="pathApp">Путь к приложению.</param>
     private void DataDivision(string data, ref string nameFile, ref string pathApp)
     {
-      int indexFerst = data.IndexOf(DataClass.code) + DataClass.code.Length;
+      int indexFerst = data.IndexOf(DataClass.Code) + DataClass.Code.Length;
       int indexLast = data.IndexOf("$", indexFerst);
       nameFile = data[indexFerst..indexLast];
 
-      indexFerst = indexLast + DataClass.code.Length;
+      indexFerst = indexLast + DataClass.Code.Length;
       indexLast = data.IndexOf("$", indexFerst);
       pathApp = data[indexFerst..indexLast];
     }

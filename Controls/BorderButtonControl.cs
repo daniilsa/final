@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LauncherNet.Controls
+﻿namespace LauncherNet.Controls
 {
-  public class BorderButtonElement : Control
+  public class BorderButtonControl : Control
   {
     /// <summary>
     /// Спсиок элементов управления.
@@ -66,7 +60,7 @@ namespace LauncherNet.Controls
 
         locationX = (this.Width - widthRect) / 2 - widthRect / 4;
         locationY = (this.Height - widthRect) / 2;
-       
+
         graphics.DrawRectangle(new Pen(this.ForeColor, 1), locationX, locationY, widthRect, heightRect);
         graphics.FillRectangle(new SolidBrush(this.BackColor), locationX + 1, locationY + 1, widthRect - 1, heightRect - 1);
       }
@@ -75,12 +69,12 @@ namespace LauncherNet.Controls
     /// <summary>
     /// Задаёт параметры по-умолчанию.
     /// </summary>
-    public BorderButtonElement()
+    public BorderButtonControl()
     {
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);
       DoubleBuffered = true;
       ChoiceElement = Choice.Nope;
-      Size = new Size(20,20);
+      Size = new Size(20, 20);
     }
   }
 }

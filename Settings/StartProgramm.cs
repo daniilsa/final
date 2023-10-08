@@ -1,7 +1,9 @@
-﻿using LauncherNet.Elements.LauncherElements;
+﻿using LauncherNet._Data;
+using LauncherNet._Front;
+using LauncherNet.Elements.LauncherElements;
 using LauncherNet.Forms;
-using LauncherNet.Front;
 using LauncherNet.Settings;
+using ThreadState = System.Threading.ThreadState;
 
 namespace LauncherNet
 {
@@ -17,21 +19,25 @@ namespace LauncherNet
     /// </summary>
     public static Form Open()
     {
-      DataClass.launcher = new LauncherForm();
+
+      DataLauncherForm.launcher = new LauncherForm();
       Thread thread = new Thread(() => new LoadForm().ShowDialog());
       thread.Start();
 
       new CheckingFiles().CheckingResources();
-      new SettingsForms().SettingsLauncherForm(DataClass.launcher);
-      new CreateElementsLauncherForm().LoadElements(DataClass.launcher);
-      new DesignElements().LoadDesignLauncher();
+      new SettingsForms().SettingsLauncherForm(DataLauncherForm.launcher);
+      new CreateElementsLauncherForm().LoadElements(DataLauncherForm.launcher);
+      //new DesignElements().LoadDesignLauncher();
+      new DesignLauncherForm().LoadDesignLauncher();
+      new CheckingFiles().CheckingChangesFiles();
 
       Thread.Sleep(3000);
-      DataClass.downloadStage = true;
+      DataClass.DownloadStage = true;
 
-      System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-      timer.Interval = 1000;
-
+      System.Windows.Forms.Timer timer = new()
+      {
+        Interval = 1000,
+      };
       timer.Tick += (s, a) =>
       {
         if (thread.ThreadState == ThreadState.Aborted)
@@ -40,9 +46,10 @@ namespace LauncherNet
         };
       };
       timer.Start();
+      new ActivateApplication().CheckAndOpenProcess();
 
       while (thread.ThreadState != ThreadState.Stopped) ;
-      return DataClass.launcher;
+      return DataLauncherForm.launcher;
     }
 
   }

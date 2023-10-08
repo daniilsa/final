@@ -1,9 +1,5 @@
-﻿using LauncherNet.Elements;
-using LauncherNet.Elements.ImageFormElements;
-using LauncherNet.Elements.LoadFormElements;
+﻿using LauncherNet.Elements.LoadFormElements;
 using LauncherNet.Settings;
-using System;
-using System.Windows.Forms;
 
 namespace LauncherNet.Forms
 {

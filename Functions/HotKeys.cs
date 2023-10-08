@@ -1,10 +1,7 @@
-﻿using LauncherNet.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using LauncherNet._Data;
+using LauncherNet._DataStatic;
+using LauncherNet.Forms;
+using LauncherNet.Settings;
 
 namespace LauncherNet.Functions
 {
@@ -12,42 +9,57 @@ namespace LauncherNet.Functions
   {
     public void CheckKeys(object s, KeyEventArgs e)
     {
-      if (e.KeyCode == Keys.F5)
+      if (DataLauncherForm.launcher != null && e.KeyCode == Keys.F5)
       {
-        new SettingsForms().UpdateLauncher(DataClass.launcher);
+        new SettingsForms().UpdateLauncher(DataLauncherForm.launcher);
       }
       else if (e.KeyCode == Keys.F1)
       {
         //TODO: Привязать помощь по ПО
-        Console.WriteLine("Привязать помощь по ПО");
+        if (DataHelpForm.helpForm != null)
+        {
+          DataHelpForm.helpForm.Focus();
+          DataHelpForm.helpForm.Activate();
+        }
+        else
+        {
+          new HelpForm().Show();
+        }
       }
       else if (e.KeyCode == Keys.X && e.Alt)
       {
         Application.Exit();
       }
-      else if (e.Control)
+      else if (DataLauncherForm.launcher != null && e.Control)
       {
         try
         {
           if (e.KeyCode == Keys.A)
           {
-            new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddApp, DataClass.activeAppPanelLauncher, DataClass.activeCategoryPanelLauncher.Name);
+            if (DataLauncherForm.activeCategoryPanelLauncher != null)
+              new FunctionsCategories().StartFunction(DataLauncherForm.launcher, DataEnum.FunctionCategory.AddApp, DataLauncherForm.activeAppPanelLauncher, DataLauncherForm.activeCategoryPanelLauncher.Name);
+            else
+              new FunctionsCategories().StartFunction(DataLauncherForm.launcher, DataEnum.FunctionCategory.AddApp, DataLauncherForm.activeAppPanelLauncher, string.Empty);
+          }
+          else if (e.KeyCode == Keys.O)
+          {
+            MessageBox.Show("Добавить настройки программы");
           }
           else if (e.KeyCode == Keys.Down)
           {
-            DataClass.activeAppPanelLauncher.MouseWheelDown();
+            DataLauncherForm.activeAppPanelLauncher?.MouseWheelDown();
           }
           else if (e.KeyCode == Keys.Up)
           {
-            DataClass.activeAppPanelLauncher.MouseWheelUp();
+            DataLauncherForm.activeAppPanelLauncher?.MouseWheelUp();
           }
           else
           {
             int key = (int)e.KeyCode - '0';
 
-            if (key != 0)
-              new FunctionsCategories().LoadFunctionCategory(DataClass.categoryElementLauncher[DataClass.categoryElementLauncher.Count - key], DataClass.mainAppsLauncher[DataClass.categoryElementLauncher.Count - key], DataClass.launcher);
-            else if (key == 0) new FunctionsCategories().StartFunction(DataClass.launcher, DataClass.FunctionCategory.AddCategory, null, null);
+            if (DataLauncherForm.categoryElementLauncher != null && DataLauncherForm.mainAppsLauncher != null && key != 0)
+              new FunctionsCategories().LoadFunctionCategory(DataLauncherForm.categoryElementLauncher[DataLauncherForm.categoryElementLauncher.Count - key], DataLauncherForm.mainAppsLauncher[DataLauncherForm.categoryElementLauncher.Count - key], DataLauncherForm.launcher);
+            else if (key == 0) new FunctionsCategories().StartFunction(DataLauncherForm.launcher, DataEnum.FunctionCategory.AddCategory, null, null);
           }
         }
         catch

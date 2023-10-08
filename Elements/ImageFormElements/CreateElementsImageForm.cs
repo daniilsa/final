@@ -1,14 +1,4 @@
-﻿using Launcher.Controls;
-using LauncherNet.Controls;
-using LauncherNet.DesignFront;
-using LauncherNet.Front;
-using LauncherNet.Functions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using LauncherNet._Data;
 
 namespace LauncherNet.Elements.ImageFormElements
 {
@@ -21,15 +11,17 @@ namespace LauncherNet.Elements.ImageFormElements
     /// <param name="imageForm">Экземляр формы.</param>
     /// <param name="nameCategory">Имя категории.</param>
     /// <param name="nameFile">Имя добавляемого файла.</param>
-    public void LoadElements(Form imageForm, string nameCategory, string nameFile)
+    public void LoadElements(Form imageForm, string nameCategory, string nameFile, ref bool next)
     {
-      DataClass.imageSelectionForm = imageForm;
-      DataClass.locationImage = string.Empty;
-      Panel mainPanel = new ImageSelectionElement().CreateImageSelection(nameFile);
+      DataImageSelectionForm.imageSelectionForm = imageForm;
+      DataLauncherForm.locationImage = string.Empty;
+      Panel? mainPanel = new ImageSelectionElement().CreateImageSelection(nameFile, ref next);
+      if (!next) return;
+
       Panel bottomPanel = new BottomElement().CreateBottomElement(imageForm, mainPanel, nameFile, nameCategory);
 
-      DataClass.mainAppsSelectionForm = mainPanel;
-      DataClass.bottomElementSelectionForm = bottomPanel;
+      DataImageSelectionForm.mainAppsSelectionForm = mainPanel;
+      DataImageSelectionForm.bottomElementSelectionForm = bottomPanel;
 
       imageForm.Controls.Add(mainPanel);
     }

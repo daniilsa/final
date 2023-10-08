@@ -1,15 +1,13 @@
-﻿using LauncherNet;
-using LauncherNet.Front;
-using LauncherNet.Settings;
+﻿using LauncherNet.Front;
 
 namespace Launcher.Controls
 {
-  public class TextElement : Control
+  public class TextControl : Control
   {
     /// <summary>
     /// Положение текста на элементе
     /// </summary>
-    private StringFormat SF = new StringFormat();
+    private StringFormat SF = new();
 
     /// <summary>
     /// Задаёт выравнивание текста по горизонтали.
@@ -31,8 +29,8 @@ namespace Launcher.Controls
       Graphics graphics = e.Graphics;
       graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
-      Rectangle rectangle = new Rectangle(0, 0, Width, Height);
-      Rectangle rectangleText = new Rectangle(10, 0, Width, Height);
+      Rectangle rectangle = new(0, 0, Width, Height);
+      Rectangle rectangleText = new(10, 0, Width - 5, Height);
 
       try
       {
@@ -60,7 +58,7 @@ namespace Launcher.Controls
     /// <summary>
     /// Задаёт параметры по-умолчанию.
     /// </summary>
-    public TextElement()
+    public TextControl()
     {
       Dock = DockStyle.Top;
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint, true);

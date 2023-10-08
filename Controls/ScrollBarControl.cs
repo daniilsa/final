@@ -1,11 +1,10 @@
-﻿using LauncherNet.Front;
+﻿using LauncherNet._Data;
 using LauncherNet.Info;
-using System.Xml.Linq;
-using static LauncherNet.DataClass;
+using System.Windows.Forms;
 
 namespace LauncherNet.Controls
 {
-  public class ScrollBarElement : Control
+  public class ScrollBarControl : Control
   {
 
     #region Поля
@@ -202,7 +201,7 @@ namespace LauncherNet.Controls
     /// Прокрутка колесика мыши.
     /// </summary>
     /// <param name="e">Данные для обработки события прокрутки колесика мыши на элементе.</param>
-    protected override async void OnMouseWheel(MouseEventArgs e)
+    protected override void OnMouseWheel(MouseEventArgs e)
     {
       base.OnMouseWheel(e);
       if (mainPanel.Height > Height && !expectationMain)
@@ -476,16 +475,12 @@ namespace LauncherNet.Controls
       //  LocationApps();
 
       LocationApps();
-
-      new InfoElement().WriteInfoElement(DataClass.launcher, "Вся форма");
-      new InfoElement().WriteInfoElement(mainPanel, "Панель с приложениями");
-      new InfoElement().ColorTwoParameters("Позиция каретки", caretScroll.Location.Y.ToString(), ConsoleColor.Green, false);
     }
 
     /// <summary>
     /// Расчёт локации элементов с приложениями.
     /// </summary>
-    private async void LocationApps()
+    private void LocationApps()
     {
       int locationX = 40;
       int locationY = 40;
@@ -498,10 +493,10 @@ namespace LauncherNet.Controls
       foreach (Control app in mainPanel.Controls)
       {
         i++;
-        if (locationX + app.Width + X_AxisIndentation < DataClass.activeAppPanelLauncher.Width)
+        if (locationX + app.Width + X_AxisIndentation < DataLauncherForm.activeAppPanelLauncher?.Width)
         {
           app.Location = new System.Drawing.Point(locationX, locationY);
-          locationX += DataClass.sizeAppElement.Width + X_AxisIndentation;
+          locationX += DataLauncherForm.sizeAppElement.Width + X_AxisIndentation;
           if (calculationOfElements) elementsOnTheLine++;
         }
         else
@@ -509,9 +504,9 @@ namespace LauncherNet.Controls
           mainPanel.Height += (sizeElement.Height + Y_AxisIndentation);
           countLines++;
           locationX = 40;
-          locationY += DataClass.sizeAppElement.Height + Y_AxisIndentation;
+          locationY += DataLauncherForm.sizeAppElement.Height + Y_AxisIndentation;
           app.Location = new System.Drawing.Point(locationX, locationY);
-          locationX += DataClass.sizeAppElement.Width + X_AxisIndentation;
+          locationX += DataLauncherForm.sizeAppElement.Width + X_AxisIndentation;
           calculationOfElements = false;
         }
       }
@@ -520,15 +515,55 @@ namespace LauncherNet.Controls
     }
 
     /// <summary>
-    /// Добавление элемента в панель элементов).
+    /// Добавление элемента в панель элементов.
     /// </summary>
     /// <param name="value">Экземпляр элемента.</param>
     public void AddControl(Control value)
     {
+      Control addControl = null;
+      if (mainPanel.Controls.Count > 1)
+      {
+        addControl = mainPanel.Controls[mainPanel.Controls.Count - 1];
+      }
+
       sizeElement.Width = value.Width;
       if (sizeElement.Height < value.Height) sizeElement.Height = value.Height;
       mainPanel.Controls.Add(value);
-      Invalidate();
+
+      if (mainPanel.Controls.Count > 1)
+      {
+        mainPanel.Controls.SetChildIndex(value, mainPanel.Controls.Count - 2);
+        mainPanel.Controls.SetChildIndex(addControl, mainPanel.Controls.Count - 1);
+      }
+
+
+      LocationApps();
+    }
+
+    /// <summary>
+    /// Удаляят элемент из панели элементов.
+    /// </summary>
+    /// <param name="nameFile"></param>
+    public void DeleteControl(string nameFile)
+    {
+      foreach (Control item in mainPanel.Controls)
+      {
+        if (item.Name == nameFile)
+        {
+          mainPanel.Controls.Remove(item);
+          LocationApps();
+          break;
+        }
+      }
+    }
+
+    /// <summary>
+    /// Возвращает все элементы.
+    /// </summary>
+    /// <returns></returns>
+    public ControlCollection GetControls()
+    {
+      return mainPanel.Controls;
     }
 
     #endregion
@@ -538,7 +573,7 @@ namespace LauncherNet.Controls
     /// <summary>
     /// Задаёт начальные параметры элемента.
     /// </summary>
-    public ScrollBarElement()
+    public ScrollBarControl()
     {
       DoubleBuffered = true;
       UpdateStyles();

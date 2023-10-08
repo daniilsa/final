@@ -1,10 +1,5 @@
-﻿using LauncherNet.Controls;
-using LauncherNet.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LauncherNet._Data;
+using LauncherNet.Controls;
 
 namespace LauncherNet.Elements.LauncherElements
 {
@@ -14,21 +9,29 @@ namespace LauncherNet.Elements.LauncherElements
     /// <summary>
     /// Создаёт и настраивает панель с файлами определённой категории.
     /// </summary>
-    /// <param name="nameCategoty">Имя категории</param>
+    /// <param name="nameCategory">Имя категории</param>
     /// <returns></returns>
-    public ScrollBarElement CreateAppsElement(Form launcher, string nameCategoty)
+    public ScrollBarControl CreateAppsElement(Form launcher, string nameCategory)
     {
-      ScrollBarElement panelApps = new()
+      ScrollBarControl panelApps = new()
       {
         Visible = false,
-        Name = nameCategoty,
+        Name = nameCategory,
         BackColor = Color.Green,
-        Width = DataClass.sizeForm.Width - DataClass.categoriesElementLauncher.Width - DataClass.borderFormWidth,
-        Height = DataClass.categoriesElementLauncher.Height,
-        Location = new Point(DataClass.categoriesElementLauncher.Width, DataClass.topElementLauncher.Height),
       };
 
-      string pathFile = DataClass.categoriesPathFiles + "\\" + nameCategoty;
+      panelApps.AddControl(new AddElements().CreateAddAppElement());
+
+      if (DataLauncherForm.categoriesElementLauncher != null)
+      {
+        panelApps.Width = DataLauncherForm.sizeMainForm.Width - DataLauncherForm.categoriesElementLauncher.Width - DataClass.borderFormWidth;
+        panelApps.Height = DataLauncherForm.categoriesElementLauncher.Height;
+
+        if (DataLauncherForm.topElementLauncher != null)
+          panelApps.Location = new Point(DataLauncherForm.categoriesElementLauncher.Width, DataLauncherForm.topElementLauncher.Height);
+      }
+
+      string pathFile = DataClass.CategoriesPathFiles + "\\" + nameCategory;
 
       if (File.Exists(pathFile))
       {
@@ -51,7 +54,7 @@ namespace LauncherNet.Elements.LauncherElements
       {
         File.Create(pathFile);
       }
-      panelApps.AddControl(new AddElements().CreateAddAppElement());
+   
 
       return panelApps;
     }

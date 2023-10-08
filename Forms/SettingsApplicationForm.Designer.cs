@@ -1,6 +1,6 @@
 ﻿namespace LauncherNet.Forms
 {
-  partial class TestForm
+  partial class SettingsApplicationForm
   {
     /// <summary>
     /// Required designer variable.
@@ -28,34 +28,12 @@
     /// </summary>
     private void InitializeComponent()
     {
-      button1 = new Button();
-      SuspendLayout();
-      // 
-      // button1
-      // 
-      button1.BackColor = Color.IndianRed;
-      button1.Location = new Point(12, 12);
-      button1.Name = "button1";
-      button1.Size = new Size(75, 23);
-      button1.TabIndex = 0;
-      button1.Text = "button1";
-      button1.UseVisualStyleBackColor = false;
-      // 
-      // TestForm
-      // 
-      AutoScaleDimensions = new SizeF(7F, 15F);
-      AutoScaleMode = AutoScaleMode.Font;
-      BackColor = SystemColors.ControlDark;
-      ClientSize = new Size(800, 450);
-      Controls.Add(button1);
-      Name = "TestForm";
-      Text = "TestForm";
-      Load += TestForm_Load_1;
-      ResumeLayout(false);
+      this.components = new System.ComponentModel.Container();
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.ClientSize = new System.Drawing.Size(800, 450);
+      this.Text = "SettingsApplicationForm";
     }
 
     #endregion
-
-    private Button button1;
   }
 }
