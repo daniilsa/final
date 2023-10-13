@@ -21,7 +21,7 @@ namespace LauncherNet.Forms
       Location = new Point((DataClass.screenSize.Width - Width) / 2, (DataClass.screenSize.Height - Height) / 2);
       DataFunctionalForm.functionalForm = this;
 
-      new SettingsForms().SettingsFunctionalForm(this);
+      new SettingsAuxiliaryForms().SettingsFunctionalForm(this);
       if (functionCategory == DataEnum.FunctionCategory.AddCategory) CreateCategory();
       else if (functionCategory == DataEnum.FunctionCategory.RenameCategory) RenameCategory(nameCategory);
       else if (functionCategory == DataEnum.FunctionCategory.AddApp) CreateApp();
@@ -37,7 +37,7 @@ namespace LauncherNet.Forms
     /// <param name="functionCategory"></param>
     public void AppForm(DataEnum.FunctionApp functionCategory, string nameCategory, string nameFile)
     {
-      new SettingsForms().SettingsFunctionalForm(this);
+      new SettingsAuxiliaryForms().SettingsFunctionalForm(this);
       if (functionCategory == DataEnum.FunctionApp.ChangeImage) ChangeImage(nameCategory, nameFile);
 
       Location = new Point((DataClass.screenSize.Width - Width) / 2, (DataClass.screenSize.Height - Height) / 2);

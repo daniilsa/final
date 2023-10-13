@@ -19,7 +19,7 @@ namespace LauncherNet._Front
         try
         {
           if (FontElements.FontCategory.Name.Contains("Parameter is not valid"))
-            new SettingsForms().UpdateLauncher(DataLauncherForm.launcher);
+            new UpdateClass().UpdateMethod(DataLauncherForm.launcher);
           else
           {
             DesignLauncher(DataLauncherForm.launcher);
@@ -66,7 +66,7 @@ namespace LauncherNet._Front
         }
         catch
         {
-          new SettingsForms().UpdateLauncher(DataLauncherForm.launcher);
+          new UpdateClass().UpdateMethod(DataLauncherForm.launcher);
         }
       }
     }

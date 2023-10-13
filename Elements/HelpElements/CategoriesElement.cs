@@ -28,23 +28,23 @@ namespace LauncherNet.Elements.HelpElements
       "1. Нажмите правой кнопкой мыши по нужной категории и выберите пункт \"Переименовать категорию\"",
       "2. Проверьте название категории в появившемся уведомлении",
       "3. Введите новое название категории",
-      "3. Для сохраненения данных нажмите кнопку \"Применить\", в противном случае, нажмите кнопку \"Отмена\"",
+      "3. Для сохраненения данных в программе нажмите кнопку \"Применить\", в противном случае, нажмите кнопку \"Отмена\"",
       " ",
       " ",
       "<h>\"Удалить категорию.\"",
       "Чтобы удалить новую категорию в приложение, выполните следующие действия:",
-      "1. Нажмите правой кнопкой мыши по нужной категории и выберите пункт \"Удалить категорию\"",
+      "1. Нажмите правой кнопкой мыши по нужной категории. Откроется список функций. Выберите пункт \"Удалить категорию\"",
       "2. Проверьте название категории в появившемся уведомлении",
-      "3. Для удаления данных нажмите кнопку \"Ок\", в противном случае, нажмите кнопку \"Отмена\"",
+      "3. Для удаления данных их программы нажмите кнопку \"Ок\", в противном случае, нажмите кнопку \"Отмена\"",
       " ",
       " ",
       "<h>\"Добавить приложение.\"",
       "Чтобы добавить новое приложение в категорию, выполните следующие действия:",
-      "1. Нажмите правой кнопкой мыши по нужной категории или нажмите сочетание клавиш Ctrl+A",
+      "1. Нажмите правой кнопкой мыши по нужной категории или нажмите сочетание клавиш Ctrl+A на клавиатуре.",
       "2. В появившемся окне проверьте имя категории, в которую хотите добавить приложение",
       "3. Чтобы не заполнять имя и путь файла, нажмите два раза по полю ввода пути к файлу. Выберите нужный файл",
       "4. Проверьте имя приложения. Если оно вам не подходит, то напишите имя вручную",
-      "5. Вы можете добавить картинку приложения сами, нажав на кнопку \"Добавить изображение\"",
+      "5. Вы можете добавить картинку приложения сами, нажав на кнопку \"Добавить изображение\" и выбрав путь к картинке.",
       "6. Если пункт 5 пропущен, то при нажатии на кнопку \"Применить\" перед вами появится новое окно",
       "7. Выберите походящее изображение и нажмите на кнопку \"Применить\"",
       "8. Приложение добавлено",
@@ -190,14 +190,18 @@ namespace LauncherNet.Elements.HelpElements
         if (DataHelpForm.mainElement != null)
           DataHelpForm.helpForm?.Controls.Remove(DataHelpForm.mainElement);
 
-        if (categoryElement.Text == helpCategories[1])
+        if (categoryElement.Text == helpCategories[2])
           CreateHelpMain(categoryElement, helpTextCategory);
-        else if (categoryElement.Text == helpCategories[2])
+
+        else if (categoryElement.Text == helpCategories[1])
           CreateHelpMain(categoryElement, helpTextApp);
+
         else if (categoryElement.Text == helpCategories[3])
           CreateHelpMain(categoryElement, helpTextTopPanel);
+
         else if (categoryElement.Text == helpCategories[0])
           CreateHelpMain(categoryElement, helpTextApplication);
+
         else
           CreateHelpMain(categoryElement, null);
       };
@@ -236,13 +240,14 @@ namespace LauncherNet.Elements.HelpElements
           ForeColor = Color.FromArgb(255 - mainElement.BackColor.R, 255 - mainElement.BackColor.G, 255 - mainElement.BackColor.B),
           Font = new Font(mainElement.Font.FontFamily, 15),
           Text = categoryElement.Text,
+          //BorderStyle = BorderStyle.FixedSingle,
         };
+        labelHeader.Width = TextRenderer.MeasureText(labelHeader.Text, labelHeader.Font).Width * 2;
+        labelHeader.Height = TextRenderer.MeasureText(labelHeader.Text, labelHeader.Font).Height;
         if (content == null)
         {
           labelHeader.Text = $"Раздел помощи \"{labelHeader.Text}\" отсутствует(";
         }
-
-        labelHeader.Size = TextRenderer.MeasureText(labelHeader.Text, labelHeader.Font);
         locationY += (labelHeader.Height + labelHeader.Location.Y + 20);
 
 

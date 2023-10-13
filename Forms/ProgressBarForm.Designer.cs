@@ -1,6 +1,6 @@
 ﻿namespace LauncherNet.Forms
 {
-  partial class LoadForm
+  partial class ProgressBarForm
   {
     /// <summary>
     /// Required designer variable.
@@ -38,7 +38,6 @@
       Name = "LoadForm";
       StartPosition = FormStartPosition.CenterParent;
       Text = "LoadForm";
-      Load += LoadForm_Load;
       ResumeLayout(false);
     }
 

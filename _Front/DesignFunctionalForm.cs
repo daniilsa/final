@@ -81,7 +81,7 @@ namespace LauncherNet._Front
     private void DesignLabelInfoFunctionalForm(Label value, int widthpanel)
     {
       //value.Font = new System.Drawing.Font("Winston Bold", 9);
-      value.Font = value.Font = FontElements.FontLabelInfo;
+      value.Font = FontElements.FontLabelInfo;
       //value.ForeColor = Color.White;
       value.ForeColor = FontElements.MainLightColorText;
 
@@ -97,9 +97,8 @@ namespace LauncherNet._Front
     /// <param name="value"></param>
     private void DesignTextBoxFunctionalForm(TextBox value)
     {
-      value.BackColor = Color.FromArgb(40, 40, 50);
+      value.BackColor = BackColorElements.MainDarkColor;
       value.ForeColor = FontElements.MainLightColorText;
-      //value.ForeColor = Color.White;
       value.Font = FontElements.FontLabelInfo;
       value.BorderStyle = BorderStyle.None;
     }

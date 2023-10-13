@@ -84,7 +84,7 @@ namespace LauncherNet.Elements.LauncherElements
         if (DataClass.Update)
         {
           DataClass.Update = false;
-          new SettingsForms().UpdateLauncher(launcher);
+          new UpdateClass().UpdateMethod(launcher);
         }
       };
       functionsApp.Items[3].Click += (s, e) => new FunctionsApps().DeleteApp(nameCategory, nameFile, false);

@@ -1,4 +1,6 @@
-﻿namespace LauncherNet
+﻿using LauncherNet.DesignFront;
+
+namespace LauncherNet
 {
   public static class DataClass
   {
@@ -58,7 +60,7 @@
     /// <summary>
     /// Путь к файлу с последними настройками.
     /// </summary>
-    public static string PathBackup => @".\BackUp";
+    public static string PathBackup => @".\Settings";
 
     /// <summary>
     /// Путь к текстовым файлам категорий.
@@ -93,6 +95,16 @@
     /// Иконка приложения.
     /// </summary>
     public static NotifyIcon? iconLauncher { get; set; }
+
+    #endregion
+
+    #region Colors
+
+    public static Color FirstMainColor => Color.FromArgb(30, 30, 40);
+    public static Color FirstAdditionalColor => BackColorElements.NewColor(FirstMainColor, 10);
+
+    static public Color SecondMainColor => Color.FromArgb(212, 213, 187);
+    static public Color SecondAdditionalMainColor => BackColorElements.NewColor(SecondMainColor, 30);
 
     #endregion
 

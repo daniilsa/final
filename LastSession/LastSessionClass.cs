@@ -7,17 +7,25 @@ namespace LauncherNet.BackUp
 
     public bool GetLastRun()
     {
-      if (File.Exists($@"{DataClass.PathBackup}\backUp"))
+      try
       {
-        string[] backup = File.ReadAllLines($@"{DataClass.PathBackup}\backUp");
-        for (int i = 0; i < backup.Length; i++)
-          if (backup[i].Contains($@"firstStart{DataClass.Code}false"))
-          {
-            return false;
-          }
-        Array.Resize(ref backup, backup.Length + 1);
-        backup[backup.Length - 1] = $"firstStart{DataClass.Code}false";
-        File.WriteAllLines($@"{DataClass.PathBackup}\backUp", backup);
+        if (File.Exists($@"{DataClass.PathBackup}\backUp"))
+        {
+          string[] backup = File.ReadAllLines($@"{DataClass.PathBackup}\backUp");
+          for (int i = 0; i < backup.Length; i++)
+            if (backup[i].Contains($@"firstStart{DataClass.Code}false"))
+            {
+              return false;
+            }
+          Array.Resize(ref backup, backup.Length + 1);
+          backup[backup.Length - 1] = $"firstStart{DataClass.Code}false";
+          File.WriteAllLines($@"{DataClass.PathBackup}\backUp", backup);
+        }
+        return true;
+      }
+      catch
+      {
+        GetLastRun();
       }
       return true;
     }
@@ -30,9 +38,10 @@ namespace LauncherNet.BackUp
       string activeCategory = string.Empty;
       if (File.Exists($@"{DataClass.PathBackup}\backUp"))
       {
-        string[] backup = File.ReadAllLines($@"{DataClass.PathBackup}\backUp");
         try
         {
+          string[] backup = File.ReadAllLines($@"{DataClass.PathBackup}\backUp");
+
           int indexStr = 0;
           int indexFirst = 0;
           for (int i = 0; i < backup.Length; i++)

@@ -1,6 +1,7 @@
-﻿using LauncherNet.DesignFront;
+﻿using LauncherNet._Data;
+using LauncherNet.DesignFront;
 
-namespace LauncherNet.Elements.LoadFormElements
+namespace LauncherNet.Elements.ProgressBarForm
 {
   internal class MainElement
   {
@@ -9,11 +10,11 @@ namespace LauncherNet.Elements.LoadFormElements
     /// </summary>
     /// <param name="loadForm"></param>
     /// <returns></returns>
-    public Panel CreateMainElement(Form loadForm)
+    public Panel CreateMainElement(Form loadForm, string text)
     {
       Panel main = CreateMainElements(loadForm);
       PictureBox leftElement = CreateLeftElement(main);
-      Label startProgrammText = CreateHeaderTextElement(loadForm, leftElement);
+      Label startProgrammText = CreateHeaderTextElement(loadForm, text);
       Label infoProgress = CreateInfoElement(loadForm, leftElement);
       Panel progressBar = CreateProgressBar(loadForm, main, leftElement, infoProgress.Width);
 
@@ -54,8 +55,8 @@ namespace LauncherNet.Elements.LoadFormElements
       {
         Dock = DockStyle.Left,
         Width = main.Width / 10 / 2,
-        BackColor = Color.FromArgb(223, 155, 44)
       };
+      DataLoadForm.LeftBorder = leftPanel;
 
       return leftPanel;
     }
@@ -66,15 +67,16 @@ namespace LauncherNet.Elements.LoadFormElements
     /// <param name="loadForm"></param>
     /// <param name="leftElement"></param>
     /// <returns></returns>
-    private Label CreateHeaderTextElement(Form loadForm, PictureBox leftElement)
+    private Label CreateHeaderTextElement(Form loadForm, string text)
     {
       Label startProgrammText = new()
       {
-        Text = "ЗАПУСК ПРОГРАММЫ",
-        //checkProgrammText.Font = new FontElements().GetHeaderFont();
-        ForeColor = leftElement.BackColor
+        Text = text,
+        
       };
       startProgrammText.Size = TextRenderer.MeasureText(startProgrammText.Text, loadForm.Font);
+
+      DataLoadForm.StartProgrammText = startProgrammText;
       return startProgrammText;
     }
 
@@ -89,9 +91,11 @@ namespace LauncherNet.Elements.LoadFormElements
       Label infoProgress = new()
       {
         Text = "Обработка данных. Это может занять некоторое время",
-        ForeColor = leftElement.BackColor
+        
       };
       infoProgress.Size = TextRenderer.MeasureText(infoProgress.Text, loadForm.Font);
+
+      DataLoadForm.InfoProgressText = infoProgress;
       return infoProgress;
     }
 
@@ -105,21 +109,23 @@ namespace LauncherNet.Elements.LoadFormElements
     /// <returns></returns>
     private Panel CreateProgressBar(Form loadForm, Panel main, PictureBox leftElement, int width)
     {
-      Panel panelProgressBar = new()
+      Panel progressBar = new()
       {
         Width = width,
-        BackColor = BackColorElements.MainDarkColor,
+        
         Height = 20
       };
-      panelProgressBar.Location = new Point(leftElement.Location.X + leftElement.Width + 20, (main.Height - panelProgressBar.Height) / 2);
+      progressBar.Location = new Point(leftElement.Location.X + leftElement.Width + 20, (main.Height - progressBar.Height) / 2);
+      DataLoadForm.ProgressBar = progressBar;
 
-      Panel progressBar = new()
+      Panel carret = new()
       {
         Location = new Point(-40, 0),
         Width = 50,
         BackColor = Color.FromArgb(223, 155, 44),
         Height = 20
       };
+      DataLoadForm.CarretBar = carret;
 
       System.Windows.Forms.Timer timer = new()
       {
@@ -129,13 +135,13 @@ namespace LauncherNet.Elements.LoadFormElements
       {
         if (!DataClass.DownloadStage)
         {
-          if (progressBar.Location.X <= (panelProgressBar as Panel).Width)
+          if (carret.Location.X <= (progressBar as Panel).Width)
           {
-            progressBar.Location = new Point(progressBar.Location.X + 2, 0);
+            carret.Location = new Point(carret.Location.X + 2, 0);
           }
           else
           {
-            progressBar.Location = new Point(-40, 0);
+            carret.Location = new Point(-40, 0);
           }
         }
         else
@@ -146,10 +152,8 @@ namespace LauncherNet.Elements.LoadFormElements
       };
       timer.Start();
 
-      loadForm.Width = panelProgressBar.Location.X + panelProgressBar.Width + 20;
-
-      panelProgressBar.Controls.Add(progressBar);
-      return panelProgressBar;
+      progressBar.Controls.Add(carret);
+      return progressBar;
     }
   }
 }

@@ -1,6 +1,9 @@
 ﻿using LauncherNet.DesignFront;
 using LauncherNet.Settings;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing.Text;
+using System.Runtime.InteropServices;
 
 namespace LauncherNet.Front
 {
@@ -69,41 +72,6 @@ namespace LauncherNet.Front
 
     #region Методы
 
-    /// <summary>
-    /// Обновляет шрифт
-    /// </summary>
-    public static void UpdateFont()
-    {
-      PrivateFontCollection fontCollection = new PrivateFontCollection();
-      FontCategory = new Font("Segoe UI", 15);
-      FontApp = new Font("Segoe UI", 9);
-      try
-      {
-        string font = FontResource.String1;
-        fontCollection.AddFontFile($@"{font}");
-        FontCategory = new Font(fontCollection.Families[0], 15);
-        FontApp = new Font(fontCollection.Families[0], 9);
-        FontLabel = FontCategory;
-        FontLabelInfo = FontApp;
-      }
-      catch
-      {
-        // Шрифт не найден
-      }
-    }
-
-    /// <summary>
-    /// Вовзращщает шрифт.
-    /// </summary>
-    /// <returns></returns>
-    public static Font GetFont()
-    {
-      PrivateFontCollection fontCollection = new PrivateFontCollection();
-      string font = FontResource.String1;
-      fontCollection.AddFontFile($@"{font}");
-      return new Font(fontCollection.Families[0], 9);
-    }
-
     #endregion
 
     #region Конструктор
@@ -113,11 +81,12 @@ namespace LauncherNet.Front
     /// </summary>
     static FontElements()
     {
-      FontCategory = new Font("Segoe UI", 15);
-      FontApp = new Font("Segoe UI", 9);
+      //FontCategory = new Font("Segoe UI", 15);
+      //FontApp = new Font("Segoe UI", 9);
+      FontCategory = new Font("Verdana", 15);
+      FontApp = new Font("Verdana", 9);
       FontLabel = FontCategory;
       FontLabelInfo = FontApp;
-      UpdateFont();
     }
 
     #endregion

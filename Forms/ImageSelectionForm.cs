@@ -22,7 +22,7 @@ namespace LauncherNet.Forms
     public new void Load()
     {
       bool next = true;
-      new SettingsForms().SettingsImageForm(this);
+      new SettingsAuxiliaryForms().SettingsImageForm(this);
       new CreateElementsImageForm().LoadElements(this, NameCategory, NameFile, ref next);
       if (!next)
       {

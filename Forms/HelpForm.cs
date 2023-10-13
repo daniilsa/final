@@ -16,7 +16,7 @@ namespace LauncherNet.Forms
     private new void Load()
     {
       DataHelpForm.helpForm = this;
-      new SettingsForms().SettingsHelpForm(this);
+      new SettingsAuxiliaryForms().SettingsHelpForm(this);
       new CreateElementsHelpForm().LoadElements(this);
       new DesignHelpForm().LoadDesignHelpForm();
     }

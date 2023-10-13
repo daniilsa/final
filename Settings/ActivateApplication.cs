@@ -9,7 +9,6 @@ namespace LauncherNet.Settings
   /// </summary>
   internal class ActivateApplication
   {
-
     /// <summary>
     /// Проверка на 1 экземпляр приложения. В попытке запустить 2 экземпляр, станет активным 1 экземпляр.
     /// </summary>

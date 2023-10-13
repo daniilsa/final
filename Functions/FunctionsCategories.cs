@@ -96,7 +96,7 @@ namespace LauncherNet.Functions
 
       if (launcher != null && DataClass.Update)
       {
-        new SettingsForms().UpdateLauncher(launcher);
+        new UpdateClass().UpdateMethod(launcher);
         DataClass.Update = false;
       }
     }
@@ -216,7 +216,6 @@ namespace LauncherNet.Functions
           Directory.CreateDirectory($@"{DataClass.PathImages}\{newName}");
         }
         File.Move($@"{DataClass.CategoriesPathFiles}\{oldName}", $@"{DataClass.CategoriesPathFiles}\{newName}");
-        new CheckingFiles().OverwritingCategoriesName();
         NewNameCategory(oldName, newName);
 
         return true;

@@ -1,6 +1,8 @@
 ﻿using LauncherNet._Data;
 using LauncherNet._Front;
+using LauncherNet.DesignFront;
 using LauncherNet.Elements.LauncherElements;
+using LauncherNet.Files;
 using LauncherNet.Forms;
 using LauncherNet.Settings;
 using ThreadState = System.Threading.ThreadState;
@@ -19,17 +21,17 @@ namespace LauncherNet
     /// </summary>
     public static Form Open()
     {
-
+      new CheckingFiles().CheckingResources();
+      WorkingColor.RewritingColor();
       DataLauncherForm.launcher = new LauncherForm();
-      Thread thread = new Thread(() => new LoadForm().ShowDialog());
+
+      Thread thread = new Thread(() => new ProgressBarForm("ЗАПУСК ПРОГРАММЫ").ShowDialog());
       thread.Start();
 
-      new CheckingFiles().CheckingResources();
-      new SettingsForms().SettingsLauncherForm(DataLauncherForm.launcher);
+      new SettingsLauncherForm().SettingsForm(DataLauncherForm.launcher);
       new CreateElementsLauncherForm().LoadElements(DataLauncherForm.launcher);
-      //new DesignElements().LoadDesignLauncher();
       new DesignLauncherForm().LoadDesignLauncher();
-      new CheckingFiles().CheckingChangesFiles();
+      new CheckingFiles().CheckingResources();
 
       Thread.Sleep(3000);
       DataClass.DownloadStage = true;

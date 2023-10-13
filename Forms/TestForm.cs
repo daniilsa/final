@@ -18,9 +18,12 @@ namespace LauncherNet.Forms
       colorPickerDialog.BackColor = BackColorElements.MainDarkColor;
       colorPickerDialog.Show();
 
-      Console.Clear();
       foreach (Control item in colorPickerDialog.Controls)
       {
+        if (item.GetType() == new Button().GetType())
+          item.ForeColor = FontElements.MainLightColorText;
+
+
         if (item != null && item.GetType() == new Button().GetType())
         {
           item.BackColor = BackColorElements.MainDarkColor;
@@ -30,9 +33,9 @@ namespace LauncherNet.Forms
         {
           foreach (Control i1 in item.Controls)
           {
+
             if (i1.GetType() == new Label().GetType())
               i1.ForeColor = FontElements.MainLightColorText;
-
 
             if (i1.GetType() == new NumericUpDown().GetType())
             {
@@ -40,7 +43,6 @@ namespace LauncherNet.Forms
               i1.BackColor = BackColorElements.AdditionalDarkColor;
 
             }
-            Console.WriteLine(i1.GetType());
           }
         }
       }

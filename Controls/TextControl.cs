@@ -32,15 +32,6 @@ namespace Launcher.Controls
       Rectangle rectangle = new(0, 0, Width, Height);
       Rectangle rectangleText = new(10, 0, Width - 5, Height);
 
-      try
-      {
-        if (FontElements.FontCategory.Name.Contains("Parameter is not valid")) return;
-      }
-      catch
-      {
-        Font = FontElements.GetFont();
-      }
-
       graphics.FillRectangle(new SolidBrush(BackColor), rectangle);
       graphics.DrawString(Text, Font, new SolidBrush(ForeColor), rectangleText, SF);
     }

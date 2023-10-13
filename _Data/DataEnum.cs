@@ -121,5 +121,16 @@
       /// </summary>
       Nope
     }
+
+    /// <summary>
+    /// Цвета лаунчера.
+    /// </summary>
+    public enum ColorLauncher
+    {
+      FirstMainColor,
+      FirstAdditionColor,
+      SecondMainColor,
+      SecondAdditionColor
+    }
   }
 }

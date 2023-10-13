@@ -1,5 +1,7 @@
 ﻿using LauncherNet._Data;
 using LauncherNet._DataStatic;
+using LauncherNet._Front;
+using LauncherNet.Files;
 using LauncherNet.Forms;
 using LauncherNet.Settings;
 
@@ -11,7 +13,7 @@ namespace LauncherNet.Functions
     {
       if (DataLauncherForm.launcher != null && e.KeyCode == Keys.F5)
       {
-        new SettingsForms().UpdateLauncher(DataLauncherForm.launcher);
+        new UpdateClass().UpdateMethod(DataLauncherForm.launcher);
       }
       else if (e.KeyCode == Keys.F1)
       {
@@ -25,6 +27,12 @@ namespace LauncherNet.Functions
         {
           new HelpForm().Show();
         }
+      }
+      else if (e.KeyCode == Keys.F2)
+      {
+         new SettingsApplicationForm(null,false).ShowDialog();
+        WorkingColor.RewritingColor();
+        new DesignLauncherForm().LoadDesignLauncher();
       }
       else if (e.KeyCode == Keys.X && e.Alt)
       {

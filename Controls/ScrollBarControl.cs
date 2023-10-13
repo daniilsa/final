@@ -1,5 +1,4 @@
 ﻿using LauncherNet._Data;
-using LauncherNet.Info;
 using System.Windows.Forms;
 
 namespace LauncherNet.Controls
@@ -10,7 +9,7 @@ namespace LauncherNet.Controls
     #region Поля
 
     /// <summary>
-    /// Высота одного элемента.
+    /// Размеры добавляемого элемента.
     /// </summary>
     private Size sizeElement = new(0, 0);
 
@@ -118,23 +117,12 @@ namespace LauncherNet.Controls
     private void CarriageHeightAndStepCalculation()
     {
       double onePercent = GetValueOnePercent();
-      new InfoElement().ColorTwoParameters("Один процент от высоты панели с элементами(пиксели) = ", onePercent.ToString(), ConsoleColor.Green, false);
-
       double visiblePartAsPercentage = GetPercentageOfForm();
-      new InfoElement().ColorTwoParameters("Видимая часть элементов(%) = ", visiblePartAsPercentage.ToString(), ConsoleColor.Green, false);
-
       CaretHeight = GetСarriageHeight(onePercent, visiblePartAsPercentage);
       caretScroll.Height = CaretHeight;
-      new InfoElement().ColorTwoParameters("Высота каретки(пиксели) = ", CaretHeight.ToString(), ConsoleColor.Green, false);
-
       int distentionRestScroll = GetEmptyScrollLength();
-      new InfoElement().ColorTwoParameters("\"Пустая\" часть скролла(пиксели) = ", distentionRestScroll.ToString(), ConsoleColor.Green, false);
-
       double numberInvisibleLines = GetPercentageInvisibleLines();
-      new InfoElement().ColorTwoParameters("Линии, не отображемые на элементе(кол-во) = ", numberInvisibleLines.ToString(), ConsoleColor.Green, false);
-
       DistanceCaret = GetCarriagePitch(numberInvisibleLines, distentionRestScroll);
-      new InfoElement().ColorTwoParameters("Шаг каретки(пиксели) = ", DistanceCaret.ToString(), ConsoleColor.Green, false);
     }
 
     /// <summary>
@@ -468,13 +456,13 @@ namespace LauncherNet.Controls
       CarriageHeightAndStepCalculation();
 
       //TODO: Расчитать момент расчёта локации
-      //if (elementsOnTheLine * (sizeAppElement.Width + X_AxisIndentation) >= mainPanel.Width)
-      //  LocationApps();
-      //
-      //else if ((elementsOnTheLine + 1) * (sizeAppElement.Width + X_AxisIndentation) <= mainPanel.Width)
-      //  LocationApps();
+      if (elementsOnTheLine * (sizeElement.Width + X_AxisIndentation) + scrollBar.Width*3 >= mainPanel.Width)
+        LocationApps();
 
-      LocationApps();
+      else if ((elementsOnTheLine + 1) * (sizeElement.Width + X_AxisIndentation) <= mainPanel.Width)
+        LocationApps();
+
+      //LocationApps();
     }
 
     /// <summary>
@@ -520,7 +508,7 @@ namespace LauncherNet.Controls
     /// <param name="value">Экземпляр элемента.</param>
     public void AddControl(Control value)
     {
-      Control addControl = null;
+      Control? addControl = null;
       if (mainPanel.Controls.Count > 1)
       {
         addControl = mainPanel.Controls[mainPanel.Controls.Count - 1];
