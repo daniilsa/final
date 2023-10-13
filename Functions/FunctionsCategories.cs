@@ -5,7 +5,6 @@ using LauncherNet.Controls;
 using LauncherNet.Elements.LauncherElements;
 using LauncherNet.Forms;
 using LauncherNet.Settings;
-using System.Windows.Forms.VisualStyles;
 
 namespace LauncherNet.Functions
 {
@@ -51,7 +50,7 @@ namespace LauncherNet.Functions
       {
         try
         {
-          DataLauncherForm.appsElementLauncher?.Add(((Panel)item));
+          DataLauncherForm.appsElementLauncher?.Add((Panel)item);
         }
         catch
         {
@@ -79,7 +78,10 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory">Имя категории.</param>
     public void StartFunction(Form? launcher, DataEnum.FunctionCategory functionCategory, ScrollBarControl? panelApps, string? nameCategory)
     {
-      if (functionCategory == DataEnum.FunctionCategory.AddCategory) FormCategory();
+      if (functionCategory == DataEnum.FunctionCategory.AddCategory)
+      {
+        FormCategory();
+      }
       else if (functionCategory == DataEnum.FunctionCategory.RenameCategory)
       {
         if (nameCategory != null) FormRenameCategory(nameCategory);
@@ -370,15 +372,7 @@ namespace LauncherNet.Functions
         TextControl categoryElement = new CategoryElement().CreateCategoryElement(DataLauncherForm.launcher, DataLauncherForm.categoriesElementLauncher, panelApps, functionCategories, nameCategory);
         new DesignLauncherForm().DesignCategoryElementLauncher(categoryElement);
 
-        DataLauncherForm.categoriesElementLauncher.Controls.Add(categoryElement);
-
-        foreach (Control item in DataLauncherForm.categoriesElementLauncher.Controls)
-        {
-          if (item.GetType() == new ControlAddControl().GetType())
-          {
-            item.Location = new(item.Location.X, item.Location.Y + categoryElement.Height);
-          }
-        }
+        DataLauncherForm.categoriesElementLauncher.AddControl(categoryElement);
       }
     }
 
@@ -392,11 +386,11 @@ namespace LauncherNet.Functions
 
       if (DataLauncherForm.categoriesElementLauncher != null)
       {
-        foreach (Control item in DataLauncherForm.categoriesElementLauncher.Controls)
+        foreach (Control item in DataLauncherForm.categoriesElementLauncher.GetControls())
         {
-          if (item.Text == nameCategory)
+          if (item.Text == nameCategory || item.Name == nameCategory)
           {
-            DataLauncherForm.categoriesElementLauncher.Controls.Remove(item);
+            DataLauncherForm.categoriesElementLauncher.DeleteControl(item.Name);
             categoryElement = item;
           }
         }

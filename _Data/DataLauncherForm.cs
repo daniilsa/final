@@ -68,7 +68,7 @@ namespace LauncherNet._Data
     /// <summary>
     /// Возвращает или задаёт экземпляр панели с категориями лаунчера.
     /// </summary>
-    public static Panel? categoriesElementLauncher { get; set; }
+    public static ScrollBarControl? categoriesElementLauncher { get; set; }
 
     /// <summary>
     /// Возвращает или задаёт экземпляр активного элемента категории.

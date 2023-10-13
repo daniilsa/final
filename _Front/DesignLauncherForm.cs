@@ -118,7 +118,7 @@ namespace LauncherNet._Front
     /// Настраивает внешний вид  элемента со всеми категориями.
     /// </summary>
     /// <param name="value">Элемент для настроек.</param>
-    private void DesignCategoriesElementLauncher(Panel value)
+    private void DesignCategoriesElementLauncher(ScrollBarControl value)
     {
       value.BackColor = BackColorElements.MainDarkColor;
     }
@@ -183,8 +183,6 @@ namespace LauncherNet._Front
       try
       {
         value.BackColor = BackColorElements.MainLightColor;
-        value.BackColorScroll = BackColorElements.MainLightColor;
-        value.BackColorCaret = BackColorElements.MainDarkColor;
 
         foreach (Panel mainPanel in value.Controls)
         {

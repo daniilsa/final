@@ -17,4 +17,10 @@
     <PackageReference Include="Cyotek.Windows.Forms.ColorPicker" Version="1.7.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Controls">
+      <HintPath>dll\Controls.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

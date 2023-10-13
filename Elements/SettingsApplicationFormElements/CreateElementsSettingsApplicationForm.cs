@@ -343,7 +343,7 @@ namespace LauncherNet.Elements.SettingsApplicationFormElements
       {
         Text = text,
       };
-      label.Font = new Font(label.Font.FontFamily, 20);
+      label.Font = new Font(label.Font.FontFamily, 15);
       label.Size = TextRenderer.MeasureText(label.Text, label.Font);
 
       return label;
@@ -361,6 +361,7 @@ namespace LauncherNet.Elements.SettingsApplicationFormElements
         BackColor = color,
         Size = new Size(Convert.ToInt32(hieght * 2), hieght),
         BorderStyle = BorderStyle.FixedSingle,
+        Tag = "false",
       };
 
       pictureBox.MouseClick += (s, a) =>

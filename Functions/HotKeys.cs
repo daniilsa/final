@@ -28,12 +28,6 @@ namespace LauncherNet.Functions
           new HelpForm().Show();
         }
       }
-      else if (e.KeyCode == Keys.F2)
-      {
-         new SettingsApplicationForm(null,false).ShowDialog();
-        WorkingColor.RewritingColor();
-        new DesignLauncherForm().LoadDesignLauncher();
-      }
       else if (e.KeyCode == Keys.X && e.Alt)
       {
         Application.Exit();
@@ -51,7 +45,9 @@ namespace LauncherNet.Functions
           }
           else if (e.KeyCode == Keys.O)
           {
-            MessageBox.Show("Добавить настройки программы");
+            new SettingsApplicationForm(null, false).ShowDialog();
+            WorkingColor.RewritingColor();
+            new DesignLauncherForm().LoadDesignLauncher();
           }
           else if (e.KeyCode == Keys.Down)
           {

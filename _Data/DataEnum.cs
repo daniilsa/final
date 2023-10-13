@@ -132,5 +132,6 @@
       SecondMainColor,
       SecondAdditionColor
     }
+
   }
 }

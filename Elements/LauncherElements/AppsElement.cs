@@ -18,6 +18,7 @@ namespace LauncherNet.Elements.LauncherElements
         Visible = false,
         Name = nameCategory,
         BackColor = Color.Green,
+        ScrollElements = ScrollBarControl.ScrollControls.Apps,
       };
 
       panelApps.AddControl(new AddElements().CreateAddAppElement());

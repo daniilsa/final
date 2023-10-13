@@ -21,7 +21,7 @@ namespace LauncherNet.Elements.LauncherElements
     /// <param name="functionCategories">Контекстное меню функций категории.</param>
     /// <param name="name">Имя категории.</param>
     /// <returns></returns>
-    public TextControl CreateCategoryElement(Form launcher, Panel categoriesPanel, ScrollBarControl panelApps, ContextMenuStrip functionCategories, string name)
+    public TextControl CreateCategoryElement(Form launcher, ScrollBarControl categoriesPanel, ScrollBarControl panelApps, ContextMenuStrip functionCategories, string name)
     {
       // Панель категории.
       TextControl categoryPanel = new()

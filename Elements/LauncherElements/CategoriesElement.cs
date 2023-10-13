@@ -15,7 +15,13 @@ namespace LauncherNet.Elements.LauncherElements
     public void CreateCategoriesElement(Form launcher)
     {
       // Панель с категориями.
-      Panel categoriesPanel = new();
+      ScrollBarControl categoriesPanel = new(DataLauncherForm.sizeMainForm.Width / 8)
+      {
+        ScrollElements = ScrollBarControl.ScrollControls.Categories,
+      };
+      ControlAddControl addCategoryElement = new AddElements().CreateAddCategoryElement(categoriesPanel);
+      categoriesPanel.AddControl(addCategoryElement);
+
       if (DataLauncherForm.topElementLauncher != null)
       {
         categoriesPanel.Size = new Size(DataLauncherForm.sizeMainForm.Width / 8, DataLauncherForm.sizeMainForm.Height - DataLauncherForm.topElementLauncher.Height - DataClass.borderFormWidth);
@@ -42,11 +48,11 @@ namespace LauncherNet.Elements.LauncherElements
         DataLauncherForm.mainAppsLauncher?.Add(panelApps);
         DataLauncherForm.categoryElementLauncher?.Add(categoryPanel);
 
-        categoriesPanel.Controls.Add(categoryPanel);
+        categoriesPanel.AddControl(categoryPanel);
       }
 
-      ControlAddControl addCategoryElement = new AddElements().CreateAddCategoryElement(categoriesPanel);
-      categoriesPanel.Controls.Add(addCategoryElement);
+ 
+     
     }
    
 

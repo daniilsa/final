@@ -11,7 +11,7 @@ namespace LauncherNet.Elements.LauncherElements
     /// Элемент добавления категории.
     /// </summary>
     /// <returns></returns>
-    public ControlAddControl CreateAddCategoryElement(Panel categoriesPanel)
+    public ControlAddControl CreateAddCategoryElement(ScrollBarControl categoriesPanel)
     {
       ControlAddControl controlAddElement = new()
       {

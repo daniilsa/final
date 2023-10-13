@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Update="BorderButtonControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="CheckBoxControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="ControlAddControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="ScrollBarControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="TextControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>
