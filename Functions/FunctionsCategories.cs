@@ -10,7 +10,7 @@ namespace LauncherNet.Functions
 {
   public class FunctionsCategories
   {
-    
+
     private bool openProgramm = true;
 
     /// <summary>
@@ -326,36 +326,38 @@ namespace LauncherNet.Functions
     {
       if (DataLauncherForm.categoriesElementLauncher != null)
       {
-        foreach (Control item in DataLauncherForm.categoriesElementLauncher.Controls)
+        foreach (Control panel in DataLauncherForm.categoriesElementLauncher.Controls)
         {
-          if (item != null)
+          if (panel.GetType() == new Panel().GetType())
           {
-            if (item.GetType() == new TextControl().GetType())
+            foreach (Control category in panel.Controls)
             {
-              TextControl value = (TextControl)item;
-              if (value.Text == oldName)
+              if (category.GetType() == new TextControl().GetType())
               {
-                value.Text = newName;
-                value.Name = newName;
-                break;
+                if (category.Text== oldName)
+                {
+                  category.Text = newName;
+                  category.Name = newName;  
+                }
               }
             }
           }
         }
+      }
 
-        foreach (ContextMenuStrip value in DataLauncherForm.functionsCategory)
+      foreach (ContextMenuStrip value in DataLauncherForm.functionsCategory)
+      {
+        if (value != null)
         {
-          if (value != null)
+          if (value.Name == oldName)
           {
-            if (value.Name == oldName)
-            {
-              value.Name = newName;
-              break;
-            }
+            value.Name = newName;
+            break;
           }
         }
       }
     }
+
 
     /// <summary>
     /// Добавление новой категории.
@@ -408,8 +410,22 @@ namespace LauncherNet.Functions
         }
       }
 
+      if (DataLauncherForm.activeAppPanelLauncher != null)
+      {
+        DataLauncherForm.activeAppPanelLauncher.Visible = false;
+        DataLauncherForm.launcher.Controls.Remove(DataLauncherForm.activeAppPanelLauncher);
+        DataLauncherForm.activeAppPanelLauncher = null;
+        DataLauncherForm.lastCategoryPanelLauncher = null;
+      }
+
     }
 
+    /// <summary>
+    /// Добавление приложения в программу.
+    /// </summary>
+    /// <param name="nameCategory"></param>
+    /// <param name="nameFile"></param>
+    /// <param name="pathFileApp"></param>
     private void AddApp(string nameCategory, string nameFile, string pathFileApp)
     {
       if (DataLauncherForm.launcher != null)
