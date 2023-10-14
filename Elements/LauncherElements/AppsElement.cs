@@ -15,6 +15,7 @@ namespace LauncherNet.Elements.LauncherElements
     {
       ScrollBarControl panelApps = new()
       {
+        Tag = "MainApps",
         Visible = false,
         Name = nameCategory,
         BackColor = Color.Green,

@@ -1,5 +1,8 @@
 ﻿namespace LauncherNet._DataStatic
 {
+  /// <summary>
+  /// Поля, свойства, методы формы помощи.
+  /// </summary>
   internal static class DataHelpForm
   {
     /// <summary>

@@ -28,34 +28,30 @@
     /// </summary>
     private void InitializeComponent()
     {
-      button1 = new Button();
-      SuspendLayout();
+      this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+      this.SuspendLayout();
       // 
-      // button1
+      // helpProvider1
       // 
-      button1.BackColor = Color.IndianRed;
-      button1.Location = new Point(12, 12);
-      button1.Name = "button1";
-      button1.Size = new Size(75, 23);
-      button1.TabIndex = 0;
-      button1.Text = "button1";
-      button1.UseVisualStyleBackColor = false;
+      this.helpProvider1.HelpNamespace = "C:\\Users\\user\\Desktop\\final-main-debug-WorkProgramm-SettingsColor — копия — копия" +
+    "\\bin\\Debug\\net6.0-windows7.0\\Help\\index.html";
       // 
       // TestForm
       // 
-      AutoScaleDimensions = new SizeF(7F, 15F);
-      AutoScaleMode = AutoScaleMode.Font;
-      BackColor = SystemColors.ControlDark;
-      ClientSize = new Size(800, 450);
-      Controls.Add(button1);
-      Name = "TestForm";
-      Text = "TestForm";
-      Load += TestForm_Load_1;
-      ResumeLayout(false);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.BackColor = System.Drawing.SystemColors.ControlDark;
+      this.ClientSize = new System.Drawing.Size(800, 450);
+      this.Name = "TestForm";
+      this.helpProvider1.SetShowHelp(this, true);
+      this.Text = "TestForm";
+      this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TestForm_KeyDown);
+      this.ResumeLayout(false);
+
     }
 
     #endregion
 
-    private Button button1;
+    private HelpProvider helpProvider1;
   }
 }

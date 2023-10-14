@@ -49,11 +49,6 @@ namespace LauncherNet.Controls
     /// </summary>
     private readonly Panel mainPanel;
 
-    /// <summary>
-    /// Плавность хода.
-    /// </summary>
-    private readonly int smoothing = 1;
-
     #endregion
 
     #region Свойства
@@ -264,8 +259,15 @@ namespace LauncherNet.Controls
 
         if (mainPanel.Controls.Count > 1)
         {
-          mainPanel.Controls.SetChildIndex(value, mainPanel.Controls.Count - 2);
-          mainPanel.Controls.SetChildIndex(addControl, mainPanel.Controls.Count - 1);
+          try
+          {
+            mainPanel.Controls.SetChildIndex(value, mainPanel.Controls.Count - 2);
+            mainPanel.Controls.SetChildIndex(addControl, mainPanel.Controls.Count - 1);
+          }
+          catch
+          { 
+          
+          }
         }
       }
       else

@@ -10,12 +10,34 @@ namespace LauncherNet.Functions
   internal class FunctionsApps
   {
 
+    public void StartFunction(DataEnum.FunctionApp functionApp, string? nameCategory, string? nameFile, string? pathFile, string? pathApp)
+    {
+      if (functionApp == DataEnum.FunctionApp.Open && pathFile != null && pathApp != null)
+      {
+        StartApp(pathFile, pathApp);
+      }
+      else if (functionApp == DataEnum.FunctionApp.PathFile && nameCategory != null && nameFile != null && pathApp != null)
+      {
+        LocationApp(pathApp, nameCategory, nameFile);
+      }
+      else if (functionApp == DataEnum.FunctionApp.ChangeImage && nameCategory != null && nameFile != null)
+      {
+        FormImage(nameCategory, nameFile);
+      }
+      else if (functionApp == DataEnum.FunctionApp.Delete && nameCategory != null && nameFile != null)
+      {
+        DeleteApp(nameCategory, nameFile, true);
+      }
+
+      new DesignLauncherForm().LoadDesignLauncher();
+    }
+
     /// <summary>
     /// Запуск программы.
     /// </summary>
     /// <param name="pathFile">Путь к файлу категории</param>
     /// <param name="pathApp">Путь к запускаемому файлу</param>
-    public void StartApp(string pathFile, string pathApp)
+    private void StartApp(string pathFile, string pathApp)
     {
       try
       {
@@ -48,13 +70,12 @@ namespace LauncherNet.Functions
     /// <summary>
     /// Открыть расположение файла.
     /// </summary>
-    /// <param name="launcher">Экземпляр формы.</param>
     /// <param name="pathApp">Путь к файлу.</param>
     /// <param name="nameFile">Имя файла.</param>
     /// <param name="nameCategory">Имя категории.</param>
-    public void LocationApp(Form launcher, string pathApp, string nameCategory, string nameFile)
+    private void LocationApp(string pathApp, string nameCategory, string nameFile)
     {
-      string argument = "";
+        string argument = "";
       int lastIndex = pathApp.LastIndexOf("\\");
       for (int index = 0; index < lastIndex; index++)
         argument += pathApp[index];
@@ -81,7 +102,7 @@ namespace LauncherNet.Functions
     /// <param name="nameCategory"></param>
     /// <param name="nameFile"></param>
     /// <param name="pathImage"></param>
-    public void FormImage(string nameCategory, string nameFile)
+    private void FormImage(string nameCategory, string nameFile)
     {
       FunctionalForm functionalForm = new();
       functionalForm.AppForm(DataEnum.FunctionApp.ChangeImage, nameCategory, nameFile);
@@ -115,9 +136,9 @@ namespace LauncherNet.Functions
     /// <param name="nameFile">Имя файла.</param>
     /// <param name="nameCategory">Имя категории.</param>
     /// <param name="question">Задавать ли вопрос о удалении файла.</param>
-    public void DeleteApp(string nameCategory, string nameFile, bool question)
+    private void DeleteApp(string nameCategory, string nameFile, bool question)
     {
-      if (question)
+      if (!question)
       {
         string nameFiliDelete = nameFile;
         string pathFildeDelete = DataClass.CategoriesPathFiles + "\\" + nameCategory;

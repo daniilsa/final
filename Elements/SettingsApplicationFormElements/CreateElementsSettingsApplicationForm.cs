@@ -239,10 +239,10 @@ namespace LauncherNet.Elements.SettingsApplicationFormElements
       };
       defaultColor.MouseClick += (s, a) =>
       {
-        WorkingColor.FirstMainColor = DataClass.FirstMainColor;
-        WorkingColor.FirstAdditionalColor = DataClass.FirstAdditionalColor;
-        WorkingColor.SecondMainColor = DataClass.SecondMainColor;
-        WorkingColor.SecondAdditionalColor = DataClass.SecondAdditionalMainColor;
+        WorkingColor.FirstMainColor = DataClass.DefaultFirstMainColor;
+        WorkingColor.FirstAdditionalColor = DataClass._DefaultFirstAdditionalColor;
+        WorkingColor.SecondMainColor = DataClass._DefaultSecondMainColor;
+        WorkingColor.SecondAdditionalColor = DataClass._DefaultSecondAdditionalMainColor;
         new LastSessionClass().GetLastRun();
         value.Close();
       };

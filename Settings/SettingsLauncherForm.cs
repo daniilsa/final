@@ -31,6 +31,10 @@ namespace LauncherNet.Settings
       FirstSettings(value);
       Mouse(value);
       Key(value);
+
+  
+
+
       DataLauncherForm.sizeMainForm = new Size(DataClass.screenSize.Width, DataClass.screenSize.Height);
       DataLauncherForm.locationMainForm = new DataStruct.Location(value.Location.X, value.Location.Y);
     }

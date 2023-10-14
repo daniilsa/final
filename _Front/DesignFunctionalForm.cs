@@ -4,6 +4,9 @@ using LauncherNet.Front;
 
 namespace LauncherNet._Front
 {
+  /// <summary>
+  /// Настройка "Дизайна" формы функций приложения.
+  /// </summary>
   internal class DesignFunctionalForm
   {
     /// <summary>
@@ -66,9 +69,7 @@ namespace LauncherNet._Front
     /// <param name="value"></param>
     private void DesignLabelFunctionalForm(Label value)
     {
-      //value.Font = new System.Drawing.Font("Winston Bold", 14);
       value.Font = FontElements.FontLabel;
-      // value.ForeColor = Color.White;
       value.ForeColor = FontElements.MainLightColorText;
       value.Width = TextRenderer.MeasureText(value.Text, value.Font).Width;
     }
@@ -80,9 +81,7 @@ namespace LauncherNet._Front
     /// <param name="widthpanel"></param>
     private void DesignLabelInfoFunctionalForm(Label value, int widthpanel)
     {
-      //value.Font = new System.Drawing.Font("Winston Bold", 9);
       value.Font = FontElements.FontLabelInfo;
-      //value.ForeColor = Color.White;
       value.ForeColor = FontElements.MainLightColorText;
 
       double height = TextRenderer.MeasureText(value.Text, value.Font).Width / Convert.ToDouble(widthpanel);
@@ -109,7 +108,6 @@ namespace LauncherNet._Front
     /// <param name="value"></param>
     private void DesignButtonFunctionalForm(Button value)
     {
-      //value.ForeColor = Color.White;
       value.Font = FontElements.FontLabelInfo;
       value.ForeColor = FontElements.MainLightColorText;
     }

@@ -22,7 +22,7 @@ namespace LauncherNet.Files
     {
       get
       {
-        return GetColor(DataClass.FirstMainColor, DataEnum.ColorLauncher.FirstMainColor);
+        return GetColor(DataClass.DefaultFirstMainColor, DataEnum.ColorLauncher.FirstMainColor);
       }
       set
       {
@@ -37,7 +37,7 @@ namespace LauncherNet.Files
     {
       get
       {
-        return GetColor(DataClass.FirstAdditionalColor, DataEnum.ColorLauncher.FirstAdditionColor);
+        return GetColor(DataClass._DefaultFirstAdditionalColor, DataEnum.ColorLauncher.FirstAdditionColor);
 
       }
       set
@@ -53,7 +53,7 @@ namespace LauncherNet.Files
     {
       get
       {
-        return GetColor(DataClass.SecondMainColor, DataEnum.ColorLauncher.SecondMainColor);
+        return GetColor(DataClass._DefaultSecondMainColor, DataEnum.ColorLauncher.SecondMainColor);
       }
       set
       {
@@ -68,7 +68,7 @@ namespace LauncherNet.Files
     {
       get
       {
-        return GetColor(DataClass.SecondAdditionalMainColor, DataEnum.ColorLauncher.SecondAdditionColor);
+        return GetColor(DataClass._DefaultSecondAdditionalMainColor, DataEnum.ColorLauncher.SecondAdditionColor);
       }
       set
       {

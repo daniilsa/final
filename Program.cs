@@ -39,13 +39,14 @@ namespace LauncherNet
         Thread.Sleep(100);
 
         ApplicationConfiguration.Initialize();
-        if (new LastSessionClass().GetLastRun())
+        DataClass.FirstStart = new LastSessionClass().GetLastRun();
+        if (DataClass.FirstStart)
         {
           Application.Run(new SettingsApplicationForm("Добро пожаловать!", true));
-          Application.Run(new HelpForm());
+          //Application.Run(new HelpForm());
         }
-        //Application.Run(new SettingsApplicationForm(null, false));
         Application.Run(StartProgramm.Open());
+        //Application.Run(new SettingsApplicationForm(null, false));
         //Application.Run(new SettingsApplicationForm());
         //Application.Run(new HelpForm());
         //Application.Run(new TestForm());

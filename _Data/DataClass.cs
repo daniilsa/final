@@ -2,12 +2,20 @@
 
 namespace LauncherNet
 {
+  /// <summary>
+  /// Общие поля, свойства и методы приложения.
+  /// </summary>
   public static class DataClass
   {
 
     #region Свойства
 
     #region Bool
+
+    /// <summary>
+    /// Возвращает или задаёт параметр самого первого запуска приложения.
+    /// </summary>
+    public static bool FirstStart { get; set; }
 
     /// <summary>
     /// "Триггер" загрузки приложения
@@ -30,9 +38,14 @@ namespace LauncherNet
     public static bool InternetСonnection { get; set; }
 
     /// <summary>
-    /// Запустить процесс.
+    /// Запустить процесс приложения.
     /// </summary>
     public static bool StartProcess { get; set; }
+
+    /// <summary>
+    /// Задаёт или возвращает значения вызова Help.
+    /// </summary>
+    public static bool HelpExist { get; set; }
 
     #endregion
 
@@ -66,16 +79,12 @@ namespace LauncherNet
     /// Путь к текстовым файлам категорий.
     /// </summary>
     public static string CategoriesPathFiles => @".\Files\Categories";
+    public static string Help => @".\Help\index.htm";
 
     /// <summary>
     /// Путь к картинкам.
     /// </summary>
     public static string PathImages => @".\Images";
-
-    /// <summary>
-    /// Путь к шрифтам
-    /// </summary>
-    public static string PathFont => @".\Font";
 
     /// <summary>
     /// Разделительный "символ" между параметрами приложения. 
@@ -100,11 +109,25 @@ namespace LauncherNet
 
     #region Colors
 
-    public static Color FirstMainColor => Color.FromArgb(30, 30, 40);
-    public static Color FirstAdditionalColor => BackColorElements.NewColor(FirstMainColor, 10);
+    /// <summary>
+    /// Первый основной цвет приложения по умолчанию.
+    /// </summary>
+    public static Color DefaultFirstMainColor => Color.FromArgb(30, 30, 40);
 
-    static public Color SecondMainColor => Color.FromArgb(212, 213, 187);
-    static public Color SecondAdditionalMainColor => BackColorElements.NewColor(SecondMainColor, 30);
+    /// <summary>
+    /// Первый дополнительный цвет приложения по умолчанию.
+    /// </summary>
+    public static Color _DefaultFirstAdditionalColor => BackColorElements.NewColor(DefaultFirstMainColor, 10);
+
+    /// <summary>
+    /// Второй основной цвет приложения по умолчанию.
+    /// </summary>
+    static public Color _DefaultSecondMainColor => Color.FromArgb(212, 213, 187);
+
+    /// <summary>
+    /// Второй дополнительный цвет приложения по умолчанию.
+    /// </summary>
+    static public Color _DefaultSecondAdditionalMainColor => BackColorElements.NewColor(_DefaultSecondMainColor, 30);
 
     #endregion
 

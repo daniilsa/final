@@ -10,8 +10,7 @@ namespace LauncherNet.Functions
 {
   public class FunctionsCategories
   {
-
-
+    
     private bool openProgramm = true;
 
     /// <summary>
@@ -68,6 +67,11 @@ namespace LauncherNet.Functions
 
       if (DataLauncherForm.activeCategoryPanelLauncher != null)
         new DesignLauncherForm().DesignCategoryElementLauncher(DataLauncherForm.activeCategoryPanelLauncher);
+
+      if (DataLauncherForm.activeAppPanelLauncher != null)
+        new DesignLauncherForm().DesignMainAppsElementLauncher(DataLauncherForm.activeAppPanelLauncher);
+
+
     }
 
     /// <summary>
@@ -94,12 +98,6 @@ namespace LauncherNet.Functions
       {
         if (panelApps != null && nameCategory != null) FormAddApp(panelApps, nameCategory);
         else if (panelApps != null) FormAddApp(panelApps, string.Empty);
-      }
-
-      if (launcher != null && DataClass.Update)
-      {
-        new UpdateClass().UpdateMethod(launcher);
-        DataClass.Update = false;
       }
     }
 
@@ -373,6 +371,12 @@ namespace LauncherNet.Functions
         new DesignLauncherForm().DesignCategoryElementLauncher(categoryElement);
 
         DataLauncherForm.categoriesElementLauncher.AddControl(categoryElement);
+        DataLauncherForm.mainAppsLauncher.Add(panelApps);
+        DataLauncherForm.launcher.Controls.Add(panelApps);
+
+        new DesignLauncherForm().DesignContextMenuFunctionsApp(functionCategories);
+
+        LoadFunctionCategory(categoryElement, panelApps, DataLauncherForm.launcher);
       }
     }
 

@@ -5,6 +5,7 @@ using LauncherNet.Elements.LauncherElements;
 using LauncherNet.Files;
 using LauncherNet.Forms;
 using LauncherNet.Settings;
+using System.Diagnostics;
 using ThreadState = System.Threading.ThreadState;
 
 namespace LauncherNet
@@ -42,13 +43,17 @@ namespace LauncherNet
       };
       timer.Tick += (s, a) =>
       {
-        if (thread.ThreadState == ThreadState.Aborted)
+        if (thread.ThreadState == ThreadState.Stopped)
         {
           timer.Stop();
         };
       };
       timer.Start();
       new ActivateApplication().CheckAndOpenProcess();
+      if (DataClass.HelpExist && DataClass.FirstStart)
+      {
+        Process.Start(@"cmd.exe ", @$"/c .\{DataClass.Help}");
+      }
 
       while (thread.ThreadState != ThreadState.Stopped) ;
       return DataLauncherForm.launcher;

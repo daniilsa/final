@@ -6,6 +6,8 @@ using LauncherNet.Front;
 
 namespace LauncherNet._Front
 {
+  /// <summary>
+  /// Настройка "Дизайна" формы помощи.
   internal class DesignHelpForm
   {
     public void LoadDesignHelpForm()

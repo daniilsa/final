@@ -1,5 +1,9 @@
 ﻿namespace LauncherNet._Data
 {
+
+  /// <summary>
+  /// Структуры приложения.
+  /// </summary>
   public static class DataStruct
   {
     /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace LauncherNet._Data
 {
+  /// <summary>
+  /// Поля, свойства, методы формы выбора изображения.
+  /// </summary>
   public static class DataImageSelectionForm
   {
 

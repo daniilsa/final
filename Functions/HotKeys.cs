@@ -4,6 +4,7 @@ using LauncherNet._Front;
 using LauncherNet.Files;
 using LauncherNet.Forms;
 using LauncherNet.Settings;
+using System.Diagnostics;
 
 namespace LauncherNet.Functions
 {
@@ -17,16 +18,20 @@ namespace LauncherNet.Functions
       }
       else if (e.KeyCode == Keys.F1)
       {
-        //TODO: Привязать помощь по ПО
-        if (DataHelpForm.helpForm != null)
-        {
-          DataHelpForm.helpForm.Focus();
-          DataHelpForm.helpForm.Activate();
-        }
-        else
-        {
-          new HelpForm().Show();
-        }
+        ////TODO: Привязать помощь по ПО
+        //if (DataHelpForm.helpForm != null)
+        //{
+        //  DataHelpForm.helpForm.Focus();
+        //  DataHelpForm.helpForm.Activate();
+        //}
+        //else
+        //{
+        //  new HelpForm().Show();
+        //}
+
+        if (!DataClass.HelpExist)
+          MessageBox.Show("Помощь отсутвует!","Внимание!",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
       }
       else if (e.KeyCode == Keys.X && e.Alt)
       {

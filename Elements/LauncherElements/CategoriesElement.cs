@@ -18,6 +18,7 @@ namespace LauncherNet.Elements.LauncherElements
       ScrollBarControl categoriesPanel = new(DataLauncherForm.sizeMainForm.Width / 8)
       {
         ScrollElements = ScrollBarControl.ScrollControls.Categories,
+        Tag = "Categories",
       };
       ControlAddControl addCategoryElement = new AddElements().CreateAddCategoryElement(categoriesPanel);
       categoriesPanel.AddControl(addCategoryElement);

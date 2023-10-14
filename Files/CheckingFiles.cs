@@ -58,6 +58,35 @@ namespace LauncherNet.Files
         }
       }
 
+      if (!File.Exists($@".\{DataClass.Help}"))
+      {
+        string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        int index = path.IndexOf("\\bin");
+        path = path.Substring(0, index);
+        if (File.Exists($@"{path}\Help\index.htm"))
+        {
+          string pathDirecrory = $@".\Help";
+          try
+          {
+            Directory.CreateDirectory(pathDirecrory);
+          }
+          catch
+          {
+
+          }
+          CopyDirectory($@"{path}\Help", pathDirecrory);
+          if (File.Exists($@".\{DataClass.Help}"))
+          {
+            DataClass.HelpExist = true;
+          }
+        }
+        else
+        {
+          DataLauncherForm.launcher.DeleteHelp();
+          DataClass.HelpExist = false;
+        }
+      }
+
       if (!File.Exists(@$"{DataClass.PathFiles}\IconLauncher.ico"))
       {
         string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -99,8 +128,8 @@ namespace LauncherNet.Files
     private void CreateFile(string path)
     {
       using (FileStream fs = File.Create(path))
-      { 
-       fs.Close();
+      {
+        fs.Close();
       }
     }
 
@@ -114,6 +143,40 @@ namespace LauncherNet.Files
       File.Copy(pathResoursec, pathFinal);
     }
 
+    /// <summary>
+    /// Копирование директории с файлами.
+    /// </summary>
+    /// <param name="pathResoursec"></param>
+    /// <param name="pathFinal"></param>
+    private void CopyDirectory(string pathResoursec, string pathFinal)
+    {
+      //Создать идентичную структуру папок
+      foreach (string dirPath in Directory.GetDirectories(pathResoursec, "*",
+          SearchOption.AllDirectories))
+      {
+        try
+        {
+          Directory.CreateDirectory(dirPath.Replace(pathResoursec, pathFinal));
+        }
+        catch (Exception e)
+        {
+          //здесь обрабатывай ошибки
+        }
+      }
 
+      //Копировать все файлы и перезаписать файлы с идентичным именем
+      foreach (string newPath in Directory.GetFiles(pathResoursec, "*.*",
+          SearchOption.AllDirectories))
+      {
+        try
+        {
+          File.Copy(newPath, newPath.Replace(pathResoursec, pathFinal), true);
+        }
+        catch (Exception e)
+        {
+          //здесь обрабатывай ошибки
+        }
+      }
+    }
   }
 }

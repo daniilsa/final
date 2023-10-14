@@ -1,5 +1,6 @@
 ﻿using Launcher.Controls;
 using LauncherNet._Data;
+using LauncherNet._Front;
 using LauncherNet.Functions;
 using LauncherNet.Settings;
 
@@ -49,6 +50,7 @@ namespace LauncherNet.Elements.LauncherElements
       labelFileName.MouseLeave += (s, a) => labelFileName.Text = nameFile;
 
       ContextMenuStrip functionsApp = CreateContextMenu(launcher, pathFile, pathApp, nameCategory, nameFile);
+      new DesignLauncherForm().DesignContextMenuFunctionsApp(functionsApp);
 
       //Действие на ЛКМ и ПКМ
       labelFileName.MouseDown += (s, e) => CheckMouseDown(e, pathFile, pathApp, functionsApp);
@@ -76,18 +78,11 @@ namespace LauncherNet.Elements.LauncherElements
       functionsApp.Items.Add("Сменить обложку");
       functionsApp.Items.Add("Удалить файл из лаунчера");
 
-      functionsApp.Items[0].Click += (s, e) => new FunctionsApps().StartApp(pathFile, pathApp);
-      functionsApp.Items[1].Click += (s, e) => new FunctionsApps().LocationApp(launcher, pathApp, nameCategory, nameFile);
-      functionsApp.Items[2].Click += (s, e) =>
-      {
-        new FunctionsApps().FormImage(nameCategory, nameFile);
-        if (DataClass.Update)
-        {
-          DataClass.Update = false;
-          new UpdateClass().UpdateMethod(launcher);
-        }
-      };
-      functionsApp.Items[3].Click += (s, e) => new FunctionsApps().DeleteApp(nameCategory, nameFile, false);
+      functionsApp.Items[0].Click += (s, e) => new FunctionsApps().StartFunction(DataEnum.FunctionApp.Open, null, null, pathFile, pathApp);
+      functionsApp.Items[1].Click += (s, e) => new FunctionsApps().StartFunction(DataEnum.FunctionApp.PathFile, nameCategory, nameFile, null, pathApp);
+      functionsApp.Items[2].Click += (s, e) => new FunctionsApps().StartFunction(DataEnum.FunctionApp.ChangeImage, nameCategory, nameFile, null, null);
+      functionsApp.Items[3].Click += (s, e) => new FunctionsApps().StartFunction(DataEnum.FunctionApp.Delete, nameCategory, nameFile, null, null);
+
       DataLauncherForm.functionsApp?.Add(functionsApp);
       return functionsApp;
     }
@@ -135,7 +130,7 @@ namespace LauncherNet.Elements.LauncherElements
     /// <param name="launcher"></param>
     private void OpenApp(string pathFile, string pathApp)
     {
-      new FunctionsApps().StartApp(pathFile, pathApp);
+      new FunctionsApps().StartFunction(DataEnum.FunctionApp.Open, null, null, pathFile, pathApp);
     }
 
     /// <summary>

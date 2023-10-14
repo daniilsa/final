@@ -1,5 +1,8 @@
 ﻿namespace LauncherNet._Data
 {
+  /// <summary>
+  /// Поля, свойства, методы формы функций.
+  /// </summary>
   public static class DataFunctionalForm
   {
     /// <summary>

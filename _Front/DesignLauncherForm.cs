@@ -178,22 +178,34 @@ namespace LauncherNet._Front
     /// Настраивает внешний вид элемента со всеми приложениями.
     /// </summary>
     /// <param name="value">Элемент для настроек.</param>
-    private void DesignMainAppsElementLauncher(ScrollBarControl value)
+    public void DesignMainAppsElementLauncher(ScrollBarControl value)
     {
-      try
-      {
-        value.BackColor = BackColorElements.MainLightColor;
+      value.BackColor = BackColorElements.MainLightColor;
 
-        foreach (Panel mainPanel in value.Controls)
+      foreach (Panel mainPanel in value.Controls)
+      {
+        try
         {
           mainPanel.BackColor = BackColorElements.MainLightColor;
           foreach (Panel control in mainPanel.Controls)
             DesignAppElementLauncher(control);
         }
-      }
-      catch
-      {
-        // Сюда, ПОЧЕМУ-ТО попадает плашка добавления приложения, так что пусть будет
+        catch
+        {
+
+        }
+        try
+        {
+          foreach (ControlAddControl item in mainPanel.Controls)
+          {
+            DesignAppAddElements(item);
+          }
+
+        }
+        catch
+        {
+
+        }
       }
     }
 
@@ -274,7 +286,7 @@ namespace LauncherNet._Front
     /// Настраивает внешний вид контектного меню.
     /// </summary>
     /// <param name="value">Элемент для настроек.</param>
-    private void DesignContextMenuFunctionsApp(ContextMenuStrip value)
+    public void DesignContextMenuFunctionsApp(ContextMenuStrip value)
     {
       value.BackColor = BackColorElements.MainDarkColor;
       value.ForeColor = FontElements.MainLightColorText;

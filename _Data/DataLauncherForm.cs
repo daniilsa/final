@@ -3,6 +3,9 @@ using LauncherNet.Controls;
 
 namespace LauncherNet._Data
 {
+  /// <summary>
+  /// Поля, свойства, методы основной формы.
+  /// </summary>
   public static class DataLauncherForm
   {
 
@@ -43,7 +46,7 @@ namespace LauncherNet._Data
     /// <summary>
     /// Возвращает или задаёт экземпляр формы лаунчера.
     /// </summary>
-    public static Form? launcher { get; set; }
+    public static LauncherForm? launcher { get; set; }
 
     /// <summary>
     /// Возвращает или задаёт экземпляр активного элемента с приложениями.
@@ -128,13 +131,6 @@ namespace LauncherNet._Data
     ///  Возвращает или задаёт расположение на экране главной формы до "Прилипания".
     /// </summary>
     public static DataStruct.Location locationStickingMainForm { get; set; }
-
-    #endregion
-
-
-    #region Экземпляры элементов
-
-
 
     #endregion
 

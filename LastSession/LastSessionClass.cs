@@ -4,7 +4,10 @@ namespace LauncherNet.BackUp
 {
   internal class LastSessionClass
   {
-
+    /// <summary>
+    /// Возвращает значение существования backUp.
+    /// </summary>
+    /// <returns></returns>
     public bool GetLastRun()
     {
       try

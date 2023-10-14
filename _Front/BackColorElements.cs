@@ -1,14 +1,34 @@
-﻿namespace LauncherNet.DesignFront
+﻿using LauncherNet.Files;
+
+namespace LauncherNet.DesignFront
 {
+  /// <summary>
+  /// Цвета фона.
+  /// </summary>
   public static class BackColorElements
   {
 
     #region Свойства
 
+    /// <summary>
+    /// Возвращает или задаёт первый основной цвет приложения.
+    /// </summary>
     public static Color MainLightColor { get; set; }
+
+    /// <summary>
+    /// Возвращает или задаёт первый дополнительный цвет приложения.
+    /// </summary>
     public static Color AdditionalLight { get; set; }
 
+
+    /// <summary>
+    /// Возвращает или задаёт второй основной цвет приложения.
+    /// </summary>
     public static Color MainDarkColor { get; set; }
+
+    /// <summary>
+    /// Возвращает или задаёт второй дополнительный цвет приложения.
+    /// </summary>
     public static Color AdditionalDarkColor { get; set; }
 
     #endregion

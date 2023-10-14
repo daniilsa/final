@@ -28,18 +28,28 @@
     /// </summary>
     private void InitializeComponent()
     {
-      SuspendLayout();
+      this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+      this.SuspendLayout();
+      // 
+      // helpProvider1
+      // 
+      this.helpProvider1.HelpNamespace = "C:\\Users\\user\\Desktop\\final-main-debug-WorkProgramm-SettingsColor — копия — копия" +
+    "\\bin\\Debug\\net6.0-windows7.0\\Help\\index.html";
       // 
       // LauncherForm
       // 
-      AutoScaleDimensions = new SizeF(7F, 15F);
-      AutoScaleMode = AutoScaleMode.Font;
-      ClientSize = new Size(606, 391);
-      Name = "LauncherForm";
-      Text = "Form1";
-      ResumeLayout(false);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.ClientSize = new System.Drawing.Size(606, 391);
+      this.Name = "LauncherForm";
+      this.helpProvider1.SetShowHelp(this, true);
+      this.Text = "Form1";
+      this.ResumeLayout(false);
+
     }
 
     #endregion
+
+    public HelpProvider helpProvider1;
   }
 }

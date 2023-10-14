@@ -13,7 +13,31 @@ namespace LauncherNet.Elements.HelpElements
       "Приложения",
       "Категории",
       "Верхняя панель",
+      "Горячие клавиши",
     };
+
+    private List<string> helpHotKeys = new()
+    {
+      "<h>\"Горячие клавиши.\"",
+      " ",
+      " ",
+      "\"F1\" - Вызов помощи программы.",
+      " ",
+      "\"Alt + F4(X)\" - Закрыть программу.",
+      " ",
+      "\"Ctrl + A\" - Добавить приложение в программу.",
+      " ",
+      "\"Ctrl + O\" - Открыть настройки программы.",
+      " ",
+      "\"Ctrl + \" - Пролистать панель с приложениями вниз.",
+      " ",
+      "\"Ctrl + \" - Пролистать панель с приложениями вверх.",
+      " ",
+      "\"Ctrl + 0\" - Создать новую категорию.",
+      " ",
+      "\"Ctrl + (1,2,...,9)\" - Открыть категорию под номером X.",
+    };
+
     private List<string> helpTextCategory = new()
     {
       "<h>\"Создать новую категорию.\"",
@@ -185,6 +209,9 @@ namespace LauncherNet.Elements.HelpElements
         Height = 50,
         Location = new(0, categoryLocationY),
       };
+
+      CreateHelpMain(categoryElement, helpHotKeys);
+
       categoryElement.MouseDown += (s, a) =>
       {
         if (DataHelpForm.mainElement != null)
@@ -201,6 +228,9 @@ namespace LauncherNet.Elements.HelpElements
 
         else if (categoryElement.Text == helpCategories[0])
           CreateHelpMain(categoryElement, helpTextApplication);
+
+        else if (categoryElement.Text == helpCategories[4])
+          CreateHelpMain(categoryElement, helpHotKeys);
 
         else
           CreateHelpMain(categoryElement, null);
@@ -247,6 +277,10 @@ namespace LauncherNet.Elements.HelpElements
         if (content == null)
         {
           labelHeader.Text = $"Раздел помощи \"{labelHeader.Text}\" отсутствует(";
+        }
+        else if (content[0].Contains("Горячие клавиши"))
+        {
+          mainElement.Visible = true;
         }
         locationY += (labelHeader.Height + labelHeader.Location.Y + 20);
 

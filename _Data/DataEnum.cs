@@ -1,5 +1,8 @@
 ﻿namespace LauncherNet._Data
 {
+  /// <summary>
+  /// Списки приложения.
+  /// </summary>
   public static class DataEnum
   {
     /// <summary>
@@ -127,9 +130,24 @@
     /// </summary>
     public enum ColorLauncher
     {
+      /// <summary>
+      /// Первый основной цвет приложения.
+      /// </summary>
       FirstMainColor,
+
+      /// <summary>
+      /// Первый дополнительный цвет приложения по умолчанию.
+      /// </summary>
       FirstAdditionColor,
+
+      /// <summary>
+      /// Второй основной цвет приложения.
+      /// </summary>
       SecondMainColor,
+
+      /// <summary>
+      /// Второй дополнительный цвет приложения по умолчанию.
+      /// </summary>
       SecondAdditionColor
     }
 
